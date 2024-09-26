@@ -69,7 +69,7 @@
                <pin_label pin_num="83" pin_signal="ADC1_SE7b/PTC11/LLWU_P11/I2C1_SDA/FTM3_CH7/I2S0_RXD1/FB_RW_b" label="J4[10]"/>
                <pin_label pin_num="82" pin_signal="ADC1_SE6b/PTC10/I2C1_SCL/FTM3_CH6/I2S0_RX_FS/FB_AD5" label="J4[12]"/>
                <pin_label pin_num="38" pin_signal="PTA4/LLWU_P3/FTM0_CH1/NMI_b/EZP_CS_b" label="SW3" identifier="SW3;Sample_Time"/>
-               <pin_label pin_num="78" pin_signal="CMP0_IN0/PTC6/LLWU_P10/SPI0_SOUT/PDB0_EXTRG/I2S0_RX_BCLK/FB_AD9/I2S0_MCLK" label="U8[11]/SW2" identifier="SW2;ACCEL_INT1;Start;Start_Stop"/>
+               <pin_label pin_num="78" pin_signal="CMP0_IN0/PTC6/LLWU_P10/SPI0_SOUT/PDB0_EXTRG/I2S0_RX_BCLK/FB_AD9/I2S0_MCLK" label="SW2" identifier="SW2;ACCEL_INT1;Start;Start_Stop"/>
                <pin_label pin_num="52" pin_signal="RESET_b" label="J3[6]/J9[10]/D1/RESET" identifier="RESET"/>
                <pin_label pin_num="6" pin_signal="PTE5/SPI1_PCS2/UART3_RX/SDHC0_D2/FTM3_CH0" label="J15[P1]/SDHC0_D2" identifier="SDHC0_D2"/>
                <pin_label pin_num="5" pin_signal="PTE4/LLWU_P2/SPI1_PCS0/UART3_TX/SDHC0_D3/TRACE_D0" label="J15[P2]/SDHC0_D3" identifier="SDHC0_D3"/>
@@ -1023,7 +1023,7 @@
                         <data type="Version">2.1.0</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="ClockOutput" resourceId="Bus_clock" description="Bus clock is inactive." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                  <dependency resourceType="ClockOutput" resourceId="Bus_clock" description="Bus clock is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="frequency" evaluation="greaterThan">
                         <data type="Frequency" unit="Hz">0</data>
                      </feature>
@@ -1119,14 +1119,14 @@
                         <setting name="enableRunInDebug" value="false"/>
                         <struct name="timingConfig">
                            <setting name="clockSource" value="BusInterfaceClock"/>
-                           <setting name="clockSourceFreq" value="GetFreq"/>
+                           <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
                         </struct>
                         <array name="channels">
                            <struct name="0">
                               <setting name="channel_id" value="CHANNEL_0"/>
                               <setting name="channelNumber" value="0"/>
                               <setting name="enableChain" value="false"/>
-                              <setting name="timerPeriod" value="125uS"/>
+                              <setting name="timerPeriod" value="7500"/>
                               <setting name="startTimer" value="true"/>
                               <setting name="enableInterrupt" value="true"/>
                               <struct name="interrupt">

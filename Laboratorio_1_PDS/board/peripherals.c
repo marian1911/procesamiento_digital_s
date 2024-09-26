@@ -248,13 +248,13 @@ instance:
     - enableRunInDebug: 'false'
     - timingConfig:
       - clockSource: 'BusInterfaceClock'
-      - clockSourceFreq: 'GetFreq'
+      - clockSourceFreq: 'BOARD_BootClockRUN'
     - channels:
       - 0:
         - channel_id: 'CHANNEL_0'
         - channelNumber: '0'
         - enableChain: 'false'
-        - timerPeriod: '125uS'
+        - timerPeriod: '7500'
         - startTimer: 'true'
         - enableInterrupt: 'true'
         - interrupt:
@@ -272,7 +272,7 @@ const pit_config_t PIT_config = {
 static void PIT_init(void) {
   /* Initialize the PIT. */
   PIT_Init(PIT_PERIPHERAL, &PIT_config);
-  /* Set channel 0 period to N/A. */
+  /* Set channel 0 period to 7.5 ms (450000 ticks). */
   PIT_SetTimerPeriod(PIT_PERIPHERAL, PIT_CHANNEL_0, PIT_CHANNEL_0_TICKS);
   /* Enable interrupts from channel 0. */
   PIT_EnableInterrupts(PIT_PERIPHERAL, PIT_CHANNEL_0, kPIT_TimerInterruptEnable);

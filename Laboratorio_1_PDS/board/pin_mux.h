@@ -25,7 +25,7 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
-/*! @name PORTC6 (number 78), U8[11]/SW2
+/*! @name PORTC6 (number 78), SW2
   @{ */
 
 /* Symbols to be used with GPIO driver */
@@ -122,7 +122,7 @@ void BOARD_InitBootPins(void);
  */
 void BOARD_InitPins(void);
 
-/*! @name PORTC6 (number 78), U8[11]/SW2
+/*! @name PORTC6 (number 78), SW2
   @{ */
 
 /* Symbols to be used with GPIO driver */
@@ -266,7 +266,7 @@ void BOARD_InitOSCPins(void);
 #define BOARD_ACCEL_SCL_PIN_MASK (1U << 24U)      /*!<@brief PORT pin mask */
                                                   /* @} */
 
-/*! @name PORTC6 (number 78), U8[11]/SW2
+/*! @name PORTC6 (number 78), SW2
   @{ */
 
 /* Symbols to be used with GPIO driver */
