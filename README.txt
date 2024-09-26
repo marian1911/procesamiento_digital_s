@@ -1,1 +1,1 @@
-mmmkffne
+laboratorio 1 procesamiento digital de señales
