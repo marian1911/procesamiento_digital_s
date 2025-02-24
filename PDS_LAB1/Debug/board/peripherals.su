@@ -1,0 +1,13 @@
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB1\CMSIS/core_cm4.h:1679:22:__NVIC_EnableIRQ	16	static
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB1\drivers/fsl_common_arm.h:499:24:EnableIRQ	24	static
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB1\drivers/fsl_adc16.h:367:20:ADC16_EnableHardwareTrigger	16	static
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB1\drivers/fsl_pit.h:159:20:PIT_EnableInterrupts	24	static
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB1\drivers/fsl_pit.h:246:20:PIT_SetTimerPeriod	24	static
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB1\drivers/fsl_pit.h:288:20:PIT_StartTimer	16	static
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB1\drivers/fsl_dac.h:187:20:DAC_Enable	16	static
+../board/peripherals.c:173:13:ADC0_init	8	static
+../board/peripherals.c:223:13:PIT_init	32	static
+../board/peripherals.c:264:13:DAC0_init	8	static
+../board/peripherals.c:278:13:BOARD_InitPeripherals_CommonPostInit	8	static
+../board/peripherals.c:286:6:BOARD_InitPeripherals	8	static
+../board/peripherals.c:299:6:BOARD_InitBootPeripherals	8	static
