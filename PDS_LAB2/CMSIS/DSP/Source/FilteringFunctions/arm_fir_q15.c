@@ -247,7 +247,6 @@ void arm_fir_q15(
   blkCnt = blockSize;
 
 #endif /* #if defined (ARM_MATH_LOOPUNROLL) */
-
   while (blkCnt > 0U)
   {
     /* Copy two samples into state buffer */
