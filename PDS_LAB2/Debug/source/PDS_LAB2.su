@@ -5,9 +5,8 @@ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB2\drivers/f
 C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB2\drivers/fsl_pit.h:246:20:PIT_SetTimerPeriod	24	static
 C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB2\drivers/fsl_pit.h:288:20:PIT_StartTimer	16	static
 C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB2\drivers/fsl_pit.h:302:20:PIT_StopTimer	16	static
-../source/PDS_LAB2.c:51:5:main	16	static
-../source/PDS_LAB2.c:85:6:Changer_Frecuency	152	static
-../source/PDS_LAB2.c:132:6:Filtro_R_S	4	static
-../source/PDS_LAB2.c:141:6:PORTA_IRQHandler	16	static
-../source/PDS_LAB2.c:154:6:PORTC_IRQHandler	16	static
-../source/PDS_LAB2.c:166:6:PIT0_IRQHandler	16	static
+../source/PDS_LAB2.c:82:5:main	16	static
+../source/PDS_LAB2.c:120:6:Changer_Frecuency	152	static
+../source/PDS_LAB2.c:198:6:PORTA_IRQHandler	16	static
+../source/PDS_LAB2.c:211:6:PORTC_IRQHandler	16	static
+../source/PDS_LAB2.c:233:6:PIT0_IRQHandler	16	static

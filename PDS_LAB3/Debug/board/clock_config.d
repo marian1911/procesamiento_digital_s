@@ -1,0 +1,29 @@
+board/clock_config.o board/clock_config.d: ../board/clock_config.c \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_smc.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_common.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\device/fsl_device_registers.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\device/MK64F12.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\CMSIS/core_cm4.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\CMSIS/cmsis_version.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\CMSIS/cmsis_compiler.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\CMSIS/cmsis_gcc.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\device/system_MK64F12.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\device/MK64F12_features.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_common_arm.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_clock.h \
+ ../board/clock_config.h \
+ C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_common.h
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_smc.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_common.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\device/fsl_device_registers.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\device/MK64F12.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\CMSIS/core_cm4.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\CMSIS/cmsis_version.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\CMSIS/cmsis_compiler.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\CMSIS/cmsis_gcc.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\device/system_MK64F12.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\device/MK64F12_features.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_common_arm.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_clock.h:
+../board/clock_config.h:
+C:\Users\enzog\Documents\MCUXpressoIDE_11.10.0_3148\workspace\PDS_LAB3\drivers/fsl_common.h:

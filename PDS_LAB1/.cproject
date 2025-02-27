@@ -530,6 +530,9 @@
 								<option id="com.crt.advproject.gcc.specs.1467447812" name="Specs" superClass="com.crt.advproject.gcc.specs" useByScannerDiscovery="false"/>
 								<option id="com.crt.advproject.gcc.config.2026526689" name="Obsolete (Config)" superClass="com.crt.advproject.gcc.config" useByScannerDiscovery="false"/>
 								<option id="com.crt.advproject.gcc.store.1057490739" name="Obsolete (Store)" superClass="com.crt.advproject.gcc.store" useByScannerDiscovery="false"/>
+								<option id="com.crt.advproject.gcc.exe.release.option.optimization.level.1853182037" superClass="com.crt.advproject.gcc.exe.release.option.optimization.level" useByScannerDiscovery="true"/>
+								<option id="com.crt.advproject.gcc.exe.release.option.debugging.level.1605353715" superClass="com.crt.advproject.gcc.exe.release.option.debugging.level" useByScannerDiscovery="false"/>
+								<option id="com.crt.advproject.gcc.exe.release.option.debugging.other.1625888273" superClass="com.crt.advproject.gcc.exe.release.option.debugging.other" useByScannerDiscovery="false"/>
 								<inputType id="com.crt.advproject.compiler.input.509056302" superClass="com.crt.advproject.compiler.input"/>
 							</tool>
 							<tool id="com.crt.advproject.gas.exe.release.396156661" name="MCU Assembler" superClass="com.crt.advproject.gas.exe.release">
@@ -559,6 +562,8 @@
 								<option id="com.crt.advproject.gas.specs.1690512976" name="Specs" superClass="com.crt.advproject.gas.specs"/>
 								<option id="com.crt.advproject.gas.config.224973364" name="Obsolete (Config)" superClass="com.crt.advproject.gas.config"/>
 								<option id="com.crt.advproject.gas.store.723607049" name="Obsolete (Store)" superClass="com.crt.advproject.gas.store"/>
+								<option id="com.crt.advproject.gas.debug.1878959392" superClass="com.crt.advproject.gas.debug"/>
+								<option id="com.crt.advproject.gas.option.debugging.other.1213736687" superClass="com.crt.advproject.gas.option.debugging.other"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.576986486" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 								<inputType id="com.crt.advproject.assembler.input.1475697436" name="Additional Assembly Source Files" superClass="com.crt.advproject.assembler.input"/>
 							</tool>
@@ -689,6 +694,7 @@
 								<option id="com.crt.advproject.miscellaneous.pvHeapLimit.651337641" name="Maximum extent of heap" superClass="com.crt.advproject.miscellaneous.pvHeapLimit"/>
 								<option id="com.crt.advproject.debugger.security.nonsecureimageenable.1163037007" name="Enable pre-programming of Non-Secure Image" superClass="com.crt.advproject.debugger.security.nonsecureimageenable"/>
 								<option id="com.crt.advproject.debugger.security.nonsecureimage.464328830" name="Non-Secure Project" superClass="com.crt.advproject.debugger.security.nonsecureimage"/>
+								<option id="com.crt.advproject.linkserver.debug.prevent.release.109312348" superClass="com.crt.advproject.linkserver.debug.prevent.release"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
