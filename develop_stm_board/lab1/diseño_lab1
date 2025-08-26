@@ -1,0 +1,80 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.5 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36" version="27.0.5">
+  <diagram name="Página-1" id="RPzymc7GtauVtw3SNtAR">
+    <mxGraphModel dx="1762" dy="1794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="FlxN8AWg-q_O8-KOhY1z-2" target="FlxN8AWg-q_O8-KOhY1z-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-2" value="timer:&lt;div&gt;TIM2 APB1=45MHz&lt;br&gt;&lt;div&gt;&amp;nbsp;contador ascendente&amp;nbsp; autorecarga&lt;/div&gt;&lt;div&gt;update evento&lt;/div&gt;&lt;div&gt;&amp;nbsp;inicia en 8k&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="-210" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-5" value="&lt;div style=&quot;line-height: 110%;&quot;&gt;&lt;p style=&quot;box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, Arial, &amp;quot;Noto Sans&amp;quot;, &amp;quot;Liberation Sans&amp;quot;, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;, &amp;quot;Noto Color Emoji&amp;quot;; font-size: 15px; text-align: left; line-height: 110%;&quot;&gt;&lt;font color=&quot;#ffffff&quot;&gt;&lt;b&gt;&lt;u&gt;Objetivo:&lt;/u&gt;&lt;/b&gt;&lt;/font&gt;&lt;/p&gt;&lt;p style=&quot;box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, Arial, &amp;quot;Noto Sans&amp;quot;, &amp;quot;Liberation Sans&amp;quot;, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;, &amp;quot;Noto Color Emoji&amp;quot;; font-size: 15px; text-align: left; line-height: 110%;&quot;&gt;&lt;font style=&quot;color: rgb(255, 255, 255);&quot;&gt;Manejar el modulo del conversor A/D integrado en el MCU MK64FN1M0VLL12 de la familia Kinetis K64.&lt;br style=&quot;box-sizing: border-box;&quot;&gt;&lt;/font&gt;&lt;/p&gt;&lt;p style=&quot;box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, Arial, &amp;quot;Noto Sans&amp;quot;, &amp;quot;Liberation Sans&amp;quot;, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;, &amp;quot;Noto Color Emoji&amp;quot;; font-size: 15px; text-align: left; line-height: 110%;&quot;&gt;&lt;font style=&quot;color: rgb(255, 255, 255);&quot;&gt;&lt;span style=&quot;box-sizing: border-box; font-weight: bolder;&quot;&gt;&lt;u style=&quot;box-sizing: border-box;&quot;&gt;&lt;span lang=&quot;ES&quot; style=&quot;box-sizing: border-box;&quot;&gt;Descripción:&lt;/span&gt;&lt;/u&gt;&lt;/span&gt;&lt;br style=&quot;box-sizing: border-box;&quot;&gt;&lt;/font&gt;&lt;/p&gt;&lt;p style=&quot;box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, Arial, &amp;quot;Noto Sans&amp;quot;, &amp;quot;Liberation Sans&amp;quot;, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;, &amp;quot;Noto Color Emoji&amp;quot;; font-size: 15px; text-align: left; line-height: 110%;&quot;&gt;&lt;font style=&quot;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;font style=&quot;color: rgb(255, 255, 255);&quot;&gt;Realizar un programa aplicativo que sea capaz de digitalizar una señal a través del modulo del ADC disponible en la board FRDM-K64F a distintas velocidades de muestreo, las velocidades requeridas son 8K/S, 16K/S 22K/S, 44K/S y 48K/S. Los cambios de las velocidades de muestreo serán realizados con una de las teclas de la placa de evaluación, en forma de un buffer circular. Cada velocidad de muestreo se indicará a través de un color RGB del LED. Con otra tecla de la placa se habilitara la adquisición o se parara la misma (Run/Stop). Los valores adquiridos serán almacenados en memoria en un buffer circular de 512 muestras del tipo q15 (fraccional 15bits) y a su vez serán enviados a través del DAC (de 12bits).&lt;/font&gt;&lt;/span&gt;&lt;br style=&quot;box-sizing: border-box;&quot;&gt;&lt;/font&gt;&lt;/p&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#000000;strokeColor=#2D7600;labelBackgroundColor=none;textShadow=1;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="-600" width="660" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="FlxN8AWg-q_O8-KOhY1z-6" target="FlxN8AWg-q_O8-KOhY1z-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-6" value="generar un evento" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="240" y="-190" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-8" value="Valores de recarga:&lt;div&gt;para 8k -&amp;gt; ticks8k()&lt;/div&gt;&lt;div&gt;para 16k -&amp;gt; ticks16k()&lt;/div&gt;&lt;div&gt;para 22k -&amp;gt; ticks22k()&lt;/div&gt;&lt;div&gt;para 44k -&amp;gt; ticks44k()&lt;/div&gt;&lt;div&gt;para 48k -&amp;gt; ticks48k()&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=0;align=center;" parent="1" vertex="1">
+          <mxGeometry x="450" y="-225" width="190" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-10" value="clock prinicipal 180MHz" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="-90" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="FlxN8AWg-q_O8-KOhY1z-11" target="FlxN8AWg-q_O8-KOhY1z-12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-11" value="adc:&lt;div&gt;ADC1 CH0 CLK2=90MHz/4&lt;br&gt;&lt;div&gt;conversion simple&lt;/div&gt;&lt;div&gt;disparo por evento&lt;/div&gt;&lt;div&gt;transferencia por DMA&lt;/div&gt;&lt;div&gt;sin interrupciones&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="-10" width="160" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-12" value="DMA almacena dato, interrumpe y convierte el dato en Q15" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="240" y="-10" width="120" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="FlxN8AWg-q_O8-KOhY1z-16" target="FlxN8AWg-q_O8-KOhY1z-17" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-16" value="dac&lt;div&gt;trabajar con buffer&lt;/div&gt;&lt;div&gt;disparo por evento&lt;/div&gt;&lt;div&gt;sin interrupcion&amp;nbsp;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="160" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D_KvbTgVc7iK5k8Tu-Zn-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FlxN8AWg-q_O8-KOhY1z-17" target="D_KvbTgVc7iK5k8Tu-Zn-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-17" value="Administrar la expulsion de los datos" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="240" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-24" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="FlxN8AWg-q_O8-KOhY1z-22" target="FlxN8AWg-q_O8-KOhY1z-23" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-22" value="&lt;div&gt;GPIO:&lt;/div&gt;&lt;div&gt;PC13&lt;/div&gt;interrupcion EXTI&lt;div&gt;flanco descendente&lt;/div&gt;&lt;div&gt;resistencia no pull-down&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="290" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="FlxN8AWg-q_O8-KOhY1z-23" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="335" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-23" value="variable de estado modo&lt;div&gt;aplicar modulo%6&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="240" y="305" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" target="FlxN8AWg-q_O8-KOhY1z-27" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="335.0588235294117" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-25" value="&lt;div&gt;Secuencia:&lt;/div&gt;modo=0 -&amp;gt; muestreo 8k&lt;div&gt;modo=1-&amp;gt; muestreo 16k&lt;/div&gt;&lt;div&gt;modo=2 -&amp;gt; muestreo 22k&lt;/div&gt;&lt;div&gt;modo=3 -&amp;gt; muestreo 44k&lt;/div&gt;&lt;div&gt;modo=4 -&amp;gt; muestreo 48k&lt;/div&gt;&lt;div&gt;modo=5 -&amp;gt; apagado&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="440" y="270" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="FlxN8AWg-q_O8-KOhY1z-27" value="detener timer&lt;div&gt;setear base de tiempo&lt;/div&gt;&lt;div&gt;reiniciar timer&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="674" y="305" width="153" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D_KvbTgVc7iK5k8Tu-Zn-1" value="hasta que no se complete el primer buffer no arranca&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;variable de estado&lt;/div&gt;&lt;div&gt;completo&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="130" width="120" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
