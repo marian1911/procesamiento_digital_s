@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1775952728.6783 "c:/Users/lisan/Facultad/Afiles/4° año - 2° cuatrimestre/PDS/Repositorio/procesamiento_digital_s/04_pds_lab2/pds_lab2.tex" "pds_lab2.pdf" "pds_lab2" 1775952735.21672 0
+["pdflatex"] 1775953555.03387 "c:/Users/lisan/Facultad/Afiles/4° año - 2° cuatrimestre/PDS/Repositorio/procesamiento_digital_s/04_pds_lab2/pds_lab2.tex" "pds_lab2.pdf" "pds_lab2" 1775953561.52993 0
   "C:/Users/lisan/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1774987390 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/lisan/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1095.pk" 1771541152 28976 30f470cc4f31adb32598c5da6231c9a7 ""
   "C:/Users/lisan/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1771541143 31952 c3b4248e01cd59f5ecad9216b2dd7c31 ""
@@ -198,14 +198,14 @@
   "Graficos/Rechaza_banda_48k.png" 1775949070 131709 1fe886ded713780e4cfaacc17a8508c9 ""
   "Graficos/Rechaza_banda_8k.png" 1775949027 134098 299c49b3dbe1d77eb15f2413e45df387 ""
   "IDE.png" 1750971096 129306 5c21d6136c58eec820b8784445d817b8 ""
-  "c:/Users/lisan/Facultad/Afiles/4° año - 2° cuatrimestre/PDS/Repositorio/procesamiento_digital_s/04_pds_lab2/pds_lab2.tex" 1775952728 60225 e4cb32002d840bdc6e3967a47fa6616a ""
+  "c:/Users/lisan/Facultad/Afiles/4° año - 2° cuatrimestre/PDS/Repositorio/procesamiento_digital_s/04_pds_lab2/pds_lab2.tex" 1775953554 60255 df28ca6a10522bec0b59d5ebfe8eb14a ""
   "pasa_alto.png" 1752369623 59138 0382863e0356d5c25694f2adc33c2eca ""
   "pasa_bajo.png" 1752369549 70869 10d7a44cea9fcba6ade627ba1d147205 ""
   "pasa_banda.png" 1752369659 79753 74ac0194ba69f55610333fde87d95f2c ""
-  "pds_lab2.aux" 1775952734 14563 171b2afeddd52c3bae62075d3e10c912 "pdflatex"
-  "pds_lab2.out" 1775952734 7150 3aa4d5729e07da442ed75b1dcc325938 "pdflatex"
-  "pds_lab2.tex" 1775952728 60225 e4cb32002d840bdc6e3967a47fa6616a ""
-  "pds_lab2.toc" 1775952734 3508 cb4ff997bf3863e958e88a7fd6a5d2ce "pdflatex"
+  "pds_lab2.aux" 1775953561 14563 171b2afeddd52c3bae62075d3e10c912 "pdflatex"
+  "pds_lab2.out" 1775953561 7150 3aa4d5729e07da442ed75b1dcc325938 "pdflatex"
+  "pds_lab2.tex" 1775953554 60255 df28ca6a10522bec0b59d5ebfe8eb14a ""
+  "pds_lab2.toc" 1775953561 3508 cb4ff997bf3863e958e88a7fd6a5d2ce "pdflatex"
   "placa.png" 1751049477 389552 80971266fc8f6e8ecc0eac2b09c17324 ""
   "rechaza_banda.png" 1752369694 69114 a2c9e6db0d57fcdbbce683b4425d6b8e ""
   "unc.png" 1747505457 137948 e8f3c5cc2aafc66d1fa6a5d96e2ca1bf ""
