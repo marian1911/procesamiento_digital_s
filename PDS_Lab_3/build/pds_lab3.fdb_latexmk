@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1777094672.91074 "d:/Usuario/PC-Lisandro/FACULTAD/Afiles/4° año - 2° cuatrimestre/DSP/procesamiento_digital_s/PDS_Lab_3/pds_lab3.tex" "build/pds_lab3.pdf" "pds_lab3" 1777094674.67003 0
+["pdflatex"] 1777095225.87155 "d:/Usuario/PC-Lisandro/FACULTAD/Afiles/4° año - 2° cuatrimestre/DSP/procesamiento_digital_s/PDS_Lab_3/pds_lab3.tex" "build/pds_lab3.pdf" "pds_lab3" 1777095227.56454 0
   "C:/Users/lisan/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1774924251 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/lisan/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1095.pk" 1770423964 28976 76286de15df7123079216d42356d0769 ""
   "C:/Users/lisan/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1770423958 31952 fd1b1d72f40bc336b0a5c866be5a0170 ""
@@ -178,13 +178,13 @@
   "C:/Users/lisan/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/lisan/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "build/IDE.png" 1777080558 129306 5c21d6136c58eec820b8784445d817b8 ""
-  "build/pds_lab3.aux" 1777094674 4969 bffc1733819baf4099c6fc48c8b6ec6c "pdflatex"
-  "build/pds_lab3.out" 1777094674 6046 17dfd36a5a0929a34a914c3cceb170f3 "pdflatex"
-  "build/pds_lab3.toc" 1777094674 2896 1e08aa4c059167407792422d1a65fab1 "pdflatex"
+  "build/pds_lab3.aux" 1777095227 4969 bffc1733819baf4099c6fc48c8b6ec6c "pdflatex"
+  "build/pds_lab3.out" 1777095227 6046 17dfd36a5a0929a34a914c3cceb170f3 "pdflatex"
+  "build/pds_lab3.toc" 1777095227 2896 1e08aa4c059167407792422d1a65fab1 "pdflatex"
   "build/placa.png" 1777080558 389552 80971266fc8f6e8ecc0eac2b09c17324 ""
   "build/unc.png" 1777080558 137948 e8f3c5cc2aafc66d1fa6a5d96e2ca1bf ""
-  "d:/Usuario/PC-Lisandro/FACULTAD/Afiles/4° año - 2° cuatrimestre/DSP/procesamiento_digital_s/PDS_Lab_3/pds_lab3.tex" 1777094672 23992 a3f8e707fabba8c6d34f48606270e578 ""
-  "pds_lab3.tex" 1777094672 23992 a3f8e707fabba8c6d34f48606270e578 ""
+  "d:/Usuario/PC-Lisandro/FACULTAD/Afiles/4° año - 2° cuatrimestre/DSP/procesamiento_digital_s/PDS_Lab_3/pds_lab3.tex" 1777095225 24003 81de11a2ea62793fe099bc99066defb7 ""
+  "pds_lab3.tex" 1777095225 24003 81de11a2ea62793fe099bc99066defb7 ""
   (generated)
   "build/pds_lab3.aux"
   "build/pds_lab3.log"
