@@ -1,0 +1,38 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Introducción}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Objetivos del proyecto}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Aspectos a tener en cuenta}{3}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Marco teórico}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Conceptos fundamentales del filtrado digital}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Filtros FIR}{4}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Diseño de filtros FIR y el uso de ventanas}{5}{subsubsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.3}Filtros IIR}{6}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Filtros biquad y cascada de secciones}{6}{subsubsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.4}Implementación con la biblioteca CMSIS-DSP}{7}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Placa de Desarrollo y Herramientas Utilizadas}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Microcontrolador STM32F446RE}{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Periféricos clave utilizados}{9}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}ADC (Analog-to-Digital Converter)}{9}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}DAC (Digital-to-Analog Converter)}{9}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}DMA (Direct Memory Access)}{9}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}TIM (Timers)}{10}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}GPIO – General Purpose Input/Output}{10}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.6}Herramientas de desarrollo}{10}{subsubsection.3.2.6}%
+\contentsline {section}{\numberline {4}Calculo y diseño de filtros}{11}{section.4}%
+\contentsline {section}{\numberline {5}Diseño del programa}{14}{section.5}%
+\contentsline {section}{\numberline {6}Programa principal}{15}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Implementación del main.c}{15}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Configuración de periféricos}{22}{subsection.6.2}%
+\contentsline {subsubsection}{\numberline {6.2.1}Configuración del ADC}{22}{subsubsection.6.2.1}%
+\contentsline {subsubsection}{\numberline {6.2.2}Configuración del DAC}{22}{subsubsection.6.2.2}%
+\contentsline {subsubsection}{\numberline {6.2.3}Configuración del temporizador}{23}{subsubsection.6.2.3}%
+\contentsline {subsubsection}{\numberline {6.2.4}Configuración del DMA}{23}{subsubsection.6.2.4}%
+\contentsline {subsubsection}{\numberline {6.2.5}Configuración de GPIO}{23}{subsubsection.6.2.5}%
+\contentsline {subsubsection}{\numberline {6.2.6}Inicialización de los filtros digitales}{24}{subsubsection.6.2.6}%
+\contentsline {subsubsection}{\numberline {6.2.7}Ejecución en tiempo real}{24}{subsubsection.6.2.7}%
+\contentsline {section}{\numberline {7}Resultados experimentales}{24}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Filtro pasa bajo}{24}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Filtro pasa alto}{27}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Filtro pasa banda}{29}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Filtro rechaza banda}{32}{subsection.7.4}%
+\contentsline {section}{\numberline {8}Conclusiones}{34}{section.8}%

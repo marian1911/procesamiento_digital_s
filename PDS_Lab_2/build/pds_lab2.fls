@@ -1,7 +1,7 @@
-PWD d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3
+PWD d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\pds_lab3.tex
-OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.log
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\pds_lab2.tex
+OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.log
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\base\size12.clo
@@ -232,10 +232,10 @@ INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\fancyhdr\fancyhdr.s
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\fancyhdr\fancyhdr.sty
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.aux
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.aux
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.aux
-OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.aux
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.aux
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.aux
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.aux
+OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.aux
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -244,22 +244,22 @@ INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\epstopdf-pkg\epstop
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\00miktex\epstopdf-sys.cfg
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
-OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.pdf
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
-OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
+OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.pdf
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
+OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm2074.tfm
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\unc.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\unc.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\unc.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\unc.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\unc.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\unc.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\unc.png
+INPUT .\unc.png
+INPUT .\unc.png
+INPUT .\unc.png
+INPUT .\unc.png
+INPUT .\unc.png
+INPUT .\unc.png
+INPUT .\unc.png
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx2074.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcbx2074.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm1440.tfm
@@ -268,13 +268,12 @@ INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmmi12.tf
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy10.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm1095.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1095.tfm
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1095.tfm
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm1728.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1728.tfm
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.toc
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.toc
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.toc
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.toc
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.toc
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.toc
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1200.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr8.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr6.tfm
@@ -284,43 +283,216 @@ INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmmi6.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy10.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy8.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy6.tfm
-OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.toc
+OUTPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.toc
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tcrm1200.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecbx1440.tfm
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1200.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt1200.tfm
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\placa.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\placa.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\placa.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\placa.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\placa.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\placa.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\IDE.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\IDE.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\IDE.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\IDE.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\IDE.png
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\IDE.png
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecti1200.tfm
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\tctt1200.tfm
+INPUT .\placa.png
+INPUT .\placa.png
+INPUT .\placa.png
+INPUT .\placa.png
+INPUT .\placa.png
+INPUT .\placa.png
+INPUT .\IDE.png
+INPUT .\IDE.png
+INPUT .\IDE.png
+INPUT .\IDE.png
+INPUT .\IDE.png
+INPUT .\IDE.png
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm0800.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ectt0800.tfm
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecrm0600.tfm
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.aux
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
-INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_3\build\pds_lab3.out
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\tfm\jknappen\ec\ecit0800.tfm
+INPUT .\pasa_bajo.png
+INPUT .\pasa_bajo.png
+INPUT .\pasa_bajo.png
+INPUT .\pasa_bajo.png
+INPUT .\pasa_bajo.png
+INPUT .\pasa_bajo.png
+INPUT .\pasa_alto.png
+INPUT .\pasa_alto.png
+INPUT .\pasa_alto.png
+INPUT .\pasa_alto.png
+INPUT .\pasa_alto.png
+INPUT .\pasa_alto.png
+INPUT .\pasa_banda.png
+INPUT .\pasa_banda.png
+INPUT .\pasa_banda.png
+INPUT .\pasa_banda.png
+INPUT .\pasa_banda.png
+INPUT .\pasa_banda.png
+INPUT .\rechaza_banda.png
+INPUT .\rechaza_banda.png
+INPUT .\rechaza_banda.png
+INPUT .\rechaza_banda.png
+INPUT .\rechaza_banda.png
+INPUT .\rechaza_banda.png
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT .\Graficos\Pasa_bajo_8k.png
+INPUT .\Graficos\Pasa_bajo_8k.png
+INPUT .\Graficos\Pasa_bajo_8k.png
+INPUT .\Graficos\Pasa_bajo_8k.png
+INPUT .\Graficos\Pasa_bajo_8k.png
+INPUT .\Graficos\Pasa_bajo_8k.png
+INPUT .\Graficos\Pasa_bajo_8k.png
+INPUT .\Graficos\Pasa_bajo_16k.png
+INPUT .\Graficos\Pasa_bajo_16k.png
+INPUT .\Graficos\Pasa_bajo_16k.png
+INPUT .\Graficos\Pasa_bajo_16k.png
+INPUT .\Graficos\Pasa_bajo_16k.png
+INPUT .\Graficos\Pasa_bajo_16k.png
+INPUT .\Graficos\Pasa_bajo_16k.png
+INPUT .\Graficos\Pasa_bajo_22k.png
+INPUT .\Graficos\Pasa_bajo_22k.png
+INPUT .\Graficos\Pasa_bajo_22k.png
+INPUT .\Graficos\Pasa_bajo_22k.png
+INPUT .\Graficos\Pasa_bajo_22k.png
+INPUT .\Graficos\Pasa_bajo_22k.png
+INPUT .\Graficos\Pasa_bajo_22k.png
+INPUT .\Graficos\Pasa_bajo_44k.png
+INPUT .\Graficos\Pasa_bajo_44k.png
+INPUT .\Graficos\Pasa_bajo_44k.png
+INPUT .\Graficos\Pasa_bajo_44k.png
+INPUT .\Graficos\Pasa_bajo_44k.png
+INPUT .\Graficos\Pasa_bajo_44k.png
+INPUT .\Graficos\Pasa_bajo_44k.png
+INPUT .\Graficos\Pasa_bajo_48k.png
+INPUT .\Graficos\Pasa_bajo_48k.png
+INPUT .\Graficos\Pasa_bajo_48k.png
+INPUT .\Graficos\Pasa_bajo_48k.png
+INPUT .\Graficos\Pasa_bajo_48k.png
+INPUT .\Graficos\Pasa_bajo_48k.png
+INPUT .\Graficos\Pasa_bajo_48k.png
+INPUT .\Graficos\Pasa_alto_8k.png
+INPUT .\Graficos\Pasa_alto_8k.png
+INPUT .\Graficos\Pasa_alto_8k.png
+INPUT .\Graficos\Pasa_alto_8k.png
+INPUT .\Graficos\Pasa_alto_8k.png
+INPUT .\Graficos\Pasa_alto_8k.png
+INPUT .\Graficos\Pasa_alto_8k.png
+INPUT .\Graficos\Pasa_alto_16k.png
+INPUT .\Graficos\Pasa_alto_16k.png
+INPUT .\Graficos\Pasa_alto_16k.png
+INPUT .\Graficos\Pasa_alto_16k.png
+INPUT .\Graficos\Pasa_alto_16k.png
+INPUT .\Graficos\Pasa_alto_16k.png
+INPUT .\Graficos\Pasa_alto_16k.png
+INPUT .\Graficos\Pasa_alto_22k.png
+INPUT .\Graficos\Pasa_alto_22k.png
+INPUT .\Graficos\Pasa_alto_22k.png
+INPUT .\Graficos\Pasa_alto_22k.png
+INPUT .\Graficos\Pasa_alto_22k.png
+INPUT .\Graficos\Pasa_alto_22k.png
+INPUT .\Graficos\Pasa_alto_22k.png
+INPUT .\Graficos\Pasa_alto_44k.png
+INPUT .\Graficos\Pasa_alto_44k.png
+INPUT .\Graficos\Pasa_alto_44k.png
+INPUT .\Graficos\Pasa_alto_44k.png
+INPUT .\Graficos\Pasa_alto_44k.png
+INPUT .\Graficos\Pasa_alto_44k.png
+INPUT .\Graficos\Pasa_alto_44k.png
+INPUT .\Graficos\Pasa_alto_48k.png
+INPUT .\Graficos\Pasa_alto_48k.png
+INPUT .\Graficos\Pasa_alto_48k.png
+INPUT .\Graficos\Pasa_alto_48k.png
+INPUT .\Graficos\Pasa_alto_48k.png
+INPUT .\Graficos\Pasa_alto_48k.png
+INPUT .\Graficos\Pasa_alto_48k.png
+INPUT .\Graficos\Pasa_banda_8k.png
+INPUT .\Graficos\Pasa_banda_8k.png
+INPUT .\Graficos\Pasa_banda_8k.png
+INPUT .\Graficos\Pasa_banda_8k.png
+INPUT .\Graficos\Pasa_banda_8k.png
+INPUT .\Graficos\Pasa_banda_8k.png
+INPUT .\Graficos\Pasa_banda_8k.png
+INPUT .\Graficos\Pasa_banda_16k.png
+INPUT .\Graficos\Pasa_banda_16k.png
+INPUT .\Graficos\Pasa_banda_16k.png
+INPUT .\Graficos\Pasa_banda_16k.png
+INPUT .\Graficos\Pasa_banda_16k.png
+INPUT .\Graficos\Pasa_banda_16k.png
+INPUT .\Graficos\Pasa_banda_16k.png
+INPUT .\Graficos\Pasa_banda_22k.png
+INPUT .\Graficos\Pasa_banda_22k.png
+INPUT .\Graficos\Pasa_banda_22k.png
+INPUT .\Graficos\Pasa_banda_22k.png
+INPUT .\Graficos\Pasa_banda_22k.png
+INPUT .\Graficos\Pasa_banda_22k.png
+INPUT .\Graficos\Pasa_banda_22k.png
+INPUT .\Graficos\Pasa_banda_44k.png
+INPUT .\Graficos\Pasa_banda_44k.png
+INPUT .\Graficos\Pasa_banda_44k.png
+INPUT .\Graficos\Pasa_banda_44k.png
+INPUT .\Graficos\Pasa_banda_44k.png
+INPUT .\Graficos\Pasa_banda_44k.png
+INPUT .\Graficos\Pasa_banda_44k.png
+INPUT .\Graficos\Pasa_banda_48k.png
+INPUT .\Graficos\Pasa_banda_48k.png
+INPUT .\Graficos\Pasa_banda_48k.png
+INPUT .\Graficos\Pasa_banda_48k.png
+INPUT .\Graficos\Pasa_banda_48k.png
+INPUT .\Graficos\Pasa_banda_48k.png
+INPUT .\Graficos\Pasa_banda_48k.png
+INPUT .\Graficos\Rechaza_banda_8k.png
+INPUT .\Graficos\Rechaza_banda_8k.png
+INPUT .\Graficos\Rechaza_banda_8k.png
+INPUT .\Graficos\Rechaza_banda_8k.png
+INPUT .\Graficos\Rechaza_banda_8k.png
+INPUT .\Graficos\Rechaza_banda_8k.png
+INPUT .\Graficos\Rechaza_banda_8k.png
+INPUT .\Graficos\Rechaza_banda_16k.png
+INPUT .\Graficos\Rechaza_banda_16k.png
+INPUT .\Graficos\Rechaza_banda_16k.png
+INPUT .\Graficos\Rechaza_banda_16k.png
+INPUT .\Graficos\Rechaza_banda_16k.png
+INPUT .\Graficos\Rechaza_banda_16k.png
+INPUT .\Graficos\Rechaza_banda_16k.png
+INPUT .\Graficos\Rechaza_banda_22k.png
+INPUT .\Graficos\Rechaza_banda_22k.png
+INPUT .\Graficos\Rechaza_banda_22k.png
+INPUT .\Graficos\Rechaza_banda_22k.png
+INPUT .\Graficos\Rechaza_banda_22k.png
+INPUT .\Graficos\Rechaza_banda_22k.png
+INPUT .\Graficos\Rechaza_banda_22k.png
+INPUT .\Graficos\Rechaza_banda_44k.png
+INPUT .\Graficos\Rechaza_banda_44k.png
+INPUT .\Graficos\Rechaza_banda_44k.png
+INPUT .\Graficos\Rechaza_banda_44k.png
+INPUT .\Graficos\Rechaza_banda_44k.png
+INPUT .\Graficos\Rechaza_banda_44k.png
+INPUT .\Graficos\Rechaza_banda_44k.png
+INPUT .\Graficos\Rechaza_banda_48k.png
+INPUT .\Graficos\Rechaza_banda_48k.png
+INPUT .\Graficos\Rechaza_banda_48k.png
+INPUT .\Graficos\Rechaza_banda_48k.png
+INPUT .\Graficos\Rechaza_banda_48k.png
+INPUT .\Graficos\Rechaza_banda_48k.png
+INPUT .\Graficos\Rechaza_banda_48k.png
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.aux
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
+INPUT d:\Usuario\PC-Lisandro\FACULTAD\Afiles\4° año - 2° cuatrimestre\DSP\procesamiento_digital_s\PDS_Lab_2\build\pds_lab2.out
+INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecit0800.pk
+INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecit0800.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt0800.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt0800.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0600.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0600.pk
-INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
-INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
+INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tctt1200.pk
+INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tctt1200.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1200.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1200.pk
+INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
+INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1200.pk
@@ -331,8 +503,6 @@ INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcr
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1200.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk
-INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1095.pk
-INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1095.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.pk
 INPUT C:\Users\lisan\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk
@@ -347,8 +517,6 @@ INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\c
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmex10.pfb
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi12.pfb
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi12.pfb
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi6.pfb
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi6.pfb
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi8.pfb
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi8.pfb
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr12.pfb
@@ -357,5 +525,3 @@ INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\c
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmr8.pfb
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb
 INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy8.pfb
-INPUT C:\Users\lisan\AppData\Local\Programs\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy8.pfb
