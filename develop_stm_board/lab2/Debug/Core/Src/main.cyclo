@@ -1,8 +1,0 @@
-../Core/Src/main.c:265:6:convert_q15_to_dac_buffer	4
-../Core/Src/main.c:283:6:process_buffer_half	2
-../Core/Src/main.c:306:6:HAL_ADC_ConvHalfCpltCallback	2
-../Core/Src/main.c:315:6:HAL_ADC_ConvCpltCallback	2
-../Core/Src/main.c:327:6:HAL_GPIO_EXTI_Callback	38
-../Core/Src/main.c:522:5:main	1
-../Core/Src/main.c:590:6:SystemClock_Config	4
-../Core/Src/main.c:644:6:Error_Handler	1
