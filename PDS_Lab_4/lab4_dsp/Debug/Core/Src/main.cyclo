@@ -1,0 +1,9 @@
+../Core/Src/main.c:137:6:generar_ruido	2
+../Core/Src/main.c:150:6:convert_float_to_dac_buffer	4
+../Core/Src/main.c:185:6:process_buffer_half	5
+../Core/Src/main.c:248:6:HAL_ADC_ConvHalfCpltCallback	3
+../Core/Src/main.c:260:6:HAL_ADC_ConvCpltCallback	3
+../Core/Src/main.c:272:6:HAL_TIM_PeriodElapsedCallback	1
+../Core/Src/main.c:279:5:main	1
+../Core/Src/main.c:342:6:SystemClock_Config	4
+../Core/Src/main.c:373:6:Error_Handler	1

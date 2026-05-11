@@ -1,0 +1,9 @@
+../Core/Src/main.c:137:6:generar_ruido	40	static
+../Core/Src/main.c:150:6:convert_float_to_dac_buffer	40	static
+../Core/Src/main.c:185:6:process_buffer_half	48	static
+../Core/Src/main.c:248:6:HAL_ADC_ConvHalfCpltCallback	16	static
+../Core/Src/main.c:260:6:HAL_ADC_ConvCpltCallback	16	static
+../Core/Src/main.c:272:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:279:5:main	16	static
+../Core/Src/main.c:342:6:SystemClock_Config	88	static
+../Core/Src/main.c:373:6:Error_Handler	4	static,ignoring_inline_asm
