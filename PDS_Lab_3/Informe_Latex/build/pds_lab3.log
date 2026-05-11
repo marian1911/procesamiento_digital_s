@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.30)  11 MAY 2026 17:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.30)  11 MAY 2026 17:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -581,7 +581,7 @@ Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count341
-<unc.png, id=194, 401.5pt x 401.5pt>
+<unc.png, id=190, 401.5pt x 401.5pt>
 File: unc.png Graphic file (type png)
 <use unc.png>
 Package pdftex.def Info: unc.png  used on input line 109.
@@ -618,7 +618,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 [5]
 
 [6]
-<placa.png, id=292, 602.25pt x 602.25pt>
+<placa.png, id=287, 602.25pt x 602.25pt>
 File: placa.png Graphic file (type png)
 <use placa.png>
 Package pdftex.def Info: placa.png  used on input line 251.
@@ -656,9 +656,7 @@ File: lstlang1.sty 2024/09/23 1.10c listings language file
 
 [15]
 
-[16]
-
-[17] (pds_lab3.aux
+[16] (pds_lab3.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -667,20 +665,20 @@ LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-07-19>
  ***********
 Package rerunfilecheck Info: File `pds_lab3.out' has not changed.
-(rerunfilecheck)             Checksum: 08BCD91C2A59909186ED8F43809A78BC;9273.
+(rerunfilecheck)             Checksum: E1850209044C4D04E8281269EB7D7A11;9112.
  ) 
 Here is how much of TeX's memory you used:
- 25702 strings out of 468149
- 473424 string characters out of 5431082
+ 25699 strings out of 468149
+ 473387 string characters out of 5431082
  1329284 words of memory out of 5000000
- 53689 multiletter control sequences out of 15000+600000
+ 53688 multiletter control sequences out of 15000+600000
  642378 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  102i,12n,107p,901b,2097s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecit0800.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0600.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcbx2074.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2074.pk><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on pds_lab3.pdf (17 pages, 989797 bytes).
+Output written on pds_lab3.pdf (16 pages, 986906 bytes).
 PDF statistics:
- 1185 PDF objects out of 1200 (max. 8388607)
- 242 named destinations out of 1000 (max. 500000)
- 399 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1175 PDF objects out of 1200 (max. 8388607)
+ 240 named destinations out of 1000 (max. 500000)
+ 391 words of extra memory for PDF output out of 10000 (max. 10000000)
 

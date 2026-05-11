@@ -724,40 +724,9 @@
 
 		\subsection{Logros alcanzados}
 
-			Se implementó exitosamente la Transformada Rápida de Fourier en el STM32F446RE, permitiendo:
-
-			\begin{itemize}
-				\item Análisis espectral de señales en tiempo real
-				\item Operación con múltiples tasas de muestreo (8-48 kHz)
-				\item Tamaños de ventana configurables (512, 1024, 2048)
-				\item Transmisión de resultados para visualización remota
-				\item Modo bypass para comparación directa
-			\end{itemize}
-
 		\subsection{Limitaciones identificadas}
 
-			\begin{itemize}
-				\item Precisión limitada por aritmética en punto fijo Q15
-				\item Memoria RAM limitada (128 KB) restringe tamaños de buffer máximos
-				\item Latencia de procesamiento dependiente del tamaño de FFT
-				\item Resolución en frecuencia limitada por tasa de muestreo
-			\end{itemize}
-
-		\subsection{Aplicaciones futuras}
-
-			Este sistema puede extenderse para:
-
-			\begin{itemize}
-				\item Detección de anomalías en vibraciones mecanicas
-				\item Monitoreo de calidad de energía eléctrica
-				\item Análisis de audio en tiempo real
-				\item Sistemas de diagnóstico médico portátiles
-				\item Telecomunicaciones digitales
-			\end{itemize}
-
 		\subsection{Reflexión final}
-
-			El desarrollo de este trabajo práctico permitió comprender la importancia de los algoritmos eficientes en sistemas embebidos. La FFT, combinada con la plataforma STM32 y las librerías optimizadas de CMSIS-DSP, demuestra cómo conceptos teóricos de procesamiento de señales pueden implementarse de manera práctica en hardware real, abriendo camino a aplicaciones complejas en tiempo real que serían imposibles con métodos ingenuos de cálculo.
 
 	%--------------------------------------------------------%
 	
