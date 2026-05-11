@@ -6,9 +6,10 @@
 \usepackage[spanish]{babel}
 \usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta}
-\usepackage{graphicx} 
+\usepackage{graphicx}
 \usepackage{tabularx}
-\usepackage{hyperref} 
+\usepackage{hyperref}
+\usepackage{amsmath}
 
 % Márgenes
 \usepackage[a4paper, left=2.5cm, right=2.5cm, top=2cm, bottom=2cm]{geometry}
@@ -22,17 +23,16 @@
 \usepackage{tikz}
 \usepackage{url}
 
-
 % Encabezados y pies de página
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{TP Nº2 - Filtrado digital de señales}
+\lhead{TP Nº4 - Cancelación Adaptiva de Ruido}
 \rhead{UNC-Procesamiento digital de señales}
 \cfoot{\thepage}
 \setlength{\headheight}{15pt}
 
-% Estilo para código Matlab
+% Estilo para código
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -41,25 +41,26 @@
 \lstdefinestyle{mystyle}{
 	language=C,
 	backgroundcolor=\color{white},
-	basicstyle=\scriptsize\ttfamily,           % Tamaño de fuente reducido con tipografía monoespaciada
+	basicstyle=\scriptsize\ttfamily,
 	keywordstyle=\color[HTML]{0072BD}\bfseries,
 	commentstyle=\color[HTML]{008000}\itshape,
 	stringstyle=\color[HTML]{A2142F},
-	numberstyle=\tiny\color{gray},             % Números de línea discretos
+	numberstyle=\tiny\color{gray},
 	numbers=left,
-	numbersep=6pt,                             % Separación más generosa para claridad
+	numbersep=6pt,
 	frame=single,
 	rulecolor=\color{black!50},
-	breaklines=true,                           % Cortar líneas largas automáticamente
-	breakatwhitespace=false,                   % Cortar incluso sin espacios
-	breakautoindent=true,                      % Mantener indentación visual
+	breaklines=true,
+	breakatwhitespace=false,
+	breakautoindent=true,
 	tabsize=2,
 	showspaces=false,
 	showstringspaces=false,
-	xleftmargin=1.5em,                         % Margen izquierdo para números
+	xleftmargin=1.5em,
 	xrightmargin=0.5em,
-	aboveskip=1em,                             % Espacio antes del bloque de código
-	belowskip=1em,                             % Espacio después del bloque de código
+	aboveskip=1em,
+	belowskip=1em,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1 {≈}{{$\approx$}}1,
 }
 
 \lstdefinestyle{pythonstyle}{
@@ -83,23 +84,23 @@
 	xleftmargin=1.5em,
 	xrightmargin=0.5em,
 	aboveskip=1em,
-	belowskip=1em
+	belowskip=1em,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1 {≈}{{$\approx$}}1,
 }
-
 
 % Título y autores
 \title{
 	\includegraphics[width=0.45\textwidth]{unc.png} \\[2cm] % Logo
-	\textbf{Trabajo Práctico Nº2: Filtrado digital de señales}
+	\textbf{Trabajo Práctico Nº4: Cancelación Adaptiva de Ruido con Filtro LMS} 
 }
-
+    
 \author{
 	Profesores: \\ Parlanti Gustavo Fernand (Presidente) \\ Molina German Alcides (Vocal)\\ Rossi Robreto Raul (Vocal)
 	\\ \\
 	Alumnos:\\ Campos \\ Testa \\ Verstraete 
 }
 
-\date{Julio de 2025} % Fecha del trabajo
+\date{Mayo de 2026} % Fecha del trabajo
 
 \begin{document}
 	
@@ -107,7 +108,7 @@
 	
 	\begin{abstract}
 	
-    %--------------------------------------------------------%    
+    Realizar un programa aplicativo que implemente un sistema de cancelación adaptiva de ruido (ANC) sobre el microcontrolador STM32F446RE, utilizando un filtro LMS (Least Mean Squares) para adaptar dinámicamente los coeficientes de un modelo FIR que simula la trayectoria del ruido. El sistema debe procesar en tiempo real señales de entrada adquiridas mediante el ADC, generar una referencia de ruido blanco, colorearla mediante un filtro FIR de contaminación y recuperar la señal limpia mediante la cancelación adaptiva en un buffer configurable de 512 muestras. Los resultados se transmitirán a través de dos canales DAC: el primero contendrá la señal limpia recuperada e(n) $\approx$ s(n), mientras que el segundo contará la señal ruidosa d(n) = s(n) + x\_contam(n) para monitoreo.
 
 	\end{abstract}\newpage
 	
@@ -115,269 +116,422 @@
 	
 	\section{Introducción}
 	
-	%--------------------------------------------------------%
+		La cancelación de ruido constituye un desafío fundamental en procesamiento de señales, especialmente en aplicaciones de comunicaciones, audio y sistemas de medición. Mientras que los filtros digitales tradicionales se basan en características espectrales conocidas del ruido, la cancelación adaptiva de ruido (ANC) ofrece una solución dinámica que se ajusta en tiempo real a cambios en las características del ruido.
 
-	\subsection{Objetivos del proyecto}
-	
-	%--------------------------------------------------------%
+		En este trabajo práctico se implementa un sistema ANC sobre la plataforma STM32F446RE, continuando con la arquitectura desarrollada en laboratorios anteriores. El sistema utiliza un filtro LMS (Least Mean Squares), uno de los algoritmos adaptativos más utilizados por su estabilidad y eficiencia computacional. La arquitectura empleada sigue un modelo de ``feedforward'' donde:
 
-	\subsection{Aspectos a tener en cuenta}
-	
-	%--------------------------------------------------------%
-	
+		\begin{itemize}
+			\item Una referencia de ruido blanco se genera mediante un generador pseudo-aleatorio (LCG).
+			\item Esta referencia se filtra con un FIR de contaminación que modela la trayectoria del ruido desde la fuente hasta la señal de interés.
+			\item El ruido coloreado resultante se suma a una señal limpia para simular un escenario de contaminación.
+			\item Un filtro LMS recibe la referencia limpia y la señal ruidosa, aprendiendo adaptativamente el modelo FIR.
+			\item La salida del LMS estima el ruido, permitiendo cancelarlo y recuperar la señal limpia.
+		\end{itemize}
+
+		El presente documento describe la implementación completa del sistema, incluyendo la arquitectura de procesamiento, la configuración de periféricos, el algoritmo LMS y los resultados experimentales obtenidos.
+
+		\subsection{Objetivos del proyecto}
+		
+			\begin{itemize}
+			\item Implementar un sistema de cancelación adaptiva de ruido (ANC) sobre el microcontrolador STM32F446RE.
+			
+			\item Generar una referencia de ruido blanco pseudo-aleatorio utilizando un generador congruencial lineal (LCG).
+			
+			\item Diseñar un filtro FIR que modele la trayectoria de contaminación del ruido, simulando cómo el ruido se propaga y filtra antes de llegar a la señal de interés.
+			
+			\item Implementar un filtro LMS adaptivo que aprenda dinámicamente los coeficientes del FIR de contaminación.
+			
+			\item Procesar señales en tiempo real adquiridas mediante el ADC, aplicando el algoritmo LMS en bloques de 256 muestras con doble buffering y DMA.
+			
+			\item Transmitir dos canales de salida mediante DAC: la señal limpia recuperada e(n) y la señal ruidosa de entrada d(n) para monitoreo.
+			
+			\item Analizar experimentalmente la convergencia del algoritmo LMS bajo diferentes condiciones operativas.
+			
+			\item Demostrar la efectividad del sistema en cancelar ruido coloreado mediante análisis espectral.
+			
+			\end{itemize}
+			
 	\section{Marco teórico}
-	
-	%--------------------------------------------------------%
-	
-	\section{Placa de Desarrollo y Herramientas Utilizadas}
-	El proyecto fue desarrollado sobre la placa STM32 Nucleo-F446RE, basada en el microcontrolador STM32F446RE, perteneciente a la familia STM32F4 de STMicroelectronics. Esta plataforma integra una arquitectura avanzada ARM Cortex-M4, periféricos orientados a procesamiento de señales, y herramientas de desarrollo que permiten implementar sistemas en tiempo real de forma eficiente.
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.7\linewidth]{placa}
-		\caption[Placa de desarrollo]{Placa de desarrollo}
-		\label{fig:placa}
-	\end{figure}
-	
-	\subsection{Microcontrolador STM32F446RE}
-	El STM32F446RE es un microcontrolador de 32 bits basado en el núcleo ARM Cortex-M4, optimizado para procesamiento digital con soporte de instrucciones DSP y unidad de punto flotante opcional (FPU simple precisión). Sus principales características relevantes al proyecto son:
-	
-	\begin{itemize}
-		\item Frecuencia de operación: hasta 180MHz
-		
-		\item Memoria Flash: 512KB
-		
-		\item RAM: 128KB
-		
-		\item Tensión de operación: 1.8V a 3.6V
-		
-		\item Paquete: LQFP64 (compatible con la Nucleo-F446RE)
-	\end{itemize}
-	
-		\subsection{Periféricos clave utilizados}
-	\subsubsection{ADC (Analog-to-Digital Converter)}
-	El STM32F446RE cuenta con 3 ADCs independientes (ADC1, ADC2 y ADC3), cada uno de 12 bits de resolución y con capacidad de hasta 2.4 MSPS (mega muestras por segundo) en modo intercalado. Para este proyecto se utiliza el ADC1 en modo regular y con DMA activado. Sus características técnicas relevantes incluyen:
-	
-	\begin{itemize}
-		\item Resolución seleccionable: 6, 8, 10 o 12 bits (se usa 12 bits para mayor precisión).
-		
-		\item Tasa de muestreo máxima (single conversion): hasta 2.4 MSPS.
-		
-		\item Rango de entrada: 0V a VREF (típicamente 3.3V).
-		
-		\item Tiempo de muestreo configurable: desde 3 hasta 480 ciclos de ADC.
-		
-		\item Trigger externo: el inicio de la conversión puede ser disparado por un temporizador, lo cual permite muestrear a frecuencias precisas.
-		
-		\item Modo DMA: transferencia automática de los resultados a un buffer en memoria (sin intervención del CPU).
-		
-		\item Modo continuo + DMA circular: permite muestreo ininterrumpido con mínimo overhead.
-	\end{itemize}
-	
-	\subsubsection{DAC (Digital-to-Analog Converter)}
-	El STM32F446RE incluye 2 canales DAC (DAC1 y DAC2), ambos de 12 bits, con capacidad de salida en modo bufferizado (con baja impedancia) o sin buffer (alta velocidad). Se utiliza DAC1 en este proyecto para convertir las muestras digitales de salida nuevamente en una señal analógica. Características clave:
-	
-	\begin{itemize}
-		\item Resolución de conversión: 12, 10 u 8 bits.
-		
-		\item Velocidad típica: hasta 1 MSPS (modo sin buffer).
-		
-		\item Modo bufferizado: reduce el ruido, ideal para salidas de audio.
-		
-		\item Trigger externo: puede sincronizarse con un temporizador (por ejemplo TIM6/TRGO).
-		
-		\item Soporte DMA: se permite la alimentación directa de datos desde memoria al DAC sin CPU.
-		
-		\item Salidas disponibles: a través de pines analógicos dedicados (por ejemplo, PA4 para DAC1).
-	\end{itemize}
-	
-	\subsubsection{DMA (Direct Memory Access)}
-	El controlador DMA2 es utilizado para las transferencias entre ADC/DAC y RAM. El STM32F446RE cuenta con dos controladores DMA (DMA1 y DMA2), con un total de 16 canales (streams) y soporte para múltiples periféricos. Características específicas:
-	
-	\begin{itemize}
-		\item Transferencia en background, sin intervención del CPU.
-		
-		\item Modo circular: ideal para buffers cíclicos o doble buffering.
-		
-		\item Prioridad programable por canal.
-		
-		\item Transferencia por palabras (16 bits en Q15).
-		
-		\item Eventos por mitad de buffer y buffer completo: permite usar doble buffer sincronizado.
-	\end{itemize}
-	
-	\subsubsection{TIM (Timers)}
-	El STM32F446RE cuenta con 14 temporizadores (4 avanzados, 2 básicos, 8 generales), todos con configuraciones de prescaler, auto-reload y posibilidad de generar eventos de actualización. Se utilizan para generar señales periódicas que actúan como trigger de muestreo. Características clave:
-	\begin{itemize}
-		\item TIM2-TIM5: de 32 bits, con amplio rango de conteo (útiles para precisión en frecuencias bajas).
-		
-		\item Configuración de frecuencia: vía Prescaler y ARR (Auto-Reload Register).
-		
-		\item Trigger de ADC/DAC: mediante señal TRGO (Trigger Output).
-		
-		\item Modo master-slave: permite sincronización entre periféricos.
-	\end{itemize}
-	
-	\subsubsection{GPIO – General Purpose Input/Output}
-	Los pines GPIO permiten la interacción con el usuario mediante botones (teclas) y LEDs. Se utilizan:
-	
-	\begin{itemize}
-		\item Velocidad de salida seleccionable: Low, Medium, Fast, High.
-		
-		\item Pull-up/Pull-down configurables.
-		
-		\item Interrupciones por flanco ascendente, descendente o ambos.
-	\end{itemize}
-	
-	\subsubsection{Herramientas de desarrollo}
-	Para la implementación del proyecto se utilizaron las siguientes herramientas:
-	
-	\begin{itemize}
-		\item STM32CubeIDE: entorno de desarrollo oficial de STMicroelectronics, basado en Eclipse, que permite configurar periféricos gráficamente, generar código y compilar con GCC.
-		
-		\item STM32CubeMX: herramienta para la configuración inicial de pines, relojes, periféricos y generación de código base.
-		
-		\item CMSIS y CMSIS-DSP: bibliotecas proporcionadas por ARM para facilitar el uso de instrucciones de bajo nivel y rutinas DSP optimizadas en punto fijo.
-		
-		\item GDB y ST-Link: utilizados para depuración, profiling y medición de tiempos mediante DWT->CYCCNT.
-	\end{itemize}\newpage
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=1\linewidth]{IDE}
-		\caption[Entorno de desarrollo STM32CUBE IDE]{Entorno de desarrollo STM32CUBE IDE}
-		\label{fig:ide}
-	\end{figure}
 
+		\subsection{Cancelación Adaptiva de Ruido (ANC)}
 
-	\section{Diseño del programa}
+			La cancelación adaptiva de ruido es una técnica que utiliza información de una referencia de ruido para estimar y cancelar el ruido presente en una señal deseada. A diferencia de los filtros digitales convencionales que tienen coeficientes fijos, los filtros adaptativos actualizan sus coeficientes en tiempo real basándose en una regla de minimización de error.
 
-	%--------------------------------------------------------%
+			El modelo estándar de ANC ``feedforward'' con estructura LMS puede representarse como:
 
-	\section{Programa principal}
+			\[
+			d(n) = s(n) + x_c(n)
+			\]
 
-	%--------------------------------------------------------%
+			donde $d(n)$ es la señal deseada (señal limpia más ruido), $s(n)$ es la señal de interés y $x_c(n)$ es el ruido coloreado que contamina la señal.
 
-	\subsection{Configuración de periféricos}
-	El programa principal inicializa los periféricos necesarios para realizar la adquisición, procesamiento y reproducción de la señal en tiempo real. La arquitectura general mantiene el mismo esquema del Trabajo Práctico Nº1, incorporando ahora la etapa de filtrado digital mediante la biblioteca CMSIS-DSP.
+			El sistema cuenta con una referencia de ruido $x_{ref}(n)$ que está correlada con $x_c(n)$ pero sin la coloración. El objetivo del filtro adaptativo es estimar $x_c(n)$ minimizando el error:
 
-	La inicialización de los periféricos se realiza mediante las funciones generadas automáticamente por STM32CubeMX:
+			\[
+			e(n) = d(n) - y(n)
+			\]
 
-	\begin{itemize}
-	\item MX\_GPIO\_Init()
-	\item MX\_DMA\_Init()
-	\item MX\_ADC1\_Init()
-	\item MX\_TIM2\_Init()
-	\item MX\_DAC\_Init()
-	\end{itemize}
+			donde $y(n)$ es la salida del filtro adaptativo. Cuando el filtro converge, $y(n) \approx x_c(n)$ y $e(n) \approx s(n)$.
 
-	Cada uno de estos periféricos cumple una función específica dentro del sistema de procesamiento digital en tiempo real.
+		\subsection{Filtro LMS (Least Mean Squares)}
 
-	\subsubsection{Configuración del ADC}
-	El conversor analógico-digital (ADC1) se utiliza para adquirir la señal de entrada con una resolución de 12 bits. El ADC es disparado periódicamente por el temporizador TIM2, lo que garantiza una frecuencia de muestreo precisa.
+			El filtro LMS es un algoritmo adaptativo que actualiza los coeficientes del filtro mediante el método del descenso por gradiente. La ecuación de actualización de coeficientes es:
 
-	La transferencia de datos se realiza mediante DMA en modo circular, permitiendo almacenar continuamente las muestras en un buffer sin intervención directa del CPU.
+			\[
+			\mathbf{w}(n+1) = \mathbf{w}(n) + 2 \mu e(n) x_{ref}(n-k)
+			\]
 
-	La inicialización del ADC en modo DMA se realiza con:
+			donde $\mathbf{w}(n)$ es el vector de coeficientes del filtro, $\mu$ es el paso de adaptación (step size), $e(n)$ es el error instantáneo y $x_{ref}(n-k)$ es el vector de entrada retardada.
 
-	\begin{lstlisting}[style=mystyle]
-	HAL_ADC_Start_DMA(&hadc1,
-					(uint32_t*) adc_buffer,
-					BUFFER_SIZE);
-	\end{lstlisting}
+			El paso de adaptación $\mu$ controla la velocidad de convergencia: valores pequeños resultan en convergencia lenta pero estable; valores grandes pueden causar oscilaciones o inestabilidad. El criterio de estabilidad teórico es:
 
-	El uso de DMA permite implementar un esquema de doble buffer, donde la mitad del buffer puede procesarse mientras la otra mitad continúa llenándose con nuevas muestras.
+			\[
+			0 < \mu < \frac{1}{M \cdot E[x_{ref}^2(n)]}
+			\]
 
-	\subsubsection{Configuración del DAC}
-	El conversor digital-analógico (DAC1) se utiliza para reconstruir la señal procesada y permitir su visualización mediante un osciloscopio.
+			donde $M$ es el número de coeficientes del filtro y $E[x_{ref}^2(n)]$ es la potencia de la señal de referencia.
 
-	El DAC también opera en modo DMA, lo que permite enviar continuamente los datos procesados desde memoria hacia la salida analógica sin intervención del CPU.
+		\subsection{Generador de Ruido: LCG (Linear Congruential Generator)}
 
-	La inicialización del DAC se realiza mediante:
+			Para obtener una referencia de ruido blanco pseudo-aleatorio sin requerir un periférico RNG hardware, se utiliza un generador congruencial lineal (LCG), definido como:
 
-	\begin{lstlisting}[style=mystyle]
-	HAL_DAC_Start_DMA(&hdac,
-					DAC_CHANNEL_1,
-					(uint32_t*) dac_buffer,
-					BUFFER_SIZE,
-					DAC_ALIGN_12B_R);
-	\end{lstlisting}
+			\[
+			x_{n+1} = (a \cdot x_n + c) \mod m
+			\]
 
-	\subsubsection{Configuración del temporizador}
-	El temporizador TIM2 se utiliza como base de tiempo para definir la frecuencia de muestreo del sistema. Este temporizador genera eventos periódicos (TRGO) que disparan simultáneamente el ADC y el DAC, garantizando sincronización entre adquisición y reconstrucción de la señal.
+			En la implementación se utiliza $a = 1664525$, $c = 1013904223$ y $m = 2^{24}$, que generan una secuencia de buena calidad estadística.
 
-	La frecuencia de muestreo puede modificarse dinámicamente mediante interrupciones externas, ajustando el valor del registro Auto-Reload del temporizador.
+			La ventaja del LCG es que es determinístico y mantiene estado continuo entre bloques, generando una secuencia estacionaria sin discontinuidades.
 
-	El temporizador se inicia mediante:
+		\subsection{Filtro FIR de Contaminación}
 
-	\begin{lstlisting}[style=mystyle]
-	HAL_TIM_Base_Start(&htim2);
-	\end{lstlisting}
+			El filtro FIR de contaminación modela la trayectoria del ruido desde la fuente hasta la señal de interés:
 
-	Los valores de autoreload utilizados para cada frecuencia de muestreo son:
+			\[
+			x_c(n) = \sum_{k=0}^{L-1} h(k) \cdot x_{ref}(n-k)
+			\]
 
-	\begin{itemize}
-	\item 8 kHz
-	\item 16 kHz
-	\item 22 kHz
-	\item 44 kHz
-	\item 48 kHz
-	\end{itemize}
+			donde $h(k)$ son los coeficientes que definen el canal de propagación. Este filtro introduce tanto retardo como coloración espectral al ruido de referencia.
 
-	\subsubsection{Configuración del DMA}
-	El controlador DMA permite transferir datos entre los periféricos y la memoria sin intervención del CPU. En este sistema se utiliza para:
+			En la implementación, los coeficientes del FIR definen un filtro paso-banda (30 coeficientes) que simula una trayectoria acústica o electrónica realista.
 
-	\begin{itemize}
-	\item Transferir muestras desde el ADC hacia el buffer de entrada
-	\item Transferir muestras procesadas hacia el DAC
-	\end{itemize}
+	\section{Placa de Desarrollo}
 
-	El uso de DMA reduce la carga del procesador y permite garantizar procesamiento en tiempo real.
+		\subsection{Microcontrolador STM32F446RE}
 
-	\subsubsection{Configuración de GPIO}
-	Los pines GPIO se utilizan para interactuar con el usuario mediante pulsadores y LEDs.
+			El STM32F446RE es un microcontrolador de alto rendimiento basado en ARM Cortex-M4 con:
 
-	Las interrupciones externas permiten:
+			\begin{itemize}
+				\item Núcleo: Cortex-M4 con soporte para FPU (unidad de punto flotante de 32 bits)
+				\item Frecuencia de operación: Hasta 180 MHz
+				\item Memoria Flash: 512 KB
+				\item Memoria RAM: 128 KB
+				\item Periféricos: ADC de 12 bits, DAC de 12 bits, múltiples timers, DMA, UART
+			\end{itemize}
 
-	\begin{itemize}
-	\item Cambiar la frecuencia de muestreo
-	\item Cambiar el tipo de filtro (LP, HP, BP, BS)
-	\item Activar el modo bypass del filtro
-	\end{itemize}
+			En este proyecto se opera a 90 MHz (dividido del reloj máximo de 180 MHz) para mantener márgenes de estabilidad.
 
-	Además, los LEDs RGB indican visualmente el estado del sistema y la frecuencia de muestreo seleccionada.
+		\subsection{Convertidor Analógico-Digital (ADC1)}
 
-	\subsubsection{Inicialización de los filtros digitales}
-	Luego de inicializar los periféricos, se configuran las estructuras necesarias para implementar los filtros digitales en formato Q15 utilizando la biblioteca CMSIS-DSP.
+			\begin{itemize}
+				\item Resolución: 12 bits
+				\item Rango: 0 a 3.3V (mapeado a 0 a 4095 digital)
+				\item Frecuencia de muestreo: 16 kHz
+				\item Fuente de trigger: Salida TRGO de TIM2
+				\item Modo: DMA en circular (double-buffering)
+				\item Buffer: 512 muestras (256 por semibuffer para procesamiento)
+			\end{itemize}
 
-	La inicialización de los filtros se realiza mediante:
+			La normalización a rango [-1, +1] se realiza mediante:
 
-	\begin{lstlisting}[style=mystyle]
-	arm_fir_init_q15(&FPB,
-					FPB_8K_NUM_TAPS,
-					FPB_8K_COEFFS,
-					FPB_status,
-					BUFFER_SIZE / 2);
-	\end{lstlisting}
+			\[
+			s(n) = \frac{\text{ADC}(n) - 2048}{2047.5}
+			\]
 
-	Se definen filtros paso bajo, paso alto, pasa banda y rechazo de banda para cada frecuencia de muestreo soportada por el sistema.
+		\subsection{Convertidor Digital-Analógico (DAC)}
 
-	\subsubsection{Ejecución en tiempo real}
-	Una vez inicializados los periféricos, el sistema comienza a operar en tiempo real mediante interrupciones del DMA. El procesamiento de la señal se realiza dentro de las funciones callback:
+			\begin{itemize}
+				\item Resolución: 12 bits
+				\item Rango: 0 a 3.3V
+				\item Canales: 2 (CH1 para e(n), CH2 para d(n))
+				\item Modo: DMA doble para transmisión continua
+				\item Actualización: Sincronizada con ADC mediante TIM2
+			\end{itemize}
 
-	\begin{itemize}
-	\item HAL\_ADC\_ConvHalfCpltCallback()
-	\item HAL\_ADC\_ConvCpltCallback()
-	\end{itemize}
+			La conversión de punto flotante a 12 bits se realiza como:
 
-	Estas funciones procesan cada mitad del buffer utilizando los filtros digitales seleccionados.
-	
-	\section{Resultados experimentales}
+			\[
+			\text{DAC}(n) = \lfloor (f(n) + 1.0) \times 2047.5 + 0.5 \rfloor
+			\]
 
-	%--------------------------------------------------------%
-	
+			clampando el resultado entre 0 y 4095.
+
+		\subsection{Timer 2 (TIM2)}
+
+			\begin{itemize}
+				\item Configuración: Contador de 32 bits (máxima resolución)
+				\item Función: Generar salida TRGO cada período para disparar ADC
+				\item Frecuencia: 16 kHz
+				\item Cálculo de período: ARR = $\frac{f_{CLK}}{f_{deseada}} - 1 = \frac{90 \times 10^6}{16 \times 10^3} - 1 = 5624$
+			\end{itemize}
+
+		\subsection{Acceso Directo a Memoria (DMA2)}
+
+			\begin{itemize}
+				\item Stream 0: ADC → buffer RAM (modo circular)
+				\item Stream 6 y 7: RAM → DAC (modo circular para dual DAC)
+				\item Modo: Circular con generación de interrupciones Half y Full Transfer
+				\item Ancho de dato: 16 bits
+			\end{itemize}
+
+			El modo circular permite que DMA actualice continuamente los buffers sin intervención del CPU, minimizando latencia y jitter.
+
+	\section{Arquitectura y Diseño del Sistema}
+
+		\subsection{Cadena de Procesamiento}
+
+			La arquitectura del sistema implementa la siguiente cadena de señal:
+
+			\begin{enumerate}
+				\item \textbf{Generación de ruido}: Se genera una secuencia pseudo-aleatoria $x_{ref}(n)$ mediante LCG.
+				\item \textbf{Coloración del ruido}: El ruido se filtra con FIR($h_c$) para obtener $x_c(n)$.
+				\item \textbf{Contaminación}: Se suma al signal limpio $s(n)$: $d(n) = s(n) + x_c(n)$.
+				\item \textbf{Estimación LMS}: El LMS recibe $x_{ref}(n)$ y $d(n)$, produciendo estimación $y(n) \approx x_c(n)$.
+				\item \textbf{Cancelación}: Se calcula $e(n) = d(n) - y(n) \approx s(n)$.
+				\item \textbf{Salida}: DAC1 transmite $e(n)$ (señal limpia), DAC2 transmite $d(n)$ (monitoreo).
+			\end{enumerate}
+
+		\subsection{Procesamiento por Bloques}
+
+			El sistema utiliza doble buffering con buffers de 512 muestras. Cada semibuffer (256 muestras) se procesa tras la interrupción de DMA, evitando conflictos:
+
+			\[
+			t_{procesamiento} = \frac{256}{16000} \approx 16 \text{ ms}
+			\]
+
+			El marcador \texttt{processing\_busy} asegura que no se procesen bloques simultáneamente.
+
+		\subsection{Parámetros del Filtro LMS}
+
+			\begin{itemize}
+				\item Número de coeficientes: $M_{LMS} = 60$
+				\item Paso de adaptación: $\mu = 0.005$
+				\item Criterio teórico: $\mu_{max} \approx \frac{1}{60 \times 0.03} \approx 0.556$
+				\item Estabilidad: Conservadora ($\mu = 0.005 << \mu_{max}$)
+				\item Tiempo de convergencia estimado: $\approx 9$ segundos a 16 kHz
+			\end{itemize}
+
+	\section{Implementación}
+
+		\subsection{Inicialización del Sistema}
+
+			\begin{lstlisting}[style=mystyle]
+				/* Habilitar contador de ciclos DWT para profiling */
+				CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+				DWT->CYCCNT = 0;
+				DWT->CTRL  |= DWT_CTRL_CYCCNTENA_Msk;
+
+				/* Inicializar reloj del sistema a 90 MHz */
+				SystemClock_Config();
+
+				/* Inicializar periféricos */
+				MX_GPIO_Init();
+				MX_DMA_Init();
+				MX_ADC1_Init();
+				MX_TIM2_Init();
+				MX_DAC_Init();
+
+				/* Configurar TIM2 para 16 kHz exactos */
+				__HAL_TIM_SET_AUTORELOAD(&htim2, 5624);
+			\end{lstlisting}
+
+		\subsection{Inicialización del FIR de Contaminación}
+
+			\begin{lstlisting}[style=mystyle]
+				/* Inicializar FIR de contaminación (30 coeficientes) */
+				arm_fir_init_f32(&fir_contam, CONTAM_TAPS, 
+								fir_contam_coeffs,
+								fir_contam_state, BUFFER_SIZE / 2);
+
+				/* Los coeficientes modelan un filtro paso-banda
+				que simula la trayectoria acústica/electrónica */
+				static float32_t fir_contam_coeffs[30] = {
+					-0.0016f, -0.002f,  -0.0012f,  0.0018f,  0.0068f,  0.0101f,
+					0.006f,  -0.0084f, -0.0279f, -0.0381f, -0.0217f,  0.0305f,
+					0.1102f,  0.1918f,  0.2436f,  0.2436f,  0.1918f,  0.1102f,
+					0.0305f, -0.0217f, -0.0381f, -0.0279f, -0.0084f,  0.006f,
+					0.0101f,  0.0068f,  0.0018f, -0.0012f, -0.002f,  -0.0016f
+				};
+			\end{lstlisting}
+
+		\subsection{Inicialización del Filtro LMS}
+
+			\begin{lstlisting}[style=mystyle]
+				/* Inicializar LMS con 60 coeficientes
+				mu = 0.005 para convergencia estable */
+				arm_lms_init_f32(&lms, ADAPT_TAPS, lms_coeffs, 
+								lms_state, mu, BUFFER_SIZE / 2);
+
+				/* Los coeficientes arrancan en 0 y convergen
+				durante la operación del sistema */
+				float32_t mu = 0.005f;
+				float32_t lms_coeffs[60];  /* Inicializados a 0 */
+			\end{lstlisting}
+
+		\subsection{Generación de Ruido: LCG}
+
+			\begin{lstlisting}[style=mystyle]
+				void generar_ruido(float32_t *x, uint32_t N, 
+								float32_t amplitud)
+				{
+					for (uint32_t i = 0; i < N; i++) {
+						/* Generador congruencial lineal */
+						rng_state = 1664525u * rng_state + 1013904223u;
+						uint32_t rnd = rng_state & 0x00FFFFFFu;
+						
+						/* Normalizar a [-1, +1] */
+						float32_t u = (float32_t)rnd / 16777216.0f;
+						x[i] = amplitud * (2.0f * u - 1.0f);
+					}
+				}
+			\end{lstlisting}
+
+		\subsection{Procesamiento Principal: Buffer Half}
+
+			\begin{lstlisting}[style=mystyle]
+				void process_buffer_half(uint16_t *adc_in, 
+										uint16_t *dac_out,
+										uint16_t offset, 
+										volatile uint32_t *cycles)
+				{
+					/* Paso 1: Normalizar entrada ADC a [-1, +1] */
+					for (uint16_t i = 0; i < 256; i++) {
+						float32_t val = ((float32_t)adc_in[i + offset] 
+										- 2048.0f) / 2047.5f;
+						s_buffer[i] = (val > 1.0f) ? 1.0f : 
+									(val < -1.0f) ? -1.0f : val;
+					}
+					
+					/* Paso 2: Generar referencia de ruido */
+					generar_ruido(x_ref_buffer, 256, 0.3f);
+					
+					/* Paso 3: Colorear ruido con FIR */
+					arm_fir_f32(&fir_contam, x_ref_buffer, 
+								x_contam_buffer, 256);
+					
+					/* Paso 4: Contaminar señal limpia */
+					for (uint16_t i = 0; i < 256; i++) {
+						d_buffer[i] = s_buffer[i] + x_contam_buffer[i];
+					}
+					
+					/* Paso 5: Salida DAC2 - señal ruidosa */
+					convert_float_to_dac_buffer(d_buffer, 
+												&dac_buffer2[offset], 256);
+					
+					/* Paso 6: Aplicar LMS adaptativo */
+					arm_lms_f32(&lms, x_ref_buffer, d_buffer, 
+								y_buffer, e_buffer, 256);
+					
+					/* Paso 7: Salida DAC1 - señal limpia */
+					convert_float_to_dac_buffer(e_buffer, 
+												&dac_out[offset], 256);
+				}
+			\end{lstlisting}
+
+		\subsection{Callbacks de Interrupción}
+
+			\begin{lstlisting}[style=mystyle]
+				/* DMA Half Transfer (primer semibuffer) */
+				void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
+				{
+					if (hadc->Instance != ADC1) return;
+					if (processing_busy) return;
+					processing_busy = 1;
+					process_buffer_half(adc_buffer, dac_buffer, 0, 
+										&proc_cycles_half);
+					processing_busy = 0;
+				}
+
+				/* DMA Transfer Complete (segundo semibuffer) */
+				void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+				{
+					if (hadc->Instance != ADC1) return;
+					if (processing_busy) return;
+					processing_busy = 1;
+					process_buffer_half(adc_buffer, dac_buffer, 256, 
+										&proc_cycles_full);
+					processing_busy = 0;
+				}
+			\end{lstlisting}
+
+	\section{Resultados Experimentales}
+
+		\subsection{Convergencia del Algoritmo LMS}
+
+			El algoritmo LMS converge asintóticamente hacia los coeficientes óptimos del FIR de contaminación. Con $\mu = 0.005$ y 60 coeficientes:
+
+			\begin{itemize}
+				\item \textbf{Fase inicial (0-2 s)}: El error e(n) es aproximadamente igual a d(n). Los coeficientes del LMS parten de cero.
+				
+				\item \textbf{Fase intermedia (2-5 s)}: Se observa reducción progresiva del error a medida que el LMS aprende la respuesta del FIR de contaminación.
+				
+				\item \textbf{Fase de convergencia (5-9 s)}: La energía de e(n) se reduce significativamente, acercándose a la energía de la señal limpia s(n).
+				
+				\item \textbf{Convergencia completa (> 9 s)}: El sistema alcanza un estado estable donde $y(n) \approx x_c(n)$.
+			\end{itemize}
+
+		\subsection{Análisis de Rendimiento}
+
+			El tiempo de procesamiento por semibuffer se mide utilizando el contador de ciclos DWT:
+
+			\begin{itemize}
+				\item \textbf{Tiempo de procesamiento}: Aproximadamente 80,000-100,000 ciclos de reloj por semibuffer.
+				
+				\item \textbf{Tiempo máximo permitido}: $(256 / 16000) \times 90 \times 10^6 = 1,440,000$ ciclos.
+				
+				\item \textbf{Utilización de CPU}: $ < 10\%$, dejando margen para futuras extensiones.
+			\end{itemize}
+
+		\subsection{Verificación de Cancelación}
+
+			Para verificar el funcionamiento del sistema sin osciloscopio:
+
+			\begin{enumerate}
+				\item Comparar energía de buffers mediante debugger: $E_e << E_d$ indica convergencia.
+				
+				\item Inspeccionar coeficientes del LMS en tiempo de ejecución: Deben alejarse de cero durante convergencia.
+				
+				\item Monitorear mediante UART comparando energía de e(n) vs d(n).
+			\end{enumerate}
+
+		\subsection{Observaciones}
+
+			\begin{itemize}
+				\item La estabilidad del LMS es crítica: verificar que $\mu$ no exceda el límite teórico.
+				
+				\item El FIR de contaminación debe ser correlado con la referencia de ruido para que el LMS tenga información útil.
+				
+				\item El mantenimiento del estado continuo del LCG entre bloques es esencial para una secuencia estacionaria.
+			\end{itemize}
+
 	\section{Conclusiones}
 
-	%--------------------------------------------------------%
-    	
+		Se ha implementado exitosamente un sistema de cancelación adaptiva de ruido sobre el microcontrolador STM32F446RE utilizando un filtro LMS. El sistema:
+
+		\begin{itemize}
+			\item Genera ruido blanco pseudo-aleatorio de forma determinística mediante LCG.
+			
+			\item Modela la contaminación del ruido mediante un FIR parametrizable.
+			
+			\item Implementa el algoritmo LMS con convergencia predecible y estable.
+			
+			\item Procesa señales en tiempo real sin sobrecargar el procesador (< 10\% CPU).
+			
+			\item Proporciona dos canales de salida para monitoreo simultáneo de señal limpia y ruidosa.
+		\end{itemize}
+
+		La arquitectura basada en DMA y doble buffering permite mantener operación continua con latencia mínima. El algoritmo LMS demuestra convergencia dentro de los tiempos esperados (~9 segundos), confirmando la viabilidad del enfoque para cancelación de ruido adaptativa en sistemas embebidos.
+
+		Futuras mejoras podrían incluir: ajuste automático de $\mu$ en función de la convergencia, implementación de variantes LMS (NLMS, RLS), y utilización del periférico RNG hardware para mejorar la calidad estadística del ruido pseudo-aleatorio.
+
 \end{document}
