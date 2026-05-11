@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.30)  11 MAY 2026 12:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.30)  11 MAY 2026 17:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**c:/FACULTAD/Materias--4to-2do/Procesamiento_Digital_de_Señales/procesamiento_digital_s/PDS_Lab_3/build/pds_lab3.tex
-(c:/FACULTAD/Materias--4to-2do/Procesamiento_Digital_de_Señales/procesamiento_digital_s/PDS_Lab_3/build/pds_lab3.tex
+**c:/FACULTAD/Materias--4to-2do/Procesamiento_Digital_de_Señales/procesamiento_digital_s/PDS_Lab_3/Informe_Latex/build/pds_lab3.tex
+(c:/FACULTAD/Materias--4to-2do/Procesamiento_Digital_de_Señales/procesamiento_digital_s/PDS_Lab_3/Informe_Latex/build/pds_lab3.tex
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-07-19>
 (C:\Users\enzog\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -497,26 +497,26 @@ Package babel Info: 'spanish' activates 'spanish' shorthands.
 )
 \openout1 = `pds_lab3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 104.
-LaTeX Font Info:    ... okay on input line 104.
-LaTeX Info: Redefining \. on input line 104.
-LaTeX Info: Redefining \% on input line 104.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 106.
+LaTeX Font Info:    ... okay on input line 106.
+LaTeX Info: Redefining \. on input line 106.
+LaTeX Info: Redefining \% on input line 106.
  (C:\Users\enzog\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count335
@@ -536,7 +536,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (C:\Users\enzog\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring OFF on input line 104.
+Package hyperref Info: Link coloring OFF on input line 106.
  (pds_lab3.out) (pds_lab3.out)
 \@outlinefile=\write4
 \openout4 = `pds_lab3.out'.
@@ -581,15 +581,15 @@ Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count341
-<unc.png, id=126, 401.5pt x 401.5pt>
+<unc.png, id=194, 401.5pt x 401.5pt>
 File: unc.png Graphic file (type png)
 <use unc.png>
-Package pdftex.def Info: unc.png  used on input line 107.
+Package pdftex.def Info: unc.png  used on input line 109.
 (pdftex.def)             Requested size: 204.85846pt x 204.8603pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 107.
+(Font)              <14.4> on input line 109.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 107.
+(Font)              <7> on input line 109.
 
 
 [1
@@ -603,29 +603,62 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 3.
-)
+
+
+[2])
 \tf@toc=\write5
 \openout5 = `pds_lab3.toc'.
 
 
-
-[2]
 
 [3]
 
 [4]
 
 [5]
-<placa.png, id=203, 602.25pt x 602.25pt>
+
+[6]
+<placa.png, id=292, 602.25pt x 602.25pt>
 File: placa.png Graphic file (type png)
 <use placa.png>
-Package pdftex.def Info: placa.png  used on input line 249.
+Package pdftex.def Info: placa.png  used on input line 251.
 (pdftex.def)             Requested size: 318.66948pt x 318.67636pt.
 
 
-[6 <./placa.png>]
+[7 <./placa.png>]
 
-[7] (pds_lab3.aux
+[8]
+
+[9]
+
+[10] (C:\Users\enzog\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
+) (C:\Users\enzog\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
+File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
+)
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 419.
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 423.
+
+
+[11]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 519.
+
+
+[12]
+
+[13] (C:\Users\enzog\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
+)
+
+[14]
+
+[15]
+
+[16]
+
+[17] (pds_lab3.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -634,20 +667,20 @@ LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-07-19>
  ***********
 Package rerunfilecheck Info: File `pds_lab3.out' has not changed.
-(rerunfilecheck)             Checksum: 17DFD36A5A0929A34A914C3CCEB170F3;6046.
+(rerunfilecheck)             Checksum: 08BCD91C2A59909186ED8F43809A78BC;9273.
  ) 
 Here is how much of TeX's memory you used:
- 24665 strings out of 468149
- 460283 string characters out of 5431082
- 861794 words of memory out of 5000000
- 52861 multiletter control sequences out of 15000+600000
- 640220 words of font info for 67 fonts, out of 8000000 for 9000
+ 25702 strings out of 468149
+ 473424 string characters out of 5431082
+ 1329284 words of memory out of 5000000
+ 53689 multiletter control sequences out of 15000+600000
+ 642378 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,12n,107p,887b,535s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcbx2074.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2074.pk><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on pds_lab3.pdf (7 pages, 860314 bytes).
+ 102i,12n,107p,901b,2097s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecit0800.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0600.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcbx2074.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2074.pk><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on pds_lab3.pdf (17 pages, 989797 bytes).
 PDF statistics:
- 654 PDF objects out of 1000 (max. 8388607)
- 44 named destinations out of 1000 (max. 500000)
- 263 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1185 PDF objects out of 1200 (max. 8388607)
+ 242 named destinations out of 1000 (max. 500000)
+ 399 words of extra memory for PDF output out of 10000 (max. 10000000)
 

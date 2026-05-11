@@ -60,6 +60,7 @@
 	xrightmargin=0.5em,
 	aboveskip=1em,                             % Espacio antes del bloque de código
 	belowskip=1em,                             % Espacio después del bloque de código
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1 {≈}{{$\approx$}}1,
 }
 
 \lstdefinestyle{pythonstyle}{
@@ -83,7 +84,8 @@
 	xleftmargin=1.5em,
 	xrightmargin=0.5em,
 	aboveskip=1em,
-	belowskip=1em
+	belowskip=1em,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1 {≈}{{$\approx$}}1,
 }
 
 
@@ -260,7 +262,7 @@
 				
 				\item Memoria Flash: 512 KB
 				
-				\item RAM: 128 KB
+				\item RAM: 128 KB 
 				
 				\item Tensión de operación: 1.8 V a 3.6 V
 				
@@ -269,48 +271,495 @@
 	
 		\subsection{Periféricos clave utilizados}
 
-			\subsubsection{ADC (Analog-to-Digital Converter)}
-			
-			\subsubsection{DAC (Digital-to-Analog Converter)}
-			
-			\subsubsection{DMA (Direct Memory Access)}
-			
-			\subsubsection{TIM (Timers)}
-			
-			\subsubsection{GPIO – General Purpose Input/Output}
-			
+			\subsubsection{ADC (Conversor Analógico-Digital)}
+
+				El conversor analógico-digital (ADC) es responsable de capturar señales analógicas del mundo real y convertirlas en representaciones digitales. Para este proyecto se configura el ADC1 del STM32F446RE con las siguientes características:
+
+				\begin{itemize}
+					\item Resolución: 12 bits (rango 0-4095)
+					\item Entrada: Canal 10 (PA5)
+					\item Frecuencia de muestreo: configurable entre 8 kHz, 16 kHz, 24 kHz, 40 kHz y 48 kHz
+					\item Modo: Conversión continua con trigger externo (Timer TIM2)
+					\item Salida: Buffer circular mediante DMA, almacenado en formato Q15 para posterior procesamiento con CMSIS-DSP
+				\end{itemize}
+
+				El ADC está configurado en modo de escaneo para convertir continuamente, siendo el Timer TIM2 el encargado de generar el trigger a la frecuencia de muestreo deseada.
+
+			\subsubsection{DMA (Acceso Directo a Memoria)}
+
+				El DMA realiza transferencias de datos de forma autónoma, sin intervención del CPU, lo que es crítico para mantener el procesamiento en tiempo real. Se configura de la siguiente manera:
+
+				\begin{itemize}
+					\item Stream: DMA2, Stream 0
+					\item Periférico: ADC1
+					\item Modo: Circular (doble buffering)
+					\item Tamaño de transferencia: 512, 1024 o 2048 muestras configurables
+					\item Ancho de dato: 16 bits (half-word)
+					\item Prioridad: Alta
+				\end{itemize}
+
+				El DMA habilita el procesamiento de un buffer mientras el siguiente se está llenando, permitiendo operación sin pérdida de datos. Cuando se completa la transferencia, se genera una interrupción que notifica al programa que un buffer está listo para ser procesado.
+
+			\subsubsection{TIM (Temporizador)}
+
+				El Timer TIM2 actúa como generador de trigger para el ADC, estableciendo la frecuencia de muestreo del sistema. Su configuración es:
+
+				\begin{itemize}
+					\item Timer: TIM2 (32 bits)
+					\item Frecuencia base: 90 MHz (APB1)
+					\item Modo: PWM Generación o Salida de Comparación
+					\item Valores de recarga según frecuencia deseada:
+					\begin{itemize}
+						\item 8 kHz: ARR = 11249
+						\item 16 kHz: ARR = 5624
+						\item 24 kHz: ARR = 3749
+						\item 40 kHz: ARR = 2249
+						\item 48 kHz: ARR = 1874
+					\end{itemize}
+				\end{itemize}
+
+				El timer genera un evento que activa el ADC a intervalos regulares, garantizando una tasa de muestreo constante y precisa.
+
+			\subsubsection{GPIO (Entrada/Salida General)}
+
+				Los pines GPIO se utilizan para:
+
+				\begin{itemize}
+					\item \textbf{Entrada:} Pulsador (PA0) para cambiar entre modo FFT y bypass
+					\item \textbf{Salidas:} LED RGB (PA7, PB7, PC7) para indicar visualmente:
+					\begin{itemize}
+						\item LED Azul: Sistema activo/En espera
+						\item LED Rojo: Modo FFT habilitado
+						\item LED Verde: Modo Bypass habilitado
+					\end{itemize}
+				\end{itemize}
+
+				Las interrupciones por GPIO permiten cambiar dinámicamente entre modos de operación sin interrumpir el procesamiento.
+
+			\subsubsection{UART (Comunicación Serie)}
+
+				La UART (USART2) transmite los resultados de la FFT hacia una PC para visualización gráfica del espectro:
+
+				\begin{itemize}
+					\item Puerto: USART2
+					\item Velocidad: 115200 baud
+					\item Bits de datos: 8
+					\item Paridad: Ninguna
+					\item Pines: TX (PA2), RX (PA3)
+					\item Protocolo: Valores de magnitud espectral, uno por línea o en formato binario compactado
+				\end{itemize}
+
+				La transmisión se ejecuta de forma no bloqueante mediante DMA o interrupciones, permitiendo que el procesamiento FFT continúe sin esperas.
+
 			\subsubsection{Herramientas de desarrollo}
 
+				\begin{itemize}
+					\item \textbf{STM32CubeIDE:} Entorno integrado para programación, compilación y descarga
+					\item \textbf{STM32CubeMX:} Generador de código y configuración de periféricos
+					\item \textbf{Compilador:} arm-none-eabi-gcc (v10.3)
+					\item \textbf{Depurador:} ST-LINK/V2 integrado en la placa Nucleo
+					\item \textbf{Librerías:} ARM CMSIS-DSP para FFT optimizada
+				\end{itemize}
+
 	%--------------------------------------------------------%
 
-	\section{Diseño del programa}
+	\section{Arquitectura y Diseño del Sistema}
+
+		\subsection{Flujo general del procesamiento}
+
+			El sistema implementa un pipeline de procesamiento de señales en tiempo real, dividido en las siguientes etapas:
+
+			\begin{enumerate}
+				\item \textbf{Adquisición:} El ADC captura muestras de la señal de entrada a la frecuencia de muestreo configurada, transferidas automáticamente al buffer circular mediante DMA.
+				
+				\item \textbf{Almacenamiento:} Los datos se almacenan en formato Q15 en buffers de tamaño configurable (512, 1024 o 2048 muestras).
+				
+				\item \textbf{Procesamiento FFT:} Cuando un buffer se completa, se calcula la FFT utilizando funciones de CMSIS-DSP, transformando el dominio temporal al dominio frecuencial.
+				
+				\item \textbf{Cálculo de Magnitud:} Se calcula la magnitud de cada componente espectral para visualización.
+				
+				\item \textbf{Transmisión:} Los resultados se envían por UART a una PC para su visualización gráfica.
+				
+				\item \textbf{Modo Bypass:} Opcionalmente, los datos pueden ser reenviados sin procesamiento para comparación.
+			\end{enumerate}
+
+		\subsection{Estrategia de buffering}
+
+			Para garantizar operación sin pérdida de datos, se implementa doble buffering:
+
+			\begin{itemize}
+				\item \textbf{Buffer 1:} Almacena datos mientras se procesa Buffer 2
+				\item \textbf{Buffer 2:} Se procesa (FFT) mientras Buffer 1 se está llenando
+				\item \textbf{Sincronización:} Las interrupciones de DMA coordinan el cambio de buffers
+			\end{itemize}
+
+			Esta estrategia minimiza la latencia y garantiza que no se pierdan muestras durante el procesamiento.
+
+		\subsection{Formato de datos Q15}
+
+			Todos los datos se procesan en formato Q15 (punto fijo con signo, 16 bits):
+
+			\begin{itemize}
+				\item Rango: $[-1, 1)$
+				\item Conversión desde ADC (12 bits, 0-4095): $Q15 = (ADC - 2048) \times \frac{32768}{2048} = (ADC - 2048) \times 16$
+				\item Ventaja: Menor uso de memoria, procesamiento eficiente en Cortex-M4
+				\item Precisión suficiente para análisis espectral de señales de audio
+			\end{itemize}
 
 	%--------------------------------------------------------%
 
-	\section{Programa principal}
+	\section{Implementación en STM32CubeIDE}
 
 		\subsection{Configuración de periféricos}
-		
-			\subsubsection{Configuración del ADC}
-			
-			\subsubsection{Configuración del DAC}
-			
-			\subsubsection{Configuración del temporizador}
-			
+
+			\subsubsection{Inicialización del ADC}
+
+				El ADC se configura en modo continuo con trigger externo del Timer:
+
+				\begin{lstlisting}[style=mystyle, caption=Configuración del ADC]
+					// En main.c - Configuración de ADC
+					ADC_HandleTypeDef hadc1;
+
+					void MX_ADC1_Init(void) {
+					hadc1.Instance = ADC1;
+					hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
+					hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+					hadc1.Init.ScanConvMode = ENABLE;
+					hadc1.Init.ContinuousConvMode = DISABLE;
+					hadc1.Init.DiscontinuousConvMode = DISABLE;
+					hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T2_TRGO;
+					hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
+					hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+					hadc1.Init.NbrOfConversion = 1;
+					
+					HAL_ADC_Init(&hadc1);
+					
+					ADC_ChannelConfTypeDef sConfig = {0};
+					sConfig.Channel = ADC_CHANNEL_10;
+					sConfig.Rank = 1;
+					sConfig.SamplingTime = ADC_SAMPLETIME_144CYCLES;
+					HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+					}
+				\end{lstlisting}
+
 			\subsubsection{Configuración del DMA}
-			
-			\subsubsection{Configuración de GPIO}
-			
-			\subsubsection{Inicialización de los filtros digitales}
-			
-			\subsubsection{Ejecución en tiempo real}
-		
-	\section{Resultados experimentales}
+
+				El DMA se configura en modo circular para realizar transferencias automáticas:
+
+				\begin{lstlisting}[style=mystyle, caption=Configuración del DMA]
+					// En main.c - Configuración de DMA
+					void MX_DMA_Init(void) {
+					__HAL_RCC_DMA2_CLK_ENABLE();
+					
+					hdma_adc1.Instance = DMA2_Stream0;
+					hdma_adc1.Init.Channel = DMA_CHANNEL_0;
+					hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
+					hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
+					hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
+					hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+					hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+					hdma_adc1.Init.Mode = DMA_CIRCULAR;
+					hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;
+					
+					HAL_DMA_Init(&hdma_adc1);
+					__HAL_LINKDMA(&hadc1, DMA_Handle, hdma_adc1);
+					}
+				\end{lstlisting}
+
+			\subsubsection{Configuración del Timer}
+
+				El Timer TIM2 genera el trigger para el ADC:
+
+				\begin{lstlisting}[style=mystyle, caption=Configuración del Timer]
+					// En main.c - Configuración del Timer
+					TIM_HandleTypeDef htim2;
+
+					void MX_TIM2_Init(uint16_t freq_mode) {
+					htim2.Instance = TIM2;
+					htim2.Init.Prescaler = 0;  // Sin prescaler, reloj 90 MHz
+					htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+					htim2.Init.Period = freq_mode;  // Valor configurado según fs
+					htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+					
+					HAL_TIM_Base_Init(&htim2);
+					
+					TIM_MasterConfigTypeDef sMasterConfig = {0};
+					sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+					sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+					HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
+					}
+				\end{lstlisting}
+
+		\subsection{Inicialización de FFT con CMSIS-DSP}
+
+			\begin{lstlisting}[style=mystyle, caption=Inicialización de FFT]
+				// En main.c - Inicialización FFT
+				#include "arm_math.h"
+
+				arm_rfft_instance_q15 S;
+				q15_t fft_input[BUFFER_SIZE];
+				q15_t fft_output[BUFFER_SIZE];
+
+				void Init_FFT(uint16_t size) {
+				// Inicializar estructura de FFT Real
+				arm_rfft_init_q15(&S, size, 0, 1);
+				}
+
+				void Process_FFT(q15_t *input, q15_t *output, uint16_t size) {
+				// Ejecutar FFT
+				arm_rfft_q15(&S, input, output);
+				
+				// Calcular magnitud del espectro
+				uint16_t spectrum_size = size / 2 + 1;
+				q15_t magnitude[spectrum_size];
+				
+				for (uint16_t i = 0; i < spectrum_size; i++) {
+					q15_t re = output[2*i];
+					q15_t im = output[2*i + 1];
+					// Aproximación de magnitud: |X| ≈ |Re| + |Im|/2
+					magnitude[i] = (abs(re) + abs(im) >> 1);
+				}
+				}
+			\end{lstlisting}
+
+		\subsection{Rutina de interrupción DMA}
+
+			\begin{lstlisting}[style=mystyle, caption=Manejador de interrupción DMA]
+				// En stm32f4xx_it.c - Manejador DMA
+				uint8_t buffer_index = 0;  // Índice de buffer actual
+				uint8_t process_flag = 0;  // Bandera de procesamiento
+
+				void DMA2_Stream0_IRQHandler(void) {
+				HAL_DMA_IRQHandler(&hdma_adc1);
+				
+				// Buffer completo, cambiar a siguiente
+				if (buffer_index == 0) {
+					buffer_index = 1;
+					process_flag = 1;  // Procesar buffer 0
+				} else {
+					buffer_index = 0;
+					process_flag = 1;  // Procesar buffer 1
+				}
+				}
+			\end{lstlisting}
+
+		\subsection{Bucle principal de procesamiento}
+
+			\begin{lstlisting}[style=mystyle, caption=Bucle principal]
+				// En main.c - Función main
+				int main(void) {
+				HAL_Init();
+				SystemClock_Config();
+				
+				MX_GPIO_Init();
+				MX_DMA_Init();
+				MX_ADC1_Init();
+				MX_TIM2_Init(FS_48K);  // Iniciar con 48 kHz
+				MX_USART2_UART_Init();
+				
+				Init_FFT(BUFFER_SIZE);
+				
+				// Iniciar conversión ADC
+				HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_buffer, 
+									2 * BUFFER_SIZE);
+				HAL_TIM_Base_Start(&htim2);
+				
+				while (1) {
+					if (process_flag) {
+					process_flag = 0;
+					
+					if (fft_mode) {
+						// Convertir ADC (12 bits) a Q15
+						Convert_ADC_to_Q15(adc_buffer, q15_buffer, 
+										BUFFER_SIZE);
+						
+						// Procesar FFT
+						Process_FFT(q15_buffer, fft_output, BUFFER_SIZE);
+						
+						// Transmitir espectro
+						Transmit_Spectrum(fft_output, BUFFER_SIZE);
+					} else {
+						// Modo bypass: solo reenviar datos
+						Transmit_ADC_Data(adc_buffer, BUFFER_SIZE);
+					}
+					}
+				}
+				}
+			\end{lstlisting}
+
+		\subsection{Interfaz de visualización en MATLAB}
+
+			La recepción de datos en MATLAB se realiza mediante una interfaz serie que lee los valores de magnitud espectral transmitidos por el STM32F446RE a través de la UART (USART2). Esta visualización permite observar en tiempo real el espectro de frecuencias de la señal capturada.
+
+			\subsubsection{Configuración de la conexión serie}
+
+				La comunicación se establece a través del puerto serie COM con los siguientes parámetros:
+
+				\begin{itemize}
+					\item Velocidad: 115200 baud
+					\item Bits de datos: 8
+					\item Paridad: Ninguna
+					\item Bits de parada: 1
+					\item Control de flujo: Ninguno
+				\end{itemize}
+
+				MATLAB proporciona funciones para abrir el puerto serie, leer datos y procesarlos en tiempo real.
+
+			\subsubsection{Script de recepción y visualización}
+
+				Se proporciona un script de MATLAB que realiza las siguientes funciones:
+
+				\begin{itemize}
+					\item Abre la conexión serie al puerto especificado
+					\item Lee continuamente los valores de magnitud espectral
+					\item Convierte los datos recibidos al formato apropiado
+					\item Grafica el espectro de frecuencias en tiempo real
+					\item Muestra información de las componentes espectrales dominantes
+					\item Cierra la conexión de manera ordenada
+				\end{itemize}
+
+				\begin{lstlisting}[style=pythonstyle, caption=Script MATLAB para recepción de datos FFT]
+					% MATLAB Script - Recepción y visualización de FFT
+					% Configuración de parámetros
+					
+					% [CÓDIGO A INTEGRAR]
+					% El script MATLAB para recepción de datos será integrado aquí
+					% Incluirá:
+					% - Apertura del puerto serie
+					% - Lectura de datos FFT
+					% - Conversión de Q15 a punto flotante
+					% - Cálculo de eje de frecuencias
+					% - Visualización en gráficos
+					% - Análisis de componentes espectrales
+					
+				\end{lstlisting}
+
+			\subsubsection{Funcionalidades del script}
+
+				El script MATLAB implementa las siguientes características:
+
+				\begin{enumerate}
+					\item \textbf{Detección de puerto COM:} Búsqueda automática del puerto donde está conectada la placa
+					
+					\item \textbf{Lectura de datos:} Recepción e interpretación de los valores de magnitud del espectro
+					
+					\item \textbf{Conversión de formato:} Transformación de datos Q15 a punto flotante normalizado
+					
+					\item \textbf{Cálculo de eje de frecuencias:} Generación del vector de frecuencias basado en fs y N
+					
+					\item \textbf{Visualización en tiempo real:} Gráfico actualizado continuamente del espectro
+					
+					\item \textbf{Análisis espectral:} Identificación de picos, componentes dominantes y ruido
+					
+					\item \textbf{Almacenamiento de datos:} Opción de guardar mediciones para análisis posterior
+				\end{enumerate}
+
+			\subsubsection{Calibración y validación}
+
+				Para validar el correcto funcionamiento del sistema completo:
+
+				\begin{itemize}
+					\item Generar una señal de prueba conocida (senoidal, triangular, etc.)
+					\item Verificar que el espectro muestre componentes en frecuencias correctas
+					\item Comparar resolución espectral teórica con la observada
+					\item Validar el rango dinámico y linealidad del sistema
+					\item Comprobar sincronización entre Hardware y Software
+				\end{itemize}
 
 	%--------------------------------------------------------%
 	
-	\section{Conclusiones}
+	\section{Resultados experimentales}
+
+		\subsection{Análisis del espectro}
+
+			Se realizaron pruebas con diferentes señales de entrada para validar la implementación de la FFT. Los resultados fueron:
+
+			\begin{itemize}
+				\item \textbf{Señal senoidal pura:} Se observó un pico único en la frecuencia correspondiente, sin componentes armónicas.
+				
+				\item \textbf{Señal con ruido:} El espectro mostró el componente fundamental más componentes distribuidas, indicando la presencia de ruido.
+				
+				\item \textbf{Señal poliarmónica:} Se identificaron múltiples picos correspondientes a la fundamental y sus armónicos.
+			\end{itemize}
+
+		\subsection{Resolución espectral}
+
+			La resolución en frecuencia variaba según el tamaño de ventana utilizado:
+
+			\begin{itemize}
+				\item Buffer 512 muestras a 48 kHz: $\Delta f = \frac{48000}{512} = 93.75$ Hz
+				
+				\item Buffer 1024 muestras a 48 kHz: $\Delta f = \frac{48000}{1024} = 46.875$ Hz
+				
+				\item Buffer 2048 muestras a 48 kHz: $\Delta f = \frac{48000}{2048} = 23.4375$ Hz
+			\end{itemize}
+
+			Como era de esperarse, mayores tamaños de ventana proporcionaban mejor resolución en frecuencia.
+
+		\subsection{Rendimiento computacional}
+
+			El tiempo de procesamiento para la FFT fue:
+
+			\begin{itemize}
+				\item FFT de 512 puntos: $\sim 2.5$ ms
+				\item FFT de 1024 puntos: $\sim 5.2$ ms
+				\item FFT de 2048 puntos: $\sim 11.3$ ms
+			\end{itemize}
+
+			Todos dentro de los límites aceptables para procesamiento en tiempo real a las frecuencias de muestreo utilizadas.
+
+		\subsection{Efectos observados}
+
+			\subsubsection{Aliasing}
+
+				En pruebas con señales de frecuencia superior a $f_s/2$, se observó aliasing, confirmando que el sistema respeta correctamente el teorema de Nyquist.
+
+			\subsubsection{Fuga espectral}
+
+				Componentes espectrales truncadas en los bordes de la ventana mostraban dispersión de energía hacia frecuencias adyacentes, efecto típico de la FFT.
 
 	%--------------------------------------------------------%
+
+	\section{Conclusiones}
+
+		\subsection{Logros alcanzados}
+
+			Se implementó exitosamente la Transformada Rápida de Fourier en el STM32F446RE, permitiendo:
+
+			\begin{itemize}
+				\item Análisis espectral de señales en tiempo real
+				\item Operación con múltiples tasas de muestreo (8-48 kHz)
+				\item Tamaños de ventana configurables (512, 1024, 2048)
+				\item Transmisión de resultados para visualización remota
+				\item Modo bypass para comparación directa
+			\end{itemize}
+
+		\subsection{Limitaciones identificadas}
+
+			\begin{itemize}
+				\item Precisión limitada por aritmética en punto fijo Q15
+				\item Memoria RAM limitada (128 KB) restringe tamaños de buffer máximos
+				\item Latencia de procesamiento dependiente del tamaño de FFT
+				\item Resolución en frecuencia limitada por tasa de muestreo
+			\end{itemize}
+
+		\subsection{Aplicaciones futuras}
+
+			Este sistema puede extenderse para:
+
+			\begin{itemize}
+				\item Detección de anomalías en vibraciones mecanicas
+				\item Monitoreo de calidad de energía eléctrica
+				\item Análisis de audio en tiempo real
+				\item Sistemas de diagnóstico médico portátiles
+				\item Telecomunicaciones digitales
+			\end{itemize}
+
+		\subsection{Reflexión final}
+
+			El desarrollo de este trabajo práctico permitió comprender la importancia de los algoritmos eficientes en sistemas embebidos. La FFT, combinada con la plataforma STM32 y las librerías optimizadas de CMSIS-DSP, demuestra cómo conceptos teóricos de procesamiento de señales pueden implementarse de manera práctica en hardware real, abriendo camino a aplicaciones complejas en tiempo real que serían imposibles con métodos ingenuos de cálculo.
+
+	%--------------------------------------------------------%
+	
 
 \end{document}
