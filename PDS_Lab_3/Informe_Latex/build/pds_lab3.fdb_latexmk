@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1778530875.68871 "c:/FACULTAD/Materias--4to-2do/Procesamiento_Digital_de_Señales/procesamiento_digital_s/PDS_Lab_3/Informe_Latex/build/pds_lab3.tex" "pds_lab3.pdf" "pds_lab3" 1778530878.32364 0
-  "C:/Users/enzog/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1778447755 163207 8b397a28da8cf491d72adf658ad1aa93 ""
+["pdflatex"] 1778551866.676 "c:/FACULTAD/Materias--4to-2do/Procesamiento_Digital_de_Señales/procesamiento_digital_s/PDS_Lab_3/Informe_Latex/build/pds_lab3.tex" "pds_lab3.pdf" "pds_lab3" 1778551872.26332 0
+  "C:/Users/enzog/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1778531498 163207 8b397a28da8cf491d72adf658ad1aa93 ""
   "C:/Users/enzog/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1095.pk" 1778447656 28976 33cd0a917916a17324932b74bdf5dfc7 ""
   "C:/Users/enzog/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1753914325 31952 1179ca254931e3eb15666325916171ec ""
   "C:/Users/enzog/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1440.pk" 1753914312 40136 23188ffbba9df7572a0e8781bcab62e7 ""
@@ -179,11 +179,11 @@
   "C:/Users/enzog/AppData/Local/Programs/MiKTeX/tex/latex/tools/tabularx.sty" 1749468414 7243 a2c17f18e2c9b702b84fad03d5f9c78b ""
   "C:/Users/enzog/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/enzog/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "c:/FACULTAD/Materias--4to-2do/Procesamiento_Digital_de_Señales/procesamiento_digital_s/PDS_Lab_3/Informe_Latex/build/pds_lab3.tex" 1778530871 32442 deb4aba0e3ad7549995b658fb566938c ""
-  "pds_lab3.aux" 1778530877 7906 2ad5a69a328ad9c572e2236be0e4b25b "pdflatex"
-  "pds_lab3.out" 1778530877 9112 e1850209044c4d04e8281269eb7d7a11 "pdflatex"
-  "pds_lab3.tex" 1778530871 32442 deb4aba0e3ad7549995b658fb566938c ""
-  "pds_lab3.toc" 1778530877 4398 652cc0a2f3e3496f1f3d3c8b1d48087c "pdflatex"
+  "c:/FACULTAD/Materias--4to-2do/Procesamiento_Digital_de_Señales/procesamiento_digital_s/PDS_Lab_3/Informe_Latex/build/pds_lab3.tex" 1778551863 32449 a0dc5ee90011fafd1a4c1bb5cbaa671b ""
+  "pds_lab3.aux" 1778551871 7906 2ad5a69a328ad9c572e2236be0e4b25b "pdflatex"
+  "pds_lab3.out" 1778551871 9112 e1850209044c4d04e8281269eb7d7a11 "pdflatex"
+  "pds_lab3.tex" 1778551863 32449 a0dc5ee90011fafd1a4c1bb5cbaa671b ""
+  "pds_lab3.toc" 1778551871 4398 652cc0a2f3e3496f1f3d3c8b1d48087c "pdflatex"
   "placa.png" 1778447569 389552 80971266fc8f6e8ecc0eac2b09c17324 ""
   "unc.png" 1778447569 137948 e8f3c5cc2aafc66d1fa6a5d96e2ca1bf ""
   (generated)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.30)  11 MAY 2026 17:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.7.30)  11 MAY 2026 23:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -668,17 +668,17 @@ Package rerunfilecheck Info: File `pds_lab3.out' has not changed.
 (rerunfilecheck)             Checksum: E1850209044C4D04E8281269EB7D7A11;9112.
  ) 
 Here is how much of TeX's memory you used:
- 25699 strings out of 468149
- 473387 string characters out of 5431082
+ 25700 strings out of 468149
+ 473401 string characters out of 5431082
  1329284 words of memory out of 5000000
  53688 multiletter control sequences out of 15000+600000
  642378 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  102i,12n,107p,901b,2097s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecit0800.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0600.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcbx2074.pk> <C:\Users\enzog\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2074.pk><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/enzog/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on pds_lab3.pdf (16 pages, 986906 bytes).
+Output written on pds_lab3.pdf (16 pages, 987176 bytes).
 PDF statistics:
- 1175 PDF objects out of 1200 (max. 8388607)
- 240 named destinations out of 1000 (max. 500000)
+ 1177 PDF objects out of 1200 (max. 8388607)
+ 241 named destinations out of 1000 (max. 500000)
  391 words of extra memory for PDF output out of 10000 (max. 10000000)
 
