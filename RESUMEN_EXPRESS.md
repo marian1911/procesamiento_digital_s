@@ -1,129 +1,47 @@
-# ⚡ Revisión Express - Resumen Ejecutivo
+# Resumen ejecutivo de la revisión
 
-**Fecha:** 11 de mayo de 2026  
-**Repositorio:** procesamiento_digital_s  
-**Puntuación General:** 65/100 ⚠️
+**Fecha:** 19 de junio de 2026
 
----
+**Repositorio:** `procesamiento_digital_s`
+**Rama:** `main`, sin divergencia indicada respecto de `origin/main`, pero con cambios locales no versionados.
 
-## 📊 Estado de Laboratorios
+## Estado real
 
-```
-Lab 1 │ ████████████████████ │ 100% ✅ COMPLETO
-Lab 2 │ ████████████████████ │ 100% ✅ COMPLETO
-Lab 3 │ ██████████░░░░░░░░░░ │  50% ⚠️ SIN INFORME
-Lab 4 │ ██████████░░░░░░░░░░ │  50% ⚠️ SIN INFORME
-Lab 5 │ ░░░░░░░░░░░░░░░░░░░░ │   0% ❌ NO EXISTE
-```
+| Entrega | Código | Informe | Validación observable | Estado |
+|---|---|---|---|---|
+| Lab 1 | Completo | Completo | Confirmado por el responsable; ELF histórico | Completo |
+| Lab 2 | Completo (FIR Q15) | Completo | Confirmado por el responsable; ELF histórico | Completo |
+| Lab 3 | FFT Q15 + UART | 735 líneas; conclusiones incompletas | Imágenes/scripts sin versionar | Cierre pendiente |
+| Lab 4 | Cancelador LMS | 537 líneas; faltan figuras y trazabilidad | Sin ELF localizado en la revisión | Cierre pendiente |
+| Proyecto final | LMS + Pan–Tompkins parcial | No se localizó informe final | ELF anterior al `main.c` vigente | Prioridad crítica |
 
----
+## Hallazgos principales
 
-## 🎯 Problemas (del más al menos urgente)
+1. `PDS_Lab_Final/` completo y varios recursos de Lab 3 están sin seguimiento de Git.
+2. No existe `.gitignore`; `README.txt` sigue siendo mínimo y menciona un Lab 5 no presente.
+3. Los informes de Lab 3 y Lab 4 ya tienen contenido: la revisión anterior que los calificaba como vacíos quedó obsoleta.
+4. Lab 2 implementa filtros FIR Q15, no una cascada IIR biquad.
+5. El proyecto final usa ADC1 + ADC2, DAC1 + DAC2, DMA ping-pong, LMS y una cadena Pan–Tompkins hasta integración móvil.
+6. El `.ioc` y `.cproject` del proyecto final todavía reflejan parcialmente el proyecto base `lab1`; CMSIS-DSP no queda configurado de forma reproducible desde `Lib/Source`.
+7. El `main.c` final fue modificado después del último ELF disponible. Ese ELF no valida el código actual.
 
-| # | Problema | Severidad | Tiempo | Solución |
-|---|----------|-----------|--------|----------|
-| 1 | Informes LaTeX vacíos (Lab 3, 4) | 🔴 CRÍTICA | 5h | Completar contenido |
-| 2 | README.txt insuficiente | 🟡 ALTA | 2h | Crear README.md |
-| 3 | Falta .gitignore | 🟡 ALTA | 0.5h | Crear archivo |
-| 4 | Nombres en español | 🟢 MEDIA | 1h | Renombrar dirs |
-| 5 | Archivos .launch duplicados | 🟢 MEDIA | 1h | Limpiar |
-| 6 | Falta Lab 5 | 🟡 ALTA | ? | Iniciar Lab 5 |
+## Próximas acciones
 
----
+### Ahora
 
-## ✅ Lo Que Está Bien
+- [ ] Crear un `.gitignore` conservador y versionar fuentes/configuración del proyecto final y recursos útiles de Lab 3.
+- [ ] Corregir la integración CMSIS-DSP y sincronizar el `.ioc` del proyecto final.
+- [ ] Ejecutar Clean + Build y validar dos ADC, dos DAC y DMA en placa.
 
-- ✓ Código de Lab 1 y 2: Completo y funcional
-- ✓ Código de Lab 3 y 4: Presente
-- ✓ Git: Organizado, 30+ commits
-- ✓ Hardware: Bien documentado (STM32F446RE)
-- ✓ Librerías: ARM CMSIS-DSP integrado
+### Después
 
----
+- [ ] Completar conclusiones y figuras de Lab 3.
+- [ ] Agregar evidencia experimental a Lab 4 y distinguirlo del proyecto final.
+- [ ] Crear informe del proyecto final y un `README.md` raíz.
+- [ ] Limpiar nombres y configuraciones heredadas solo después de asegurar una compilación reproducible.
 
-## ❌ Lo Que Falta
+## Evaluación
 
-- ✗ Documentación académica (Lab 3, 4)
-- ✗ README profesional
-- ✗ .gitignore
-- ✗ Guía de compilación/uso
-- ✗ Lab 5 (mencionado en README)
-- ✗ Estructura de directorios estandarizada
+El repositorio tiene implementaciones DSP sustanciales, pero todavía no conviene asignarle una puntuación porcentual: faltan compilaciones actuales, trazabilidad de mediciones y control de versiones del proyecto final. El riesgo principal no es la ausencia de código, sino perderlo o no poder reconstruirlo desde una clonación limpia.
 
----
-
-## 🚀 Plan Rápido (2-3 semanas)
-
-1. **ESTA SEMANA** 🔴
-   - [ ] Completar pds_lab3.tex (5 horas)
-   - [ ] Completar pds_lab4.tex (4 horas)
-   - [ ] Crear README.md (2 horas)
-
-2. **PRÓXIMA SEMANA** 🟡
-   - [ ] Agregar .gitignore
-   - [ ] Reorganizar directorios
-   - [ ] Documentar dependencias
-
-3. **TERCERA SEMANA** 🟢
-   - [ ] Verificación final
-   - [ ] Testing completo
-
----
-
-## 📈 Métricas
-
-| Métrica | Valor | Meta |
-|---------|-------|------|
-| Código completado | 80% | 100% |
-| Informes completados | 50% | 100% |
-| Documentación | 30% | 100% |
-| Calidad Git | 80% | 100% |
-| **Puntuación General** | **65/100** | **90/100** |
-
----
-
-## 📁 Estructura Actual
-
-```
-procesamiento_digital_s/
-├── 📄 README.txt (⚠️ Muy básico)
-├── 📊 diagrama de flujo PDS_LAB1.drawio.png
-├── 📁 PDS_Lab_1/ (✅ Completo)
-├── 📁 PDS_Lab_2/ (✅ Completo)
-├── 📁 PDS_Lab_3/ (⚠️ Código OK, informe vacío)
-├── 📁 PDS_Lab_4/ (⚠️ Código OK, informe vacío)
-└── ❌ Falta: .gitignore, README.md, Lab 5
-```
-
----
-
-## 💡 Recomendación Inmediata
-
-**PRIORIDAD 1:** Completar archivos `.tex` de Lab 3 y 4  
-- Afecta directamente la puntuación académica
-- Requiere 5-7 horas de trabajo
-- Es lo más urgente
-
-**PRIORIDAD 2:** Mejorar README  
-- Facilita uso del proyecto
-- Requiere 2-3 horas
-
-**PRIORIDAD 3:** Organización (git, directorios)  
-- Mejora mantenibilidad
-- Requiere 3-4 horas
-
----
-
-## 📞 Archivos de Referencia Creados
-
-Dentro del repositorio ahora tienes:
-- ✅ `REVISION_REPOSITORIO.md` - Análisis completo (1000+ líneas)
-- ✅ `PLAN_DE_ACCION.md` - Tareas detalladas con ejemplos
-- ✅ `RESUMEN_EXPRESS.md` - Este archivo
-
----
-
-**Revisión completada automáticamente**  
-**Generado por:** GitHub Copilot  
-**Tiempo total de análisis:** ~15 minutos  
-**Detalles en:** `REVISION_REPOSITORIO.md`
+Para el detalle técnico y la evidencia inspeccionada, consultar `REVISION_REPOSITORIO.md`. Para el orden de ejecución, consultar `PLAN_DE_ACCION.md`.

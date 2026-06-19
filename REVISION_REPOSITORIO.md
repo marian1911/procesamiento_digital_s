@@ -1,359 +1,206 @@
-# 📋 Revisión Completa del Repositorio - Procesamiento Digital de Señales
-
-**Fecha de Revisión:** 11 de mayo de 2026  
-**Revisor:** GitHub Copilot  
-**Rama Actual:** main (sincronizado con origin/main)
-
----
-
-## 📊 Estadísticas Generales
-
-| Métrica | Valor |
-|---------|-------|
-| **Tamaño Total** | ~202 MB |
-| **Total de Archivos** | 1,298 |
-| **Laboratorios** | 4 (Lab 1-4) |
-| **Estado del Repositorio** | Limpio (Sin cambios sin confirmar) |
-| **Commits Totales** | 30+ commits |
-
----
-
-## 📁 Estructura del Proyecto
-
-```
-procesamiento_digital_s/
-├── PDS_Lab_1/
-│   ├── Informe_Latex/
-│   │   └── pds_lab1.tex (COMPLETADO)
-│   └── lab1_dsp/
-│       ├── Core/ (main.c con CMSIS-DSP)
-│       ├── Drivers/ (STM32F4xx HAL)
-│       └── Lib/
-├── PDS_Lab_2/
-│   ├── Informe_Latex/
-│   │   ├── pds_lab2.tex (COMPLETADO)
-│   │   ├── build/
-│   │   └── Graficos/
-│   └── lab2_dsp/
-│       ├── Core/ (Implementación de filtros)
-│       ├── Drivers/
-│       │   └── filtros.h (NUEVO)
-│       └── Lib/ (ARM CMSIS-DSP)
-├── PDS_Lab_3/
-│   ├── Informe_Latex/
-│   │   ├── build/
-│   │   └── pds_lab3.tex (INCOMPLETO - Falta contenido)
-│   └── lab3_dsp/
-│       ├── Core/ (main.c con FFT)
-│       ├── Drivers/
-│       └── Lib/
-├── PDS_Lab_4/
-│   ├── Informe_Latex/
-│   │   ├── build/
-│   │   └── pds_lab4.tex (INCOMPLETO - Falta contenido)
-│   └── lab4_dsp/
-│       ├── Core/ (main.c)
-│       ├── Drivers/
-│       └── Lib/
-├── diagrama de flujo PDS_LAB1.drawio.png
-└── README.txt (Estado básico)
-```
-
----
-
-## ✅ Estado de Completitud
-
-| Laboratorio | Código | Informe | Estado General | Notas |
-|-------------|--------|---------|----------------|-------|
-| **Lab 1** | ✅ | ✅ | **LISTO** | Compilación exitosa, probado en placa |
-| **Lab 2** | ✅ | ✅ | **LISTO** | Implementación de filtros completada |
-| **Lab 3** | ✅ | ⚠️ | **PARCIAL** | Código OK, informe SIN contenido sustancial |
-| **Lab 4** | ✅ | ⚠️ | **PARCIAL** | Código presente, informe SIN contenido sustancial |
-| **Lab 5** | ❌ | ❌ | **NO INICIADO** | No existe en el repositorio |
-
----
-
-## 🔍 Análisis Detallado por Laboratorio
-
-### **Laboratorio 1 - Adquisición de Señales**
-**Ubicación:** `PDS_Lab_1/`
-
-✅ **Características:**
-- ✓ Programa principal completamente documentado
-- ✓ Integración con librerías CMSIS-DSP (ARM Math)
-- ✓ Configuración de ADC, DAC, DMA y timers
-- ✓ Buffer size: 512 muestras
-- ✓ Múltiples tasas de muestreo (8kHz, 16kHz, 22kHz, 44kHz, 48kHz)
-- ✓ Informe LaTeX bien estructurado con gráficos
-- ✓ Compilado exitosamente (Debug/)
-
-**Archivos Clave:**
-- `lab1_dsp/Core/Src/main.c` - Programa principal
-- `lab1_dsp/STM32F446RETX_FLASH.ld` - Enlazador
-- `Informe_Latex/pds_lab1.tex` - Documentación completa
-
----
-
-### **Laboratorio 2 - Filtrado Digital**
-**Ubicación:** `PDS_Lab_2/`
-
-✅ **Características:**
-- ✓ Implementación de filtros IIR (biquad cascade)
-- ✓ Buffer size: 5096 muestras (aumentado)
-- ✓ Soporte para múltiples tipos de filtros: LP, HP, BP, BS
-- ✓ Uso de librerías ARM CMSIS-DSP
-- ✓ **Archivo nuevo:** `Drivers/filtros.h` - Definiciones de filtros
-- ✓ Procesamiento en tiempo real con DMA
-- ✓ Informe LaTeX con estructura de filtros
-- ✓ Carpeta de gráficos incluida
+# Revisión técnica del repositorio `procesamiento_digital_s`
 
-**Archivos Clave:**
-- `lab2_dsp/Core/Src/main.c` - Procesamiento de filtros
-- `lab2_dsp/Drivers/filtros.h` - Definiciones de coeficientes
-- `lab2_dsp/Lib/Source/` - Implementación ARM CMSIS-DSP
-- `Informe_Latex/pds_lab2.tex` - Documentación
+**Fecha de revisión:** 19 de junio de 2026
 
-**Observación:** Buffer aumentado a 5096 (comparado con 512 del Lab 1)
+**Alcance:** árbol de trabajo local, fuentes, informes, configuración STM32CubeIDE, artefactos existentes y estado de Git.
+**Limitación:** no se compiló ni se ejecutó firmware en placa durante esta revisión. El responsable del repositorio confirmó que Lab 1 y Lab 2 están completos.
 
----
+## 1. Resumen
 
-### **Laboratorio 3 - Transformada Rápida de Fourier (FFT)**
-**Ubicación:** `PDS_Lab_3/`
+La revisión anterior, fechada el 11 de mayo, quedó desactualizada. Desde entonces se completó gran parte de los informes de Lab 3 y Lab 4, se añadieron herramientas de recepción para Lab 3 y apareció `PDS_Lab_Final`, un proyecto distinto de Lab 4 orientado a ECG.
 
-⚠️ **Estado: INCOMPLETO**
+El repositorio contiene trabajo técnico valioso, pero su estado actual no es reproducible desde Git: todo el proyecto final y varios resultados de Lab 3 están sin versionar. Además, el proyecto final conserva configuración heredada de Lab 1 y su último ELF es anterior al `main.c` vigente.
 
-**Características Identificadas:**
-- ✓ Código: Implementación de FFT con timers, ADC, DMA
-- ✓ Archivo main.c presente en `lab3_dsp/Core/Src/`
-- ✓ Comunicación UART añadida (usart.c)
-- ✓ Drivers HAL STM32F4 completos
-- ✓ Compilado exitosamente
+## 2. Instantánea verificable
 
-❌ **Problemas:**
-- ⚠️ **Informe LaTeX VACÍO** - Solo contiene preámbulo y estilos
-- ⚠️ Falta contenido: introduccción, marco teórico, resultados, conclusiones
-- ⚠️ Falta gráficos y análisis de resultados
+| Dato | Observación |
+|---|---|
+| Rama local | `main` |
+| Relación mostrada con remoto | `main...origin/main`, sin conteo ahead/behind |
+| Commits alcanzables desde HEAD | 20 |
+| Archivos seguidos por Git | 1301 |
+| Estado del árbol | Sucio: recursos de Lab 3 y todo `PDS_Lab_Final/` sin versionar |
+| Documentación raíz | `README.txt`, 5 líneas |
+| `.gitignore` | No existe |
+| Directorios de entregas | `PDS_Lab_1` a `PDS_Lab_4` y `PDS_Lab_Final` |
 
-**Archivos Clave:**
-- `lab3_dsp/Core/Src/main.c` - Implementación OK
-- `Informe_Latex/build/pds_lab3.tex` - **NECESITA COMPLETARSE**
+El árbol local completo ocupa aproximadamente 541 MiB y contiene unos 9600 archivos, contando `.git`, entornos Python, drivers y salidas de compilación. Esas cifras no representan el tamaño de una distribución limpia.
 
----
+## 3. Estado por entrega
 
-### **Laboratorio 4 - Proyecto Final**
-**Ubicación:** `PDS_Lab_4/`
+### Lab 1 — adquisición y reproducción
 
-⚠️ **Estado: INCOMPLETO**
+Rutas principales:
 
-**Características Identificadas:**
-- ✓ Código: Estructura similiar a Lab 2 con DAC, ADC, timers
-- ✓ Archivo main.c presente
-- ✓ Drivers y librerías compiladas
+- `PDS_Lab_1/lab1_dsp/Core/Src/main.c`
+- `PDS_Lab_1/Informe_Latex/pds_lab1.tex`
 
-❌ **Problemas:**
-- ⚠️ **Informe LaTeX VACÍO** - Similar al Lab 3
-- ⚠️ Falta documentación completa
-- ⚠️ Falta análisis de resultados
+Evidencia observada:
 
-**Archivos Clave:**
-- `lab4_dsp/Core/Src/main.c` - Implementación presente
-- `Informe_Latex/build/pds_lab4.tex` - **NECESITA COMPLETARSE**
-
----
-
-## 📚 Hardware Utilizado
-
-- **Microcontrolador:** STM32F446RE (ARM Cortex-M4 @ 90 MHz)
-- **Periféricos:** ADC, DAC, Timers, DMA, UART
-- **Librerías:** ARM CMSIS-DSP, STM32F4xx HAL Driver
-
----
-
-## 🔧 Historial de Git
-
-**Últimos commits importantes:**
-```
-91da72f - Proceso de Reorganizacion (HEAD -> main)
-f0d3edc - caratula_lab3
-c50200d - marco_teorico_lab3
-f2f0bd5 - Lab3_Lab4_layouts
-cc90c46 - Rename Folders
-a458587 - tp2_resultados_y_conclusiones
-```
-
-**Actividad:** 
-- Rama principal activa: `main`
-- Ramas remotas histórico: `mariano`, `Enzo`, `Lisandro`
-- Commits totales: 30+
-
----
-
-## ⚠️ Problemas Identificados
-
-### 🔴 **CRÍTICO**
-
-1. **Informes LaTeX Incompletos (Lab 3 y 4)**
-   - Los archivos `.tex` son esqueletos vacíos
-   - Falta contenido académico sustancial
-   - **Impacto:** No hay documentación de resultados
-
-2. **Laboratorio 5 No Existe**
-   - Mencionado en README pero no implementado
-   - **Impacto:** Incumplimiento parcial del plan de estudios
-
-### 🟡 **MODERADO**
-
-3. **README.txt Muy Básico**
-   - Solo lista estado de laboratorios
-   - Falta instrucciones de compilación
-   - Falta descripción del proyecto
-   - Falta guía de configuración del entorno
-
-4. **Ausencia de .gitignore**
-   - No hay archivo `.gitignore`
-   - Podría incluir archivos innecesarios (binarios, caché)
-   - **Recomendación:** Crear `.gitignore` para proyectos STM32
-
-5. **Rutas y Nombres de Directorios en Español**
-   - `diseño_lab1`, `Informe_Latex`, `Graficos`
-   - Puede causar problemas en sistemas Linux/CI/CD
-   - **Recomendación:** Usar nombres en inglés
-
-6. **Archivos .launch Duplicados**
-   - Lab 2 y Lab 4 tienen múltiples archivos `.launch` de debug
-   - Posible contaminación o copias no sincronizadas
-
-### 🟢 **MENOR**
-
-7. **Documentación de Código Limitada**
-   - Los main.c de Lab 3 y Lab 4 carecen de comentarios detallados
-   - Comparado con Lab 1 y Lab 2 que tienen mejor documentación
-
-8. **Falta Explicación de Dependencias**
-   - ARM CMSIS-DSP no tiene versión especificada
-   - Difícil reproducir en otro sistema
-
----
-
-## 💡 Recomendaciones
-
-### **ALTO IMPACTO** 🔴
-
-1. **Completar Informes LaTeX**
-   ```
-   [ ] Terminar pds_lab3.tex con:
-       - Introducción y objetivos
-       - Marco teórico de FFT
-       - Resultados experimentales
-       - Gráficos de espectros
-       - Conclusiones
-   
-   [ ] Terminar pds_lab4.tex con análisis similar
-   ```
-
-2. **Crear Documentación Raíz**
-   ```
-   [ ] Expandir README.txt a README.md con:
-       - Descripción general del proyecto
-       - Requisitos del sistema
-       - Instrucciones de compilación
-       - Estructura del proyecto
-       - Instrucciones de ejecución
-   ```
-
-3. **Agregar Configuración Crítica**
-   ```
-   [ ] Crear .gitignore para:
-       - Debug/
-       - *.o, *.a
-       - *.elf, *.bin, *.hex
-       - Archivos generados por IDEs
-   ```
-
-### **MEDIO IMPACTO** 🟡
-
-4. **Mejorar Estructura de Directorios**
-   ```
-   [ ] Renombrar:
-       - Informe_Latex/ → reports/
-       - Graficos/ → graphics/
-       - diseño_lab1 → design_lab1
-   ```
-
-5. **Consolidar Archivos de Debug**
-   ```
-   [ ] Eliminar archivos .launch duplicados
-   [ ] Mantener solo configuraciones válidas
-   ```
-
-6. **Documentar Dependencias**
-   ```
-   [ ] Crear requirements.txt o similar para:
-       - Versión de ARM CMSIS-DSP
-       - Versión de STM32CubeMX
-       - Versión de compilador (arm-none-eabi-gcc)
-   ```
-
-### **BAJO IMPACTO** 🟢
-
-7. **Mejorar Comentarios en Código**
-   ```
-   [ ] Agregar docstrings en Lab 3 main.c
-   [ ] Agregar docstrings en Lab 4 main.c
-   ```
-
-8. **Agregar Archivo de Proyecto**
-   ```
-   [ ] Crear PROJECT_INFO.md con:
-       - Descripción de cada laboratorio
-       - Objetivos académicos
-       - Resultados esperados
-   ```
-
----
-
-## 📈 Próximos Pasos Sugeridos
-
-### Corto Plazo (Esta Semana)
-- [ ] Completar informes LaTeX de Lab 3 y Lab 4
-- [ ] Crear README.md mejorado
-- [ ] Crear .gitignore
-
-### Mediano Plazo (Este Mes)
-- [ ] Reorganizar estructura de directorios
-- [ ] Limpiar archivos duplicados
-- [ ] Documentar dependencias
-
-### Largo Plazo (Para Futuro)
-- [ ] Iniciar Lab 5 si es requerido
-- [ ] Crear scripts de compilación automática
-- [ ] Implementar CI/CD (GitHub Actions)
-
----
-
-## 🎯 Conclusión
-
-**Estado General:** ⚠️ **PARCIALMENTE COMPLETADO**
-
-**Puntuación Estimada:** 65/100
-
-| Aspecto | Evaluación |
-|---------|-----------|
-| Código Fuente | ✅ 85/100 |
-| Documentación | ⚠️ 40/100 |
-| Estructura | ⚠️ 60/100 |
-| Git/Control de Versiones | ✅ 80/100 |
-| Completitud | ⚠️ 65/100 |
-
-**Resumen:**
-- ✅ Código de laboratorios 1 y 2: **COMPLETO Y FUNCIONAL**
-- ⚠️ Código de laboratorios 3 y 4: **PRESENTE PERO SIN DOCUMENTACIÓN**
-- ❌ Laboratorio 5: **NO EXISTE**
-- ⚠️ Documentación general: **INSUFICIENTE**
-
-**Acción Recomendada:** Priorizar completación de informes LaTeX y mejorar documentación raíz antes de continuar con nuevos laboratorios.
-
----
-
-**Generado automáticamente por GitHub Copilot**  
-**Última actualización:** 11/05/2026
+- ADC y DAC con DMA circular, disparados por TIM2.
+- Buffer de 512 muestras.
+- Selección de tasas aproximadas de 8, 16, 22, 44 y 48 kHz.
+- Informe de 1015 líneas con introducción, resultados, figuras y conclusiones.
+- Artefactos ELF históricos en `Debug/`.
+
+Evaluación: **completo**, según confirmación del responsable del repositorio. La revisión constató código, informe y artefactos históricos coherentes con ese estado.
+
+### Lab 2 — filtrado FIR
+
+Rutas principales:
+
+- `PDS_Lab_2/lab2_dsp/Core/Src/main.c`
+- `PDS_Lab_2/lab2_dsp/Drivers/filtros.h`
+- `PDS_Lab_2/Informe_Latex/pds_lab2.tex`
+
+Evidencia observada:
+
+- Procesamiento Q15 mediante `arm_fir_q15`, no filtros IIR biquad.
+- Cuatro respuestas seleccionables: pasa-bajos, pasa-altos, pasa-banda y rechaza-banda.
+- Coeficientes dependientes de 8, 16, 22, 44 y 48 kHz.
+- Buffer de 5096 muestras.
+- Informe de 1296 líneas con numerosas figuras de resultados y conclusiones.
+- Artefacto ELF histórico en `Debug/`.
+
+Evaluación: **completo**, según confirmación del responsable del repositorio. Debe mantenerse la descripción técnica correcta: el fuente actual implementa filtros FIR Q15, no IIR.
+
+### Lab 3 — FFT y transporte UART
+
+Rutas principales:
+
+- `PDS_Lab_3/lab3_dsp/Core/Src/main.c`
+- `PDS_Lab_3/Informe_Latex/build/pds_lab3.tex`
+- `PDS_Lab_3/Recepcion_FFT.m`
+- `PDS_Lab_3/serial_debug.py`, `serial_pattern.py`, `serial_plotter.py`
+
+Evidencia observada:
+
+- Adquisición ADC por DMA y procesamiento fuera de las callbacks.
+- FFT compleja Q15 de CMSIS-DSP con tamaños 512, 1024 y 2048.
+- Cálculo de magnitud y modo bypass.
+- Envío binario por UART4 con trama propia.
+- Selección de frecuencia de muestreo y tamaño mediante GPIO.
+- Informe de 735 líneas con teoría, implementación y resultados redactados.
+
+Pendientes:
+
+- Las subsecciones “Logros alcanzados”, “Limitaciones identificadas” y “Reflexión final” están vacías.
+- El informe solo inserta el logo y una imagen de la placa; no integra las capturas espectrales disponibles.
+- Los tiempos declarados para las FFT no están acompañados por tabla de medición, captura DWT o procedimiento reproducible.
+- Tres PNG, el receptor MATLAB y tres scripts Python figuran sin versionar.
+- No se localizó un ELF de Lab 3 en la búsqueda realizada.
+
+Evaluación: el informe no está vacío; está avanzado, pero le falta cierre y evidencia experimental trazable.
+
+### Lab 4 — cancelación adaptiva LMS
+
+Rutas principales:
+
+- `PDS_Lab_4/lab4_dsp/Core/Src/main.c`
+- `PDS_Lab_4/Informe_Latex/build/pds_lab4.tex`
+
+Evidencia observada:
+
+- Entrada `s(n)` desde ADC.
+- Referencia de ruido pseudoaleatoria generada por LCG.
+- FIR de 30 taps que modela la trayectoria de contaminación.
+- LMS float32 de 60 taps con `mu = 0.005`.
+- Buffer de 512 muestras y procesamiento por semibuffer.
+- DAC1 expone el error estimado `e(n)` y DAC2 la señal contaminada `d(n)`.
+- Informe de 537 líneas con arquitectura, código, resultados redactados y conclusiones.
+
+Pendientes:
+
+- El informe no contiene figuras experimentales aparte del logo.
+- Las cifras de convergencia, ciclos y utilización de CPU deben respaldarse con mediciones o rotularse como estimaciones.
+- Existen configuraciones `.launch` y un `.ioc` heredados de Lab 2; no deben borrarse sin comprobar primero cuál configuración abre y depura correctamente.
+- No se localizó un ELF de Lab 4 en la búsqueda realizada.
+
+Evaluación: código e informe sustanciales, con validación experimental y limpieza de proyecto pendientes.
+
+### Proyecto final — ECG, LMS y Pan–Tompkins parcial
+
+Rutas principales:
+
+- `PDS_Lab_Final/labfinal_dsp/Core/Src/main.c`
+- `PDS_Lab_Final/labfinal_dsp/Core/Src/adc.c`
+- `PDS_Lab_Final/labfinal_dsp/Core/Src/dac.c`
+- `PDS_Lab_Final/Procesaciento_ECG_ejemplo.m`
+- `PDS_Lab_Final/Propuesta ECG.pdf`
+
+Arquitectura observada en los fuentes:
+
+1. ADC1 captura el ECG contaminado `d(n)` por PA0.
+2. ADC2 captura la referencia de ruido `x(n)` por PA1.
+3. `arm_lms_f32` estima el ruido `y(n)` y produce `e(n) = d(n) - y(n)`.
+4. `e(n)` pasa por pasa-bajos, pasa-altos, derivada, cuadrado e integración por ventana móvil.
+5. DAC1 entrega la salida MWI y DAC2 permite seleccionar una señal interna.
+6. DMA circular y flags de mitad/completo implementan procesamiento ping-pong fuera de las ISR.
+
+Parámetros principales:
+
+| Parámetro | Valor |
+|---|---:|
+| `BLOCK_SIZE` | 32 |
+| `BUFFER_SIZE` | 64 |
+| `LMS_ORDER` | 32 |
+| `MWI_SIZE` | 30 |
+| Representación DSP | `float32_t` |
+
+Alcance algorítmico: se implementa el preprocesamiento característico de Pan–Tompkins hasta la integración móvil. No se observó lógica completa de umbral adaptativo, clasificación de picos, período refractario ni cálculo de frecuencia cardíaca. Debe describirse como cadena parcial y no como detector QRS completo.
+
+Problemas de reproducibilidad:
+
+- Todo `PDS_Lab_Final/` está sin seguimiento de Git.
+- `lab1.ioc` solo declara ADC1 y DAC1; no representa ADC2, DAC2 ni todos sus DMA usados por los fuentes.
+- `.cproject` incluye `Core/Inc` pero no `Lib/Include`, declara solo `Core` y `Drivers` como rutas fuente y mantiene `-larm_cortexM4l_math`.
+- `Lib/Source` contiene `arm_lms_f32.c` y `arm_lms_init_f32.c`, pero esa carpeta no forma parte de las entradas fuente persistidas.
+- El proyecto compila para FPU `fpv4-sp-d16`; una biblioteca estática debe coincidir con su ABI hard-float.
+- El ELF existente se llama `lab1_dsp.elf`, fue generado el 10 de junio y es anterior al `main.c` modificado el 19 de junio.
+
+Evaluación: la implementación fuente está avanzada, pero no hay evidencia suficiente de que la revisión actual compile o funcione en placa. Este es el mayor riesgo técnico del repositorio.
+
+## 4. Problemas transversales
+
+### Críticos
+
+1. **Trabajo importante sin versionar.** Una limpieza de carpeta, cambio de equipo o fallo del disco puede perder el proyecto final y resultados de Lab 3.
+2. **Build final no trazable.** Configuración, `.ioc`, fuentes CMSIS-DSP y artefactos no describen una misma revisión coherente.
+3. **Resultados sin evidencia suficiente.** Varias cifras de los informes aparecen como experimentales sin figura, log o método asociado.
+
+### Altos
+
+4. **README obsoleto.** No menciona el proyecto final y sigue marcando Lab 3/Lab 4 como faltantes.
+5. **Ausencia de `.gitignore`.** Se mezclan fuentes con `Debug/`, objetos, cachés y entornos locales.
+6. **Identidad heredada.** Lab 4 conserva archivos `lab2*`; el proyecto final conserva `lab1*`. Esto aumenta el riesgo de importar, regenerar o depurar el proyecto equivocado.
+
+### Medios
+
+7. **Dependencias no documentadas.** Conviven librerías estáticas y fuentes CMSIS-DSP sin una política común.
+8. **Fuente canónica de informes poco clara.** Los `.tex` de Lab 3 y Lab 4 viven dentro de `Informe_Latex/build/`, nombre que normalmente identifica salidas generadas.
+9. **Sin automatización de verificación.** No hay un procedimiento raíz que reconstruya informes o confirme compilaciones.
+
+## 5. Correcciones respecto de la revisión anterior
+
+| Afirmación anterior | Estado actual verificado |
+|---|---|
+| “Lab 3 sin informe” | Incorrecto: existe un informe sustancial de 735 líneas; faltan conclusiones y evidencia gráfica. |
+| “Lab 4 sin informe” | Incorrecto: existe un informe sustancial de 537 líneas; falta trazabilidad experimental. |
+| “Lab 2 usa IIR biquad” | Incorrecto para el fuente actual: usa `arm_fir_q15`. |
+| “Repositorio limpio” | Incorrecto: hay múltiples archivos y un directorio completo sin versionar. |
+| “30+ commits” | El conteo local actual de `HEAD` es 20. |
+| “Falta Lab 5” como defecto | No hay evidencia local de que Lab 5 sea una entrega requerida; no debe tratarse como problema sin consigna. |
+| “Lab 4 es el proyecto final” | Ya existe `PDS_Lab_Final`, distinto de `PDS_Lab_4`. |
+
+## 6. Recomendación
+
+No conviene comenzar por renombrar carpetas ni por CI/CD. El orden técnico correcto es:
+
+1. preservar en Git las fuentes y resultados actuales;
+2. hacer reproducible el build de `labfinal_dsp` y alinear su `.ioc`;
+3. validar el firmware vigente en placa;
+4. completar evidencia y conclusiones de los informes;
+5. actualizar README, dependencias y nombres heredados;
+6. recién después evaluar automatización o reorganización estructural.
+
+El detalle operativo y los criterios de cierre están en `PLAN_DE_ACCION.md`; la síntesis está en `RESUMEN_EXPRESS.md`.

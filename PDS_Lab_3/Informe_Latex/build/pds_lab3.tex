@@ -9,6 +9,7 @@
 \usepackage{graphicx} 
 \usepackage{tabularx}
 \usepackage{hyperref} 
+\usepackage{sistyle}
 
 % Márgenes
 \usepackage[a4paper, left=2.5cm, right=2.5cm, top=2cm, bottom=2cm]{geometry}
@@ -671,17 +672,46 @@
 	
 	\section{Resultados experimentales}
 
-		\subsection{Análisis del espectro}
+		\subsection{Prueba del programa}
 
-			Se realizaron pruebas con diferentes señales de entrada para validar la implementación de la FFT. Los resultados fueron:
+			Para validar la implementación de la FFT, se realizaron ensayos con distintas señales de entrada y 
+			configuraciones del sistema. Dado que documentar todas las combinaciones posibles requeriría una 
+			cantidad considerable de imágenes, se seleccionaron capturas representativas obtenidas al variar la 
+			frecuencia de la señal de entrada, la frecuencia de muestreo y el modo de funcionamiento del programa.
 
-			\begin{itemize}
-				\item \textbf{Señal senoidal pura:} Se observó un pico único en la frecuencia correspondiente, sin componentes armónicas.
-				
-				\item \textbf{Señal con ruido:} El espectro mostró el componente fundamental más componentes distribuidas, indicando la presencia de ruido.
-				
-				\item \textbf{Señal poliarmónica:} Se identificaron múltiples picos correspondientes a la fundamental y sus armónicos.
-			\end{itemize}
+			En la Figura \ref{fig:Img1_s220Hz} se presentan los resultados obtenidos al inyectar una señal 
+			senoidal de 220 Hz. Para el procesamiento mediante FFT se utilizaron 2048 puntos y una frecuencia 
+			de muestreo de 22 kHz, mientras que en el modo bypass se emplearon 2048 muestras y una frecuencia 
+			de muestreo de 8 kHz.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=1\textwidth]{Imagen1_lab3_220hz.png}
+				\caption{FFT y bypass con señal de entrada a 220 Hz.}
+				\label{fig:Img1_s220Hz}
+			\end{figure}
+
+			La Figura \ref{fig:Img2_s220Hz} muestra un segundo ensayo realizado con la misma señal senoidal de 
+			220 Hz. En este caso, la FFT se calculó sobre 2048 puntos con una frecuencia de muestreo de 48 kHz. 
+			Para el modo bypass se mantuvieron las 2048 muestras y la frecuencia de muestreo de 8 kHz.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=1\textwidth]{Imagen2_lab3_220hz.png}
+				\caption{FFT y bypass con señal de entrada a 220 Hz.}
+				\label{fig:Img2_s220Hz}
+			\end{figure}
+
+			Por último, en la Figura \ref{fig:Img1_s920Hz} se muestran los resultados correspondientes a una señal 
+			senoidal de 920 Hz. Tanto para el cálculo de la FFT como para el modo bypass se utilizaron 2048 muestras 
+			y una frecuencia de muestreo de 48 kHz.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=1\textwidth]{Imagen1_lab3_920hz.png}
+				\caption{FFT y bypass con señal de entrada a 920 Hz.}
+				\label{fig:Img1_s920Hz}
+			\end{figure}
 
 		\subsection{Resolución espectral}
 
@@ -709,25 +739,11 @@
 
 			Todos dentro de los límites aceptables para procesamiento en tiempo real a las frecuencias de muestreo utilizadas.
 
-		\subsection{Efectos observados}
-
-			\subsubsection{Aliasing}
-
-				En pruebas con señales de frecuencia superior a $f_s/2$, se observó aliasing, confirmando que el sistema respeta correctamente el teorema de Nyquist.
-
-			\subsubsection{Fuga espectral}
-
-				Componentes espectrales truncadas en los bordes de la ventana mostraban dispersión de energía hacia frecuencias adyacentes, efecto típico de la FFT.
-
 	%--------------------------------------------------------%
 
 	\section{Conclusiones}
 
-		\subsection{Logros alcanzados}
-
-		\subsection{Limitaciones identificadas}
-
-		\subsection{Reflexión final}
+		
 
 	%--------------------------------------------------------%
 	
