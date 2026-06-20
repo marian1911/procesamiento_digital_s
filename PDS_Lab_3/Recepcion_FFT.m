@@ -1,8 +1,8 @@
 % Configuración del puerto serie
 clear s;
-puerto   = 'COM7';     % Ajustá según corresponda
+puerto   = 'COM3';     % Ajustá según corresponda
 baudrate = 115200;
-Vref = 5;
+Vref = 3.3;
 
 s = serialport(puerto, baudrate, 'Timeout', 5);
 

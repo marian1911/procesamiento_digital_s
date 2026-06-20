@@ -611,29 +611,206 @@
 				Se proporciona un script de MATLAB que realiza las siguientes funciones:
 
 				\begin{itemize}
-					\item Abre la conexión serie al puerto especificado
-					\item Lee continuamente los valores de magnitud espectral
-					\item Convierte los datos recibidos al formato apropiado
-					\item Grafica el espectro de frecuencias en tiempo real
-					\item Muestra información de las componentes espectrales dominantes
-					\item Cierra la conexión de manera ordenada
+					\item Configura la conexión serie con la placa
+					\item Sincroniza y valida las tramas recibidas
+					\item Interpreta la configuración enviada en el encabezado
+					\item Recibe magnitudes FFT o muestras del ADC
+					\item Convierte los datos a dB o voltios
+					\item Grafica los resultados en tiempo real
 				\end{itemize}
 
-				\begin{lstlisting}[style=pythonstyle, caption=Script MATLAB para recepción de datos FFT]
-					
-					% MATLAB Script - Recepción y visualización de FFT
-					% Configuración de parámetros
-					
-					% [CÓDIGO A INTEGRAR]
-					% El script MATLAB para recepción de datos será integrado aquí
-					% Incluirá:
-					% - Apertura del puerto serie
-					% - Lectura de datos FFT
-					% - Conversión de Q15 a punto flotante
-					% - Cálculo de eje de frecuencias
-					% - Visualización en gráficos
-					% - Análisis de componentes espectrales
-					
+				El script se presenta a continuación dividido en bloques funcionales. Estos fragmentos forman parte de un único programa y deben ejecutarse de manera conjunta.
+
+				\paragraph{Configuración de la comunicación serie}
+
+				En primer lugar, se establece el puerto de comunicación, la velocidad de transmisión y la tensión de referencia utilizada para convertir las muestras del ADC a voltios. También se inicializan los objetos gráficos y el byte de sincronismo del protocolo.
+
+				\begin{lstlisting}[style=pythonstyle, language=Matlab, caption=Configuración del puerto serie]
+% Configuración del puerto serie
+clear s;
+puerto   = 'COM3';     % Ajustá según corresponda
+baudrate = 115200;
+Vref = 3.3;
+
+s = serialport(puerto, baudrate, 'Timeout', 5);
+
+hPlot_fft  = [];
+hPlot_time = [];
+titulo_prev_fft  = '';
+titulo_prev_time = '';
+
+SYNC_BYTE  = uint8(15);     % Byte de sincronismo en header[1]
+				\end{lstlisting}
+
+				\paragraph{Sincronización y lectura del encabezado}
+
+				Cada trama comienza con el byte de sincronismo 15. Una vez detectado, se leen los tres bytes restantes del encabezado, que identifican la frecuencia de muestreo, el tamaño de ventana y el modo de funcionamiento.
+
+				\begin{lstlisting}[style=pythonstyle, language=Matlab, caption=Sincronización y lectura del encabezado]
+while true
+    %% ---- ESPERAR BYTE DE SINCRONISMO (15) ----
+    try
+        %% ---- SINCRONIZACIÓN ROBUSTA ----
+        sync = read(s, 1, 'uint8');
+        while sync ~= SYNC_BYTE
+            sync = read(s, 1, 'uint8');
+        end
+
+        %% ---- LEER RESTO DEL HEADER (fs_mode, window_size, bypass) ----
+        header      = read(s, 3, 'uint8');
+        fs_mode     = header(1);
+        window_size = header(2);
+        bypass      = header(3);
+				\end{lstlisting}
+
+				\paragraph{Interpretación de los parámetros de adquisición}
+
+				Los valores codificados en el encabezado se convierten en el número de muestras de la ventana y en la frecuencia de muestreo utilizada por la placa.
+
+				\begin{lstlisting}[style=pythonstyle, language=Matlab, caption=Interpretación del tamaño de ventana y la frecuencia de muestreo]
+        %% ---- Determinar tamaño de ventana según window_size ----
+        switch window_size
+            case 0
+                data_size = 512;
+            case 1
+                data_size = 1024;
+            case 2
+                data_size = 2048;
+            otherwise
+                warning('window_size desconocido: %d', window_size);
+                % descarto este frame
+                continue;
+        end
+
+        %% ---- Mapear fs_mode -> frecuencia de muestreo aproximada ----
+        switch fs_mode
+            case 0
+                fs = 8000;     % ~8 kHz
+            case 1
+                fs = 16000;    % ~16 kHz
+            case 2
+                fs = 22000;    % ~22 kHz aprox.
+            case 3
+                fs = 44000;    % ~44 kHz
+            case 4
+                fs = 48000;    % ~48 kHz
+            otherwise
+                fs = NaN;      % Modo stop u otro
+        end
+				\end{lstlisting}
+
+				\paragraph{Recepción y visualización en modo FFT}
+
+				Cuando el modo bypass está deshabilitado, MATLAB recibe las magnitudes en formato Q15, verifica el final de la trama, construye el eje de frecuencias y representa el espectro en decibelios.
+
+				\begin{lstlisting}[style=pythonstyle, language=Matlab, caption=Procesamiento y representación del espectro FFT]
+        %% =========================
+        %   MODO FFT (bypass == 0)
+        %% =========================
+        if bypass == 0
+            % Número de magnitudes enviados por la placa: N = data_size/2 + 1
+            num_magnitudes = data_size/2 + 1;
+
+            % ---- LECTURA DE DATOS ----
+            magnitudes_q15 = read(s, num_magnitudes, 'int16');
+
+            % ---- FOOTER ----
+            footer = read(s, 2, 'uint8');
+            if ~isequal(footer, uint8([10 10]))   % 10 = '\n'
+                warning('Footer inválido (FFT), posible desalineación. Re-sincronizando...');
+                flush(s);
+                continue;
+            end
+
+            % ---- EJE DE FRECUENCIAS ----
+            f = (0:num_magnitudes-1) * (fs / data_size);   % de 0 a fs/2
+
+            % ---- convertir Q15 a dB ----
+            mags_lin = double(magnitudes_q15) / 32768;     % [0,1)
+            mags_db  = 20*log10(max(mags_lin, 1e-6));      % dB
+
+            % ---- GRÁFICA EN TIEMPO REAL (FFT) ----
+            if isempty(hPlot_fft) || ~isvalid(hPlot_fft)
+                figure(1);
+                hPlot_fft = plot(f, mags_db);
+                xlabel('Frecuencia [Hz]');
+                ylabel('Magnitud [dB]');
+                grid on;
+            else
+                set(hPlot_fft, 'XData', f, 'YData', mags_db);
+            end
+
+            % Título dinámico con info de modo
+            titulo_fft = sprintf('FFT %d pts | fs_mode=%d (fs≈%.0f Hz)', ...
+                                 data_size, fs_mode, fs);
+            if ~strcmp(titulo_fft, titulo_prev_fft)
+                title(titulo_fft);
+                titulo_prev_fft = titulo_fft;
+            end
+				\end{lstlisting}
+
+				\paragraph{Recepción y visualización en modo bypass}
+
+				En modo bypass se reciben directamente las muestras de 12 bits del ADC. Estas se convierten a voltios y se representan respecto del tiempo.
+
+				\begin{lstlisting}[style=pythonstyle, language=Matlab, caption=Procesamiento y representación de la señal en modo bypass]
+        %% =============================
+        %   MODO BYPASS (bypass != 0)
+        %% =============================
+        else
+            % En bypass la placa manda data_size muestras uint16 (ADC crudo)
+            num_samples = data_size;
+
+            % ---- LECTURA DE DATOS (uint16) ----
+            samples_adc = read(s, num_samples, 'uint16');
+
+            % ---- FOOTER (2 bytes '\n''\n') ----
+            footer = read(s, 2, 'uint8');
+            if ~isequal(footer, uint8([10 10]))   % 10 = '\n'
+                warning('Footer inválido (bypass), posible desalineación. Re-sincronizando...');
+                flush(s);
+                continue;
+            end
+
+            % ---- Convertir a Volts ----
+            x_volt = double(samples_adc) * Vref / 4095;   % 12 bits
+
+            % ---- EJE TIEMPO (lo que llamás "período" de la señal) ----
+            t = (0:num_samples-1) / fs;   % segundos
+
+            % ---- GRÁFICA EN TIEMPO REAL (señal senoidal) ----
+            if isempty(hPlot_time) || ~isvalid(hPlot_time)
+                figure(2);
+                hPlot_time = plot(t, x_volt);
+                xlabel('Tiempo [s]');
+                ylabel('Señal [V]');
+                grid on;
+            else
+                set(hPlot_time, 'XData', t, 'YData', x_volt);
+            end
+
+            % Título dinámico
+            titulo_time = sprintf('Señal cruda (bypass) | %d muestras | fs_mode=%d (fs≈%.0f Hz)', ...
+                                  data_size, fs_mode, fs);
+            if ~strcmp(titulo_time, titulo_prev_time)
+                title(titulo_time);
+                titulo_prev_time = titulo_time;
+            end
+        end
+				\end{lstlisting}
+
+				\paragraph{Actualización gráfica y recuperación ante errores}
+
+				Finalmente, se actualizan las figuras y se capturan las excepciones producidas durante la recepción. Ante un error, el buffer serie se vacía y el programa vuelve a buscar el siguiente byte de sincronismo.
+
+				\begin{lstlisting}[style=pythonstyle, language=Matlab, caption=Actualización de las gráficas y manejo de errores]
+        drawnow;
+
+    catch e
+        warning('Error: %s - reintentando sync...', e.message);
+        flush(s);
+    end
+end
 				\end{lstlisting}
 
 			\subsubsection{Funcionalidades del script}
@@ -641,19 +818,23 @@
 				El script MATLAB implementa las siguientes características:
 
 				\begin{enumerate}
-					\item \textbf{Detección de puerto COM:} Búsqueda automática del puerto donde está conectada la placa
+					\item \textbf{Conexión serie:} Configura el puerto y la velocidad de comunicación
 					
-					\item \textbf{Lectura de datos:} Recepción e interpretación de los valores de magnitud del espectro
+					\item \textbf{Sincronización:} Detecta el inicio de cada trama mediante el byte de sincronismo
 					
-					\item \textbf{Conversión de formato:} Transformación de datos Q15 a punto flotante normalizado
+					\item \textbf{Interpretación:} Obtiene del encabezado el modo, la ventana y la frecuencia de muestreo
 					
-					\item \textbf{Cálculo de eje de frecuencias:} Generación del vector de frecuencias basado en fs y N
+					\item \textbf{Lectura:} Recibe magnitudes FFT o muestras ADC según el modo
 					
-					\item \textbf{Visualización en tiempo real:} Gráfico actualizado continuamente del espectro
+					\item \textbf{Validación:} Comprueba el final de la trama y resincroniza ante errores
 					
-					\item \textbf{Análisis espectral:} Identificación de picos, componentes dominantes y ruido
+					\item \textbf{Conversión:} Transforma Q15 a dB y las muestras ADC a voltios
 					
-					\item \textbf{Almacenamiento de datos:} Opción de guardar mediciones para análisis posterior
+					\item \textbf{Generación de ejes:} Calcula los ejes de frecuencia y tiempo
+
+					\item \textbf{Visualización:} Actualiza el espectro o la señal temporal en tiempo real
+
+					\item \textbf{Manejo de errores:} Vacía el buffer y reintenta la recepción
 				\end{enumerate}
 
 			\subsubsection{Calibración y validación}
@@ -743,7 +924,17 @@
 
 	\section{Conclusiones}
 
-		
+		En el presente trabajo se implementó la Transformada Rápida de Fourier sobre la plataforma STM32F446RE, utilizando la biblioteca CMSIS-DSP y datos representados en formato Q15. El sistema desarrollado permitió procesar señales adquiridas en tiempo real con ventanas configurables de 512, 1024 y 2048 muestras.
+
+		A partir de los resultados experimentales, se verificó que el espectro obtenido permite identificar correctamente la componente correspondiente a la frecuencia de la señal de entrada. Asimismo, la transmisión mediante la interfaz serie y la visualización en MATLAB permitieron observar tanto el espectro en modo FFT como la señal adquirida en el dominio temporal mediante el modo bypass.
+
+		Se comprobó que la resolución espectral depende de la frecuencia de muestreo y del número de muestras procesadas. Para una frecuencia de muestreo de 48 kHz, la resolución mejoró desde 93,75 Hz con 512 muestras hasta 23,44 Hz con 2048 muestras. Esto confirma que aumentar el tamaño de la ventana mejora la discriminación entre componentes frecuenciales, aunque también incrementa el tiempo de adquisición y procesamiento.
+
+		Los tiempos medidos para las FFT de 512, 1024 y 2048 puntos se mantuvieron por debajo del tiempo necesario para adquirir cada bloque de muestras. Por lo tanto, la arquitectura basada en DMA y doble buffering resultó adecuada para ejecutar el procesamiento de manera continua y sin pérdida de datos.
+
+		El empleo del formato Q15 permitió reducir el uso de memoria y aprovechar las instrucciones de procesamiento digital del núcleo ARM Cortex-M4. No obstante, la resolución finita de los datos y la cuantización introducen diferencias respecto de un procesamiento realizado en punto flotante, especialmente para componentes espectrales de baja amplitud.
+
+		En conclusión, se cumplieron los objetivos propuestos al integrar la adquisición, el cálculo de la FFT, el modo bypass y la transmisión de resultados en un único sistema embebido. El trabajo permitió relacionar los conceptos teóricos del análisis espectral con su implementación práctica y comprobar la viabilidad del procesamiento frecuencial en tiempo real sobre recursos de hardware limitados.
 
 	%--------------------------------------------------------%
 	
