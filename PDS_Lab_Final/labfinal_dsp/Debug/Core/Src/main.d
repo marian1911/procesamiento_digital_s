@@ -31,8 +31,39 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
- ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/dac.h ../Core/Inc/dma.h \
- ../Core/Inc/tim.h ../Core/Inc/gpio.h ../Core/Inc/arm_math.h
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math_types.h \
+ ../Drivers/CMSIS/Include/cmsis_compiler.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math_memory.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/none.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math_types.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/utils.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/basic_math_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math_memory.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/none.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/utils.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/interpolation_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/bayes_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/statistics_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/basic_math_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/fast_math_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/matrix_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/complex_math_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/statistics_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/controller_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/support_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/distance_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/matrix_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/svm_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/svm_defines.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/fast_math_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/transform_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/complex_math_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/filtering_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/support_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/quaternion_math_functions.h \
+ C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/window_functions.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -66,10 +97,36 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
-../Core/Inc/adc.h:
-../Core/Inc/main.h:
-../Core/Inc/dac.h:
-../Core/Inc/dma.h:
-../Core/Inc/tim.h:
-../Core/Inc/gpio.h:
-../Core/Inc/arm_math.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math_types.h:
+../Drivers/CMSIS/Include/cmsis_compiler.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math_memory.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/none.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math_types.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/utils.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/basic_math_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/arm_math_memory.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/none.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/utils.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/interpolation_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/bayes_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/statistics_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/basic_math_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/fast_math_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/matrix_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/complex_math_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/statistics_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/controller_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/support_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/distance_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/matrix_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/svm_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/svm_defines.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/fast_math_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/transform_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/complex_math_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/filtering_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/support_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/quaternion_math_functions.h:
+C:/Users/enzog/STM32CubeIDE/workspace_1.17.0/labfinal_dsp/Lib/Include/dsp/window_functions.h:

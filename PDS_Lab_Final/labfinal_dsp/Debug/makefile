@@ -9,6 +9,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Lib/Source/subdir.mk
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
@@ -34,34 +35,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := lab1_dsp
+BUILD_ARTIFACT_NAME := labfinal_dsp
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-lab1_dsp.elf \
+labfinal_dsp.elf \
 
 MAP_FILES += \
-lab1_dsp.map \
+labfinal_dsp.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-lab1_dsp.list \
+labfinal_dsp.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: lab1_dsp.elf secondary-outputs
+main-build: labfinal_dsp.elf secondary-outputs
 
 # Tool invocations
-lab1_dsp.elf lab1_dsp.map: $(OBJS) $(USER_OBJS) C:\Users\enzog\STM32CubeIDE\workspace_1.17.0\lab1_dsp\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "lab1_dsp.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\enzog\STM32CubeIDE\workspace_1.17.0\lab1_dsp\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="lab1_dsp.map" -Wl,--gc-sections -static -L"C:\Users\enzog\STM32CubeIDE\workspace_1.17.0\lab1_dsp\Lib" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+labfinal_dsp.elf labfinal_dsp.map: $(OBJS) $(USER_OBJS) C:\Users\enzog\STM32CubeIDE\workspace_1.17.0\labfinal_dsp\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "labfinal_dsp.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\enzog\STM32CubeIDE\workspace_1.17.0\labfinal_dsp\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="labfinal_dsp.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +71,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-lab1_dsp.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "lab1_dsp.list"
+labfinal_dsp.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "labfinal_dsp.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout lab1_dsp.elf lab1_dsp.list lab1_dsp.map
+	-$(RM) default.size.stdout labfinal_dsp.elf labfinal_dsp.list labfinal_dsp.map
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
