@@ -26,6 +26,17 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+typedef enum
+{
+  DAC2_OUT_LMS_ERROR = 0,     /* e(n): ECG filtrado por LMS */
+  DAC2_OUT_LMS_OUTPUT,        /* y(n): estimación de ruido del LMS */
+  DAC2_OUT_ADC1_INPUT,        /* d(n): entrada principal ADC1 */
+  DAC2_OUT_ADC2_INPUT,        /* x(n): referencia ADC2 */
+  DAC2_OUT_PT_BANDPASS,       /* salida pasa-altos Pan-Tompkins */
+  DAC2_OUT_PT_DERIVATIVE,     /* salida derivativa Pan-Tompkins */
+  DAC2_OUT_PT_MWI,            /* integración de ventana móvil */
+  DAC2_OUT_COUNT
+} dac2_output_mode_t;
 
 /* USER CODE END PTD */
 
@@ -44,7 +55,9 @@
 
 #define ADC_DAC_MAX_CODE   4095.0f
 #define ANALOG_VDDA        3.3f
-#define SIGNAL_BIAS        (ANALOG_VDDA / 2.0f)
+#define SIGNAL_BIAS        0.0f
+
+#define BUTTON_DEBOUNCE_MS  200U
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -120,6 +133,15 @@ static float32_t mwi_acc = 0.0f;
 static volatile uint32_t adc_half_ready_mask = 0U;
 static volatile uint32_t adc_full_ready_mask = 0U;
 static volatile uint32_t adc_error_mask = 0U;
+
+/* Modo actual de salida del DAC2. Puede observarse desde el debugger. */
+static volatile dac2_output_mode_t dac2_output_mode = DAC2_OUT_LMS_ERROR;
+
+/* Contador auxiliar para verificar pulsaciones desde el debugger. */
+static volatile uint32_t dac2_output_switch_count = 0U;
+
+/* Antirrebote simple para el botón B1. */
+static volatile uint32_t button_last_tick_ms = 0U;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -321,6 +343,61 @@ static void pan_tompkins_process_block(const float32_t *input,
 }
 
 /**
+ * @brief Selecciona qué señal interna se enviará al DAC2.
+ *
+ * El índice corresponde a la muestra actual dentro del bloque procesado.
+ * La conversión final a código DAC se hace fuera de esta función.
+ */
+static float32_t dac2_select_sample(dac2_output_mode_t mode, uint32_t index)
+{
+  float32_t sample;
+
+  switch (mode)
+  {
+    case DAC2_OUT_LMS_ERROR:
+      /* e(n): salida útil del cancelador adaptativo. */
+      sample = e_block[index];
+      break;
+
+    case DAC2_OUT_LMS_OUTPUT:
+      /* y(n): estimación de ruido generada por el LMS. */
+      sample = y_block[index];
+      break;
+
+    case DAC2_OUT_ADC1_INPUT:
+      /* d(n): señal principal adquirida por ADC1. */
+      sample = d_block[index];
+      break;
+
+    case DAC2_OUT_ADC2_INPUT:
+      /* x(n): referencia de ruido adquirida por ADC2. */
+      sample = x_block[index];
+      break;
+
+    case DAC2_OUT_PT_BANDPASS:
+      /* Señal luego del pasa-bajos + pasa-altos de Pan-Tompkins. */
+      sample = hpf_block[index];
+      break;
+
+    case DAC2_OUT_PT_DERIVATIVE:
+      /* Derivada de Pan-Tompkins. */
+      sample = der_block[index];
+      break;
+
+    case DAC2_OUT_PT_MWI:
+      /* Integrador de ventana móvil. */
+      sample = mwi_block[index];
+      break;
+
+    default:
+      sample = e_block[index];
+      break;
+  }
+
+  return sample;
+}
+
+/**
  * @brief Ejecuta LMS y el preprocesamiento Pan-Tompkins sobre un bloque.
  *
  * ADC1 contiene la señal deseada d(n), mientras ADC2 proporciona la
@@ -332,6 +409,8 @@ static void process_block(const uint16_t *adc1_ptr,
                           uint16_t *dac1_ptr,
                           uint16_t *dac2_ptr)
 {
+  dac2_output_mode_t current_dac2_mode;
+
   for (uint32_t i = 0U; i < BLOCK_SIZE; i++)
   {
     d_block[i] = adc_to_float(adc1_ptr[i]);
@@ -348,13 +427,19 @@ static void process_block(const uint16_t *adc1_ptr,
   /* El ECG filtrado por LMS alimenta todas las etapas de Pan-Tompkins. */
   pan_tompkins_process_block(e_block, BLOCK_SIZE);
 
+  /*
+   * Copia local del modo de salida. Así, aunque el botón se pulse durante el
+   * procesamiento, todo este bloque DMA se genera con la misma señal en DAC2.
+   */
+  current_dac2_mode = dac2_output_mode;
+
   for (uint32_t i = 0U; i < BLOCK_SIZE; i++)
   {
     /* DAC1 permite observar la energía integrada asociada al complejo QRS. */
     dac1_ptr[i] = float_to_dac(mwi_block[i]);
 
-    /* DAC2 conserva como referencia el ECG obtenido a la salida del LMS. */
-    dac2_ptr[i] = float_to_dac(e_block[i]);
+    /* DAC2 permite observar una señal interna seleccionable. */
+    dac2_ptr[i] = float_to_dac(dac2_select_sample(current_dac2_mode, i));
   }
 }
 
@@ -901,6 +986,38 @@ void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
   else if (hadc->Instance == ADC2)
   {
     adc_error_mask |= ADC2_READY_FLAG;
+  }
+}
+
+/**
+ * @brief Cambia la señal observada por DAC2 con cada pulsación de B1.
+ *
+ * Usa un antirrebote básico por tiempo. Cada flanco válido avanza al siguiente
+ * modo de salida y vuelve al primero al llegar al final de la lista.
+ */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  uint32_t now_ms;
+  uint32_t next_mode;
+
+  if (GPIO_Pin == B1_Pin)
+  {
+    now_ms = HAL_GetTick();
+
+    if ((now_ms - button_last_tick_ms) >= BUTTON_DEBOUNCE_MS)
+    {
+      button_last_tick_ms = now_ms;
+
+      next_mode = (uint32_t)dac2_output_mode + 1U;
+
+      if (next_mode >= (uint32_t)DAC2_OUT_COUNT)
+      {
+        next_mode = 0U;
+      }
+
+      dac2_output_mode = (dac2_output_mode_t)next_mode;
+      dac2_output_switch_count++;
+    }
   }
 }
 
