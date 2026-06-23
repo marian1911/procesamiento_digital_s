@@ -1,0 +1,202 @@
+\documentclass[12pt]{article}
+
+% Codificación y lenguaje
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+
+% Márgenes
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2cm, bottom=2cm]{geometry}
+
+% Gráficos, flotantes y código
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{url}
+
+% Encabezados y pies de página
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{TP Final - Cancelación Adaptiva de Ruido}
+\rhead{UNC-Procesamiento digital de señales}
+\cfoot{\thepage}
+\setlength{\headheight}{15pt}
+
+% Estilo para código
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	language=C,
+	backgroundcolor=\color{white},
+	basicstyle=\scriptsize\ttfamily,
+	keywordstyle=\color[HTML]{0072BD}\bfseries,
+	commentstyle=\color[HTML]{008000}\itshape,
+	stringstyle=\color[HTML]{A2142F},
+	numberstyle=\tiny\color{gray},
+	numbers=left,
+	numbersep=6pt,
+	frame=single,
+	rulecolor=\color{black!50},
+	breaklines=true,
+	breakatwhitespace=false,
+	breakautoindent=true,
+	tabsize=2,
+	showspaces=false,
+	showstringspaces=false,
+	xleftmargin=1.5em,
+	xrightmargin=0.5em,
+	aboveskip=1em,
+	belowskip=1em,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1 {≈}{{$\approx$}}1,
+}
+
+\lstdefinestyle{pythonstyle}{
+	language=Python,
+	backgroundcolor=\color{white},
+	basicstyle=\scriptsize\ttfamily,
+	keywordstyle=\color[HTML]{0000FF}\bfseries,
+	commentstyle=\color[HTML]{008000}\itshape,
+	stringstyle=\color[HTML]{A2142F},
+	numberstyle=\tiny\color{gray},
+	numbers=left,
+	numbersep=6pt,
+	frame=single,
+	rulecolor=\color{black!50},
+	breaklines=true,
+	breakatwhitespace=false,
+	breakautoindent=true,
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false,
+	xleftmargin=1.5em,
+	xrightmargin=0.5em,
+	aboveskip=1em,
+	belowskip=1em,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1 {≈}{{$\approx$}}1,
+}
+
+% Título y autores
+\title{
+	\includegraphics[width=0.45\textwidth]{unc.png} \\[2cm] % Logo
+	\textbf{Trabajo Práctico Final: Acondicionamiento de señal SG} 
+}
+    
+\author{
+	Profesores: \\ Parlanti Gustavo Fernand (Presidente) \\ Molina German Alcides (Vocal)\\ Rossi Robreto Raul (Vocal)
+	\\ \\
+	Alumnos:\\ Campos \\ Testa \\ Verstraete 
+}
+
+\date{Junio de 2026} % Fecha del trabajo
+
+\begin{document}
+	
+	\maketitle
+	
+	\begin{abstract}
+    
+		Aca va un resumen bien zarpado  
+
+	\end{abstract}\newpage
+	
+	\tableofcontents \newpage
+	
+	\section{Introducción}
+	
+		\subsection{Objetivos del proyecto}
+			
+	\section{Marco teórico}
+
+	\section{Placa de Desarrollo}
+
+		\subsection{Microcontrolador STM32F446RE}
+
+			El STM32F446RE es un microcontrolador de alto rendimiento basado en ARM Cortex-M4 con:
+
+			\begin{itemize}
+				\item Núcleo: Cortex-M4 con soporte para FPU (unidad de punto flotante de 32 bits)
+				\item Frecuencia de operación: Hasta 180 MHz
+				\item Memoria Flash: 512 KB
+				\item Memoria RAM: 128 KB
+				\item Periféricos: ADC de 12 bits, DAC de 12 bits, múltiples timers, DMA, UART
+			\end{itemize}
+
+			En este proyecto se opera a 90 MHz (dividido del reloj máximo de 180 MHz) para mantener márgenes de estabilidad.
+
+		\subsection{Convertidor Analógico-Digital (ADC1)}
+
+			\begin{itemize}
+				\item Resolución: 12 bits
+				\item Rango: 0 a 3.3V (mapeado a 0 a 4095 digital)
+				\item Frecuencia de muestreo: 16 kHz
+				\item Fuente de trigger: Salida TRGO de TIM2
+				\item Modo: DMA en circular (double-buffering)
+				\item Buffer: 512 muestras (256 por semibuffer para procesamiento)
+			\end{itemize}
+
+			La normalización a rango [-1, +1] se realiza mediante:
+
+			\[
+			s(n) = \frac{\text{ADC}(n) - 2048}{2047.5}
+			\]
+
+		\subsection{Convertidor Digital-Analógico (DAC)}
+
+			\begin{itemize}
+				\item Resolución: 12 bits
+				\item Rango: 0 a 3.3V
+				\item Canales: 2 (CH1 para e(n), CH2 para d(n))
+				\item Modo: DMA doble para transmisión continua
+				\item Actualización: Sincronizada con ADC mediante TIM2
+			\end{itemize}
+
+			La conversión de punto flotante a 12 bits se realiza como:
+
+			\[
+			\text{DAC}(n) = \lfloor (f(n) + 1.0) \times 2047.5 + 0.5 \rfloor
+			\]
+
+			clampando el resultado entre 0 y 4095.
+
+		\subsection{Timer 2 (TIM2)}
+
+			\begin{itemize}
+				\item Configuración: Contador de 32 bits (máxima resolución)
+				\item Función: Generar salida TRGO cada período para disparar ADC
+				\item Frecuencia: 16 kHz
+				\item Cálculo de período: ARR = $\frac{f_{CLK}}{f_{deseada}} - 1 = \frac{90 \times 10^6}{16 \times 10^3} - 1 = 5624$
+			\end{itemize}
+
+		\subsection{Acceso Directo a Memoria (DMA2)}
+
+			\begin{itemize}
+				\item Stream 0: ADC → buffer RAM (modo circular)
+				\item Stream 6 y 7: RAM → DAC (modo circular para dual DAC)
+				\item Modo: Circular con generación de interrupciones Half y Full Transfer
+				\item Ancho de dato: 16 bits
+			\end{itemize}
+
+			El modo circular permite que DMA actualice continuamente los buffers sin intervención del CPU, minimizando latencia y jitter.
+
+	\section{Arquitectura y Diseño del Sistema}
+
+	\section{Implementación}
+
+	\section{Resultados Experimentales}
+
+	\section{Conclusiones}
+
+\end{document}
