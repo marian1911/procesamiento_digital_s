@@ -46,7 +46,7 @@ typedef enum
 #define BUFFER_SIZE     (2U * BLOCK_SIZE)
 #define DAC_MID_SCALE   2048U
 #define LMS_ORDER       32U
-#define LMS_MU          0.001f
+#define LMS_MU          0.005f
 #define MWI_SIZE        30U
 
 #define ADC1_READY_FLAG (1UL << 0)
@@ -58,6 +58,11 @@ typedef enum
 #define SIGNAL_BIAS        0.0f
 
 #define BUTTON_DEBOUNCE_MS  200U
+
+#define ECG_FS_HZ              200U
+#define QRS_REFRACTORY_MS      200U
+#define QRS_REFRACTORY_SAMPLES ((ECG_FS_HZ * QRS_REFRACTORY_MS) / 1000U)
+#define QRS_INIT_SAMPLES       (2U * ECG_FS_HZ)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -128,6 +133,24 @@ static float32_t mwi_hist[MWI_SIZE];
 static uint32_t mwi_idx = 0U;
 static uint32_t mwi_count = 0U;
 static float32_t mwi_acc = 0.0f;
+
+/* Estado del detector simple de QRS/pulso basado en la salida MWI. */
+static float32_t qrs_prev2 = 0.0f;
+static float32_t qrs_prev1 = 0.0f;
+
+static float32_t qrs_signal_level = 0.0f;
+static float32_t qrs_noise_level = 0.0f;
+static float32_t qrs_threshold = 0.0f;
+
+static uint32_t qrs_sample_index = 0U;
+static uint32_t qrs_last_sample = 0U;
+static uint32_t qrs_init_count = 0U;
+static float32_t qrs_init_max = 0.0f;
+
+/* Variables visibles desde el debugger para validar el conteo de pulso. */
+static volatile uint32_t pulse_count = 0U;
+static volatile float32_t heart_rate_bpm = 0.0f;
+static volatile uint8_t qrs_detected_flag = 0U;
 
 /* Estado compartido entre las interrupciones DMA y el bucle principal. */
 static volatile uint32_t adc_half_ready_mask = 0U;
@@ -343,6 +366,113 @@ static void pan_tompkins_process_block(const float32_t *input,
 }
 
 /**
+ * @brief Actualiza el umbral adaptativo usado para detectar picos QRS.
+ *
+ * El umbral se ubica entre el nivel estimado de ruido y el nivel estimado
+ * de señal. Esta versión es intencionalmente simple y evita una máquina de
+ * estados completa.
+ */
+static void qrs_update_threshold(void)
+{
+  qrs_threshold = qrs_noise_level + (0.25f * (qrs_signal_level - qrs_noise_level));
+}
+
+/**
+ * @brief Procesa una muestra del MWI y actualiza el conteo de pulso.
+ *
+ * La detección usa máximos locales, un umbral adaptativo y un período
+ * refractario de 200 ms para evitar contar dos veces el mismo complejo QRS.
+ */
+static void qrs_process_sample(float32_t mwi_sample)
+{
+  float32_t peak;
+  uint32_t peak_sample_index;
+  uint32_t rr_samples;
+
+  qrs_detected_flag = 0U;
+
+  /*
+   * Durante los primeros 2 segundos se estima una escala inicial del MWI.
+   * Esto evita arrancar con un umbral nulo o completamente arbitrario.
+   */
+  if (qrs_init_count < QRS_INIT_SAMPLES)
+  {
+    if (mwi_sample > qrs_init_max)
+    {
+      qrs_init_max = mwi_sample;
+    }
+
+    qrs_init_count++;
+    qrs_sample_index++;
+
+    if (qrs_init_count == QRS_INIT_SAMPLES)
+    {
+      qrs_signal_level = 0.50f * qrs_init_max;
+      qrs_noise_level = 0.05f * qrs_init_max;
+      qrs_update_threshold();
+    }
+
+    qrs_prev2 = qrs_prev1;
+    qrs_prev1 = mwi_sample;
+
+    return;
+  }
+
+  /*
+   * Detección de máximo local: qrs_prev1 es pico si quedó por encima de la
+   * muestra anterior y de la muestra actual.
+   */
+  if ((qrs_prev1 > qrs_prev2) && (qrs_prev1 >= mwi_sample))
+  {
+    peak = qrs_prev1;
+    peak_sample_index = qrs_sample_index - 1U;
+
+    if (peak > qrs_threshold)
+    {
+      if ((peak_sample_index - qrs_last_sample) >= QRS_REFRACTORY_SAMPLES)
+      {
+        pulse_count++;
+        qrs_detected_flag = 1U;
+
+        if (qrs_last_sample != 0U)
+        {
+          rr_samples = peak_sample_index - qrs_last_sample;
+
+          if (rr_samples != 0U)
+          {
+            heart_rate_bpm = (60.0f * (float32_t)ECG_FS_HZ) / (float32_t)rr_samples;
+          }
+        }
+
+        qrs_last_sample = peak_sample_index;
+
+        /* Pico aceptado: actualiza la estimación del nivel de señal. */
+        qrs_signal_level = (0.125f * peak) + (0.875f * qrs_signal_level);
+      }
+      else
+      {
+        /*
+         * Pico por encima del umbral pero dentro del período refractario:
+         * se considera parte del mismo complejo o ruido cercano.
+         */
+        qrs_noise_level = (0.125f * peak) + (0.875f * qrs_noise_level);
+      }
+    }
+    else
+    {
+      /* Pico por debajo del umbral: actualiza la estimación de ruido. */
+      qrs_noise_level = (0.125f * peak) + (0.875f * qrs_noise_level);
+    }
+
+    qrs_update_threshold();
+  }
+
+  qrs_prev2 = qrs_prev1;
+  qrs_prev1 = mwi_sample;
+  qrs_sample_index++;
+}
+
+/**
  * @brief Selecciona qué señal interna se enviará al DAC2.
  *
  * El índice corresponde a la muestra actual dentro del bloque procesado.
@@ -426,6 +556,12 @@ static void process_block(const uint16_t *adc1_ptr,
 
   /* El ECG filtrado por LMS alimenta todas las etapas de Pan-Tompkins. */
   pan_tompkins_process_block(e_block, BLOCK_SIZE);
+
+  /* Detecta complejos QRS sobre el MWI y actualiza contador/BPM. */
+  for (uint32_t i = 0U; i < BLOCK_SIZE; i++)
+  {
+    qrs_process_sample(mwi_block[i]);
+  }
 
   /*
    * Copia local del modo de salida. Así, aunque el botón se pulse durante el
