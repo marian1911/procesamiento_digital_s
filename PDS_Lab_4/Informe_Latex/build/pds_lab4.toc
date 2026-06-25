@@ -6,26 +6,30 @@
 \contentsline {subsection}{\numberline {2.2}Filtro LMS (Least Mean Squares)}{4}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}Generador de Ruido: LCG (Linear Congruential Generator)}{4}{subsection.2.3}%
 \contentsline {subsection}{\numberline {2.4}Filtro FIR de Contaminación}{5}{subsection.2.4}%
-\contentsline {section}{\numberline {3}Placa de Desarrollo}{5}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Microcontrolador STM32F446RE}{5}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Convertidor Analógico-Digital (ADC1)}{5}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Convertidor Digital-Analógico (DAC)}{6}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Timer 2 (TIM2)}{6}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Acceso Directo a Memoria (DMA2)}{6}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Arquitectura y Diseño del Sistema}{6}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Cadena de Procesamiento}{6}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Procesamiento por Bloques}{7}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Parámetros del Filtro LMS}{7}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Implementación}{7}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Inicialización del Sistema}{7}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Inicialización del FIR de Contaminación}{7}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Inicialización del Filtro LMS}{8}{subsection.5.3}%
-\contentsline {subsection}{\numberline {5.4}Generación de Ruido: LCG}{8}{subsection.5.4}%
-\contentsline {subsection}{\numberline {5.5}Procesamiento Principal: Buffer Half}{8}{subsection.5.5}%
-\contentsline {subsection}{\numberline {5.6}Callbacks de Interrupción}{9}{subsection.5.6}%
-\contentsline {section}{\numberline {6}Resultados Experimentales}{9}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Convergencia del Algoritmo LMS}{9}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Análisis de Rendimiento}{9}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Verificación de Cancelación}{10}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Observaciones}{10}{subsection.6.4}%
-\contentsline {section}{\numberline {7}Conclusiones}{10}{section.7}%
+\contentsline {section}{\numberline {3}Análisis de un proceso adaptativo}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Implementación del algoritmo LMS}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Resultados experimentales}{6}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Análisis de la influencia del ruido}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Placa de Desarrollo}{9}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Microcontrolador STM32F446RE}{9}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}Convertidor Analógico-Digital (ADC1)}{10}{subsubsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.3}Convertidor Digital-Analógico (DAC)}{10}{subsubsection.4.1.3}%
+\contentsline {subsubsection}{\numberline {4.1.4}Timer 2 (TIM2)}{10}{subsubsection.4.1.4}%
+\contentsline {subsubsection}{\numberline {4.1.5}Acceso Directo a Memoria (DMA2)}{11}{subsubsection.4.1.5}%
+\contentsline {subsection}{\numberline {4.2}Arquitectura y Diseño del Sistema}{11}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Cadena de Procesamiento}{11}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Procesamiento por Bloques}{11}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}Parámetros del Filtro LMS}{11}{subsubsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.3}Implementación}{12}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Inicialización del Sistema}{12}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Inicialización del FIR de Contaminación}{12}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Inicialización del Filtro LMS}{12}{subsubsection.4.3.3}%
+\contentsline {subsubsection}{\numberline {4.3.4}Generación de Ruido: LCG}{12}{subsubsection.4.3.4}%
+\contentsline {subsubsection}{\numberline {4.3.5}Procesamiento Principal: Buffer Half}{13}{subsubsection.4.3.5}%
+\contentsline {subsubsection}{\numberline {4.3.6}Callbacks de Interrupción}{13}{subsubsection.4.3.6}%
+\contentsline {subsection}{\numberline {4.4}Resultados Experimentales}{14}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}Convergencia del Algoritmo LMS}{14}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2}Análisis de Rendimiento}{14}{subsubsection.4.4.2}%
+\contentsline {subsubsection}{\numberline {4.4.3}Verificación de Cancelación}{14}{subsubsection.4.4.3}%
+\contentsline {subsubsection}{\numberline {4.4.4}Observaciones}{14}{subsubsection.4.4.4}%
+\contentsline {section}{\numberline {5}Conclusiones}{15}{section.5}%

@@ -3,17 +3,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-
-try:
-    import matplotlib.pyplot as plt
-except ModuleNotFoundError:
-    print("\nError: no se encontro matplotlib.")
-    print("Instalalo con:")
-    print("python -m pip install matplotlib")
-    print("\nSi aparece un problema de certificados SSL, proba:")
-    print("python -m pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org matplotlib")
-    sys.exit(1)
-
+import matplotlib.pyplot as plt
 
 BASE_DIR = Path(__file__).resolve().parent
 C_FILE = BASE_DIR / "lms_planta.c"

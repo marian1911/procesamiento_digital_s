@@ -178,7 +178,7 @@
 			El filtro LMS es un algoritmo adaptativo que actualiza los coeficientes del filtro mediante el método del descenso por gradiente. La ecuación de actualización de coeficientes es:
 
 			\[
-			\mathbf{w}(n+1) = \mathbf{w}(n) + 2 \mu e(n) x_{ref}(n-k)
+			\mathbf{w}(n+1) = \mathbf{w}(n) + \mu e(n) x_{ref}(n-k)
 			\]
 
 			donde $\mathbf{w}(n)$ es el vector de coeficientes del filtro, $\mu$ es el paso de adaptación (step size), $e(n)$ es el error instantáneo y $x_{ref}(n-k)$ es el vector de entrada retardada.
@@ -216,328 +216,441 @@
 			En la implementación, los coeficientes del FIR definen un filtro paso-banda (30 coeficientes) que simula una trayectoria acústica o electrónica realista.
 
 
-	\section{Análisis de un proceso adaptativo}
+		\section{Análisis de un proceso adaptativo}
 
-			
+			Como primera etapa del laboratorio se estudió el comportamiento de un filtro adaptativo basado en el algoritmo LMS (\textit{Least Mean Squares}) bajo el esquema de identificación de planta. El objetivo de esta sección es analizar el proceso de adaptación de los coeficientes del filtro y evaluar la influencia de los principales parámetros del algoritmo, particularmente el paso de adaptación $\mu$ y las características de la señal de entrada, sobre la velocidad de convergencia y el error de identificación.
 
+			Para ello se desarrolló un programa en lenguaje C que implementa una planta FIR de 30 coeficientes con respuesta al impulso conocida y un filtro adaptativo de igual longitud encargado de identificar dicha planta. Durante la simulación se calcula el error cuadrático medio (MSE), promediado cada 100 muestras, y la diferencia entre los coeficientes de la planta y los coeficientes estimados por el filtro adaptativo, permitiendo observar cuantitativamente el proceso de convergencia.
 
-	\section{Placa de Desarrollo}
+			Con el fin de analizar la influencia de la señal de excitación sobre el desempeño del algoritmo, se realizaron ensayos utilizando tanto una señal pseudoaleatoria como una señal constante a la entrada del sistema. Asimismo, para cada caso se evaluaron distintos valores del parámetro de adaptación $\mu$, permitiendo comparar la velocidad de convergencia y el error residual alcanzado por el filtro.
 
-		\subsection{Microcontrolador STM32F446RE}
+			Finalmente, se desarrolló un script en Python encargado de procesar los datos generados por la simulación y representar gráficamente la evolución temporal del MSE y del error de los coeficientes para cada una de las condiciones analizadas. Estas gráficas constituyen la base para el análisis experimental presentado en las secciones siguientes.
+	
+		\subsection{Implementación del algoritmo LMS}
 
-			El STM32F446RE es un microcontrolador de alto rendimiento basado en ARM Cortex-M4 con:
+			La implementación del algoritmo LMS se realizó en lenguaje C utilizando una estructura de identificación de planta. En primer lugar se define una planta FIR de longitud $L=30$, cuyos coeficientes permanecen fijos durante toda la simulación y representan la respuesta al impulso del sistema que el filtro adaptativo debe identificar.
 
-			\begin{itemize}
-				\item Núcleo: Cortex-M4 con soporte para FPU (unidad de punto flotante de 32 bits)
-				\item Frecuencia de operación: Hasta 180 MHz
-				\item Memoria Flash: 512 KB
-				\item Memoria RAM: 128 KB
-				\item Periféricos: ADC de 12 bits, DAC de 12 bits, múltiples timers, DMA, UART
-			\end{itemize}
+				\begin{lstlisting}[style=mystyle]
+					#define L 30
 
-			En este proyecto se opera a 90 MHz (dividido del reloj máximo de 180 MHz) para mantener márgenes de estabilidad.
-
-		\subsection{Convertidor Analógico-Digital (ADC1)}
-
-			\begin{itemize}
-				\item Resolución: 12 bits
-				\item Rango: 0 a 3.3V (mapeado a 0 a 4095 digital)
-				\item Frecuencia de muestreo: 16 kHz
-				\item Fuente de trigger: Salida TRGO de TIM2
-				\item Modo: DMA en circular (double-buffering)
-				\item Buffer: 512 muestras (256 por semibuffer para procesamiento)
-			\end{itemize}
-
-			La normalización a rango [-1, +1] se realiza mediante:
-
-			\[
-			s(n) = \frac{\text{ADC}(n) - 2048}{2047.5}
-			\]
-
-		\subsection{Convertidor Digital-Analógico (DAC)}
-
-			\begin{itemize}
-				\item Resolución: 12 bits
-				\item Rango: 0 a 3.3V
-				\item Canales: 2 (CH1 para e(n), CH2 para d(n))
-				\item Modo: DMA doble para transmisión continua
-				\item Actualización: Sincronizada con ADC mediante TIM2
-			\end{itemize}
-
-			La conversión de punto flotante a 12 bits se realiza como:
-
-			\[
-			\text{DAC}(n) = \lfloor (f(n) + 1.0) \times 2047.5 + 0.5 \rfloor
-			\]
-
-			clampando el resultado entre 0 y 4095.
-
-		\subsection{Timer 2 (TIM2)}
-
-			\begin{itemize}
-				\item Configuración: Contador de 32 bits (máxima resolución)
-				\item Función: Generar salida TRGO cada período para disparar ADC
-				\item Frecuencia: 16 kHz
-				\item Cálculo de período: ARR = $\frac{f_{CLK}}{f_{deseada}} - 1 = \frac{90 \times 10^6}{16 \times 10^3} - 1 = 5624$
-			\end{itemize}
-
-		\subsection{Acceso Directo a Memoria (DMA2)}
-
-			\begin{itemize}
-				\item Stream 0: ADC → buffer RAM (modo circular)
-				\item Stream 6 y 7: RAM → DAC (modo circular para dual DAC)
-				\item Modo: Circular con generación de interrupciones Half y Full Transfer
-				\item Ancho de dato: 16 bits
-			\end{itemize}
-
-			El modo circular permite que DMA actualice continuamente los buffers sin intervención del CPU, minimizando latencia y jitter.
-
-	\section{Arquitectura y Diseño del Sistema}
-
-		\subsection{Cadena de Procesamiento}
-
-			La arquitectura del sistema implementa la siguiente cadena de señal:
-
-			\begin{enumerate}
-				\item \textbf{Generación de ruido}: Se genera una secuencia pseudo-aleatoria $x_{ref}(n)$ mediante LCG.
-				\item \textbf{Coloración del ruido}: El ruido se filtra con FIR($h_c$) para obtener $x_c(n)$.
-				\item \textbf{Contaminación}: Se suma al signal limpio $s(n)$: $d(n) = s(n) + x_c(n)$.
-				\item \textbf{Estimación LMS}: El LMS recibe $x_{ref}(n)$ y $d(n)$, produciendo estimación $y(n) \approx x_c(n)$.
-				\item \textbf{Cancelación}: Se calcula $e(n) = d(n) - y(n) \approx s(n)$.
-				\item \textbf{Salida}: DAC1 transmite $e(n)$ (señal limpia), DAC2 transmite $d(n)$ (monitoreo).
-			\end{enumerate}
-
-		\subsection{Procesamiento por Bloques}
-
-			El sistema utiliza doble buffering con buffers de 512 muestras. Cada semibuffer (256 muestras) se procesa tras la interrupción de DMA, evitando conflictos:
-
-			\[
-			t_{procesamiento} = \frac{256}{16000} \approx 16 \text{ ms}
-			\]
-
-			El marcador \texttt{processing\_busy} asegura que no se procesen bloques simultáneamente.
-
-		\subsection{Parámetros del Filtro LMS}
-
-			\begin{itemize}
-				\item Número de coeficientes: $M_{LMS} = 60$
-				\item Paso de adaptación: $\mu = 0.005$
-				\item Criterio teórico: $\mu_{max} \approx \frac{1}{60 \times 0.03} \approx 0.556$
-				\item Estabilidad: Conservadora ($\mu = 0.005 << \mu_{max}$)
-				\item Tiempo de convergencia estimado: $\approx 9$ segundos a 16 kHz
-			\end{itemize}
-
-	\section{Implementación}
-
-		\subsection{Inicialización del Sistema}
-
-			\begin{lstlisting}[style=mystyle]
-				/* Habilitar contador de ciclos DWT para profiling */
-				CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-				DWT->CYCCNT = 0;
-				DWT->CTRL  |= DWT_CTRL_CYCCNTENA_Msk;
-
-				/* Inicializar reloj del sistema a 90 MHz */
-				SystemClock_Config();
-
-				/* Inicializar periféricos */
-				MX_GPIO_Init();
-				MX_DMA_Init();
-				MX_ADC1_Init();
-				MX_TIM2_Init();
-				MX_DAC_Init();
-
-				/* Configurar TIM2 para 16 kHz exactos */
-				__HAL_TIM_SET_AUTORELOAD(&htim2, 5624);
-			\end{lstlisting}
-
-		\subsection{Inicialización del FIR de Contaminación}
-
-			\begin{lstlisting}[style=mystyle]
-				/* Inicializar FIR de contaminación (30 coeficientes) */
-				arm_fir_init_f32(&fir_contam, CONTAM_TAPS, 
-								fir_contam_coeffs,
-								fir_contam_state, BUFFER_SIZE / 2);
-
-				/* Los coeficientes modelan un filtro paso-banda
-				que simula la trayectoria acústica/electrónica */
-				static float32_t fir_contam_coeffs[30] = {
-					-0.0016f, -0.002f,  -0.0012f,  0.0018f,  0.0068f,  0.0101f,
-					0.006f,  -0.0084f, -0.0279f, -0.0381f, -0.0217f,  0.0305f,
-					0.1102f,  0.1918f,  0.2436f,  0.2436f,  0.1918f,  0.1102f,
-					0.0305f, -0.0217f, -0.0381f, -0.0279f, -0.0084f,  0.006f,
-					0.0101f,  0.0068f,  0.0018f, -0.0012f, -0.002f,  -0.0016f
+					static const double h[L] = {
+						...
 				};
-			\end{lstlisting}
+				\end{lstlisting}
 
-		\subsection{Inicialización del Filtro LMS}
+				El programa permite realizar ensayos con dos tipos de señales de entrada: una señal pseudoaleatoria distribuida uniformemente en el intervalo $[-1,1]$ y una señal constante de amplitud configurable. Además, los principales parámetros de la simulación, como el valor de $\mu$, el número de muestras procesadas, el tipo de entrada y el nombre de los archivos de salida, se reciben como argumentos desde la línea de comandos, permitiendo automatizar los ensayos para distintas condiciones de operación.
 
-			\begin{lstlisting}[style=mystyle]
-				/* Inicializar LMS con 60 coeficientes
-				mu = 0.005 para convergencia estable */
-				arm_lms_init_f32(&lms, ADAPT_TAPS, lms_coeffs, 
-								lms_state, mu, BUFFER_SIZE / 2);
+				El núcleo del algoritmo se encuentra dentro del lazo principal de procesamiento. Para cada muestra se genera el valor de entrada, se actualiza el buffer con las últimas $L$ muestras y se calculan simultáneamente la salida de la planta $d(n)$ y la salida del filtro adaptativo $y(n)$ mediante el producto interno entre los coeficientes y el vector de entrada.
 
-				/* Los coeficientes arrancan en 0 y convergen
-				durante la operación del sistema */
-				float32_t mu = 0.005f;
-				float32_t lms_coeffs[60];  /* Inicializados a 0 */
-			\end{lstlisting}
+				\begin{lstlisting}[style=mystyle]
+					for (int i = L - 1; i > 0; i--)
+						x_buffer[i] = x_buffer[i - 1];
+					x_buffer[0] = x;
 
-		\subsection{Generación de Ruido: LCG}
+					double d = 0.0;
+					double y = 0.0;
 
-			\begin{lstlisting}[style=mystyle]
-				void generar_ruido(float32_t *x, uint32_t N, 
-								float32_t amplitud)
-				{
-					for (uint32_t i = 0; i < N; i++) {
-						/* Generador congruencial lineal */
-						rng_state = 1664525u * rng_state + 1013904223u;
-						uint32_t rnd = rng_state & 0x00FFFFFFu;
+					for (int i = 0; i < L; i++) {
+						d += h[i] * x_buffer[i];
+						y += w[i] * x_buffer[i];
+					}
+				\end{lstlisting}
+
+				A partir de la diferencia entre la salida deseada y la salida del filtro se obtiene la señal de error
+
+				\[
+				e(n)=d(n)-y(n),
+				\]
+
+				la cual se emplea para actualizar los coeficientes del filtro adaptativo siguiendo la regla LMS
+
+				\[
+				w_i(n+1)=w_i(n)+\mu\,e(n)\,x(n-i).
+				\]
+
+				La implementación correspondiente se muestra en el siguiente fragmento de código.
+
+				\begin{lstlisting}[style=mystyle]
+					double e = d - y;
+
+					for (int i = 0; i < L; i++) {
+						w[i] += mu * e * x_buffer[i];
+					}
+				\end{lstlisting}
+
+				Durante la simulación se calcula el error cuadrático medio (MSE), promediado cada 100 muestras, y el error RMS entre los coeficientes estimados y los coeficientes reales de la planta. Estas métricas, junto con la evolución temporal de los coeficientes, se almacenan en archivos \texttt{.csv} para su posterior procesamiento y representación gráfica mediante un script desarrollado en Python.
+
+		\subsection{Resultados experimentales}
+
+			Con el objetivo de evaluar el desempeño del algoritmo LMS se realizaron distintas simulaciones modificando el valor del paso de adaptación $\mu$. Durante cada ensayo se registró la evolución temporal del error cuadrático medio (MSE), el error RMS entre los coeficientes de la planta y los coeficientes estimados, así como la evolución individual de cada coeficiente del filtro adaptativo.
+
+			La figura \ref{fig:mse_random} muestra la evolución del error cuadrático medio para distintos valores de $\mu$ utilizando una señal de entrada pseudoaleatoria. En todos los casos puede observarse una disminución progresiva del error durante las primeras iteraciones, indicando que la salida del filtro adaptativo se aproxima progresivamente a la salida de la planta. Asimismo, se verifica el compromiso característico del algoritmo LMS entre velocidad de convergencia y estabilidad: valores pequeños de $\mu$ producen una convergencia lenta pero estable, mientras que al incrementar este parámetro el tiempo necesario para identificar la planta disminuye considerablemente.
+
+			Cabe destacar que, para los mayores valores de $\mu$, el MSE alcanza valores del orden de $10^{-32}$, correspondientes al límite de precisión numérica de las variables de doble precisión utilizadas durante la simulación. Esto indica que el error de identificación es prácticamente nulo y que el filtro adaptativo reproduce con gran exactitud la respuesta de la planta.
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\textwidth]{imagenes/convergencia_mse_random.png}
+				\caption{Evolución del MSE para distintos valores de $\mu$ utilizando una señal de entrada pseudoaleatoria.}
+				\label{fig:mse_random}
+			\end{figure}
+
+			La figura \ref{fig:rms_random} presenta la evolución del error RMS entre los coeficientes estimados por el algoritmo y los coeficientes reales de la planta. Inicialmente el error es elevado debido a que todos los coeficientes del filtro adaptativo se inicializan en cero. A medida que avanza el proceso de adaptación, el error disminuye hasta estabilizarse alrededor de un valor muy próximo a cero, indicando que los coeficientes estimados convergen hacia los coeficientes reales de la planta.
+
+			Si bien el error RMS no alcanza exactamente el valor cero, las diferencias finales entre los coeficientes reales y estimados son del orden de la precisión numérica del sistema, por lo que pueden atribuirse a errores de redondeo inherentes a la representación en punto flotante. En contraste, la señal pseudoaleatoria posee un contenido espectral amplio que excita simultáneamente todos los coeficientes de la planta, permitiendo que el algoritmo LMS disponga de la información necesaria para reconstruir correctamente su respuesta al impulso.
+
+			Puede observarse además que el incremento del parámetro de adaptación $\mu$ reduce significativamente la cantidad de muestras necesarias para alcanzar la convergencia. Mientras que para $\mu=0.001$ el algoritmo aún no converge completamente luego de 20000 muestras, para $\mu=0.03$ y $\mu=0.1$ la identificación se completa aproximadamente antes de las 4000 y 2000 muestras, respectivamente. Esto se debe a que un mayor valor de $\mu$ incrementa la velocidad de adaptación de los coeficientes, aunque valores excesivamente elevados podrían conducir a un comportamiento inestable del algoritmo.
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\textwidth]{imagenes/convergencia_coeficientes_random.png}
+				\caption{Evolución del error RMS de los coeficientes para distintos valores de $\mu$.}
+				\label{fig:rms_random}
+			\end{figure}
+
+			Con el propósito de analizar la influencia de la señal de entrada sobre el proceso adaptativo, también se realizaron ensayos utilizando una señal constante de amplitud $x=0.5$. Los resultados correspondientes se muestran en las figuras \ref{fig:mse_constant} y \ref{fig:rms_constant}. En este caso se observa que el algoritmo no logra identificar correctamente la planta. Si bien durante las primeras iteraciones los coeficientes del filtro adaptativo presentan una ligera variación, tanto el MSE como el error RMS permanecen prácticamente constantes a lo largo de la simulación. Este comportamiento se debe a que una señal constante no constituye una señal persistentemente excitante, por lo que no aporta información suficiente para estimar de manera unívoca todos los coeficientes de la planta.
+
+			Este resultado coincide con la teoría de filtros adaptativos, ya que la convergencia del algoritmo LMS requiere que la matriz de autocorrelación de la señal de entrada tenga rango completo. Una señal constante genera una matriz singular, impidiendo la identificación de todos los coeficientes de la planta.
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\textwidth]{imagenes/convergencia_mse_constant.png}
+				\caption{Evolución del MSE utilizando una señal de entrada constante ($x=0.5$).}
+				\label{fig:mse_constant}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\textwidth]{imagenes/convergencia_coeficientes_constant.png}
+				\caption{Evolución del error RMS de los coeficientes utilizando una señal de entrada constante ($x=0.5$).}
+				\label{fig:rms_constant}
+			\end{figure}
+
+			En conjunto, los resultados obtenidos demuestran el correcto funcionamiento del algoritmo LMS implementado. La disminución del MSE y del error RMS cuando se emplea una señal pseudoaleatoria confirma que el filtro adaptativo logra identificar correctamente la planta cuando la señal de entrada posee suficiente contenido espectral para excitar todos sus coeficientes. Además, los ensayos permiten verificar experimentalmente el compromiso existente entre rapidez de convergencia y estabilidad al variar el parámetro $\mu$, así como la necesidad de utilizar señales persistentemente excitantes para garantizar la convergencia del algoritmo.
+
+			Los resultados obtenidos concuerdan con el comportamiento esperado para el algoritmo LMS. En particular, se verifica experimentalmente que la velocidad de convergencia depende directamente del paso de adaptación $\mu$, mientras que la correcta identificación de la planta requiere una señal de entrada suficientemente excitante. Estos resultados validan tanto la implementación desarrollada como los fundamentos teóricos del algoritmo estudiados.
+	
+	\section{Análisis de la influencia del ruido}
+		
+		\subsection{Placa de Desarrollo}
+
+			\subsubsection{Microcontrolador STM32F446RE}
+
+				El STM32F446RE es un microcontrolador de alto rendimiento basado en ARM Cortex-M4 con:
+
+				\begin{itemize}
+					\item Núcleo: Cortex-M4 con soporte para FPU (unidad de punto flotante de 32 bits)
+					\item Frecuencia de operación: Hasta 180 MHz
+					\item Memoria Flash: 512 KB
+					\item Memoria RAM: 128 KB
+					\item Periféricos: ADC de 12 bits, DAC de 12 bits, múltiples timers, DMA, UART
+				\end{itemize}
+
+				En este proyecto se opera a 90 MHz (dividido del reloj máximo de 180 MHz) para mantener márgenes de estabilidad.
+
+			\subsubsection{Convertidor Analógico-Digital (ADC1)}
+
+				\begin{itemize}
+					\item Resolución: 12 bits
+					\item Rango: 0 a 3.3V (mapeado a 0 a 4095 digital)
+					\item Frecuencia de muestreo: 16 kHz
+					\item Fuente de trigger: Salida TRGO de TIM2
+					\item Modo: DMA en circular (double-buffering)
+					\item Buffer: 512 muestras (256 por semibuffer para procesamiento)
+				\end{itemize}
+
+				La normalización a rango [-1, +1] se realiza mediante:
+
+				\[
+				s(n) = \frac{\text{ADC}(n) - 2048}{2047.5}
+				\]
+
+			\subsubsection{Convertidor Digital-Analógico (DAC)}
+
+				\begin{itemize}
+					\item Resolución: 12 bits
+					\item Rango: 0 a 3.3V
+					\item Canales: 2 (CH1 para e(n), CH2 para d(n))
+					\item Modo: DMA doble para transmisión continua
+					\item Actualización: Sincronizada con ADC mediante TIM2
+				\end{itemize}
+
+				La conversión de punto flotante a 12 bits se realiza como:
+
+				\[
+				\text{DAC}(n) = \lfloor (f(n) + 1.0) \times 2047.5 + 0.5 \rfloor
+				\]
+
+				clampando el resultado entre 0 y 4095.
+
+			\subsubsection{Timer 2 (TIM2)}
+
+				\begin{itemize}
+					\item Configuración: Contador de 32 bits (máxima resolución)
+					\item Función: Generar salida TRGO cada período para disparar ADC
+					\item Frecuencia: 16 kHz
+					\item Cálculo de período: ARR = $\frac{f_{CLK}}{f_{deseada}} - 1 = \frac{90 \times 10^6}{16 \times 10^3} - 1 = 5624$
+				\end{itemize}
+
+			\subsubsection{Acceso Directo a Memoria (DMA2)}
+
+				\begin{itemize}
+					\item Stream 0: ADC → buffer RAM (modo circular)
+					\item Stream 6 y 7: RAM → DAC (modo circular para dual DAC)
+					\item Modo: Circular con generación de interrupciones Half y Full Transfer
+					\item Ancho de dato: 16 bits
+				\end{itemize}
+
+				El modo circular permite que DMA actualice continuamente los buffers sin intervención del CPU, minimizando latencia y jitter.
+
+		\subsection{Arquitectura y Diseño del Sistema}
+
+			\subsubsection{Cadena de Procesamiento}
+
+				La arquitectura del sistema implementa la siguiente cadena de señal:
+
+				\begin{enumerate}
+					\item \textbf{Generación de ruido}: Se genera una secuencia pseudo-aleatoria $x_{ref}(n)$ mediante LCG.
+					\item \textbf{Coloración del ruido}: El ruido se filtra con FIR($h_c$) para obtener $x_c(n)$.
+					\item \textbf{Contaminación}: Se suma al signal limpio $s(n)$: $d(n) = s(n) + x_c(n)$.
+					\item \textbf{Estimación LMS}: El LMS recibe $x_{ref}(n)$ y $d(n)$, produciendo estimación $y(n) \approx x_c(n)$.
+					\item \textbf{Cancelación}: Se calcula $e(n) = d(n) - y(n) \approx s(n)$.
+					\item \textbf{Salida}: DAC1 transmite $e(n)$ (señal limpia), DAC2 transmite $d(n)$ (monitoreo).
+				\end{enumerate}
+
+			\subsubsection{Procesamiento por Bloques}
+
+				El sistema utiliza doble buffering con buffers de 512 muestras. Cada semibuffer (256 muestras) se procesa tras la interrupción de DMA, evitando conflictos:
+
+				\[
+				t_{procesamiento} = \frac{256}{16000} \approx 16 \text{ ms}
+				\]
+
+				El marcador \texttt{processing\_busy} asegura que no se procesen bloques simultáneamente.
+
+			\subsubsection{Parámetros del Filtro LMS}
+
+				\begin{itemize}
+					\item Número de coeficientes: $M_{LMS} = 60$
+					\item Paso de adaptación: $\mu = 0.005$
+					\item Criterio teórico: $\mu_{max} \approx \frac{1}{60 \times 0.03} \approx 0.556$
+					\item Estabilidad: Conservadora ($\mu = 0.005 << \mu_{max}$)
+					\item Tiempo de convergencia estimado: $\approx 9$ segundos a 16 kHz
+				\end{itemize}
+
+		\subsection{Implementación}
+
+			\subsubsection{Inicialización del Sistema}
+
+				\begin{lstlisting}[style=mystyle]
+					/* Habilitar contador de ciclos DWT para profiling */
+					CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+					DWT->CYCCNT = 0;
+					DWT->CTRL  |= DWT_CTRL_CYCCNTENA_Msk;
+
+					/* Inicializar reloj del sistema a 90 MHz */
+					SystemClock_Config();
+
+					/* Inicializar periféricos */
+					MX_GPIO_Init();
+					MX_DMA_Init();
+					MX_ADC1_Init();
+					MX_TIM2_Init();
+					MX_DAC_Init();
+
+					/* Configurar TIM2 para 16 kHz exactos */
+					__HAL_TIM_SET_AUTORELOAD(&htim2, 5624);
+				\end{lstlisting}
+
+			\subsubsection{Inicialización del FIR de Contaminación}
+
+				\begin{lstlisting}[style=mystyle]
+					/* Inicializar FIR de contaminación (30 coeficientes) */
+					arm_fir_init_f32(&fir_contam, CONTAM_TAPS, 
+									fir_contam_coeffs,
+									fir_contam_state, BUFFER_SIZE / 2);
+
+					/* Los coeficientes modelan un filtro paso-banda
+					que simula la trayectoria acústica/electrónica */
+					static float32_t fir_contam_coeffs[30] = {
+						-0.0016f, -0.002f,  -0.0012f,  0.0018f,  0.0068f,  0.0101f,
+						0.006f,  -0.0084f, -0.0279f, -0.0381f, -0.0217f,  0.0305f,
+						0.1102f,  0.1918f,  0.2436f,  0.2436f,  0.1918f,  0.1102f,
+						0.0305f, -0.0217f, -0.0381f, -0.0279f, -0.0084f,  0.006f,
+						0.0101f,  0.0068f,  0.0018f, -0.0012f, -0.002f,  -0.0016f
+					};
+				\end{lstlisting}
+
+			\subsubsection{Inicialización del Filtro LMS}
+
+				\begin{lstlisting}[style=mystyle]
+					/* Inicializar LMS con 60 coeficientes
+					mu = 0.005 para convergencia estable */
+					arm_lms_init_f32(&lms, ADAPT_TAPS, lms_coeffs, 
+									lms_state, mu, BUFFER_SIZE / 2);
+
+					/* Los coeficientes arrancan en 0 y convergen
+					durante la operación del sistema */
+					float32_t mu = 0.005f;
+					float32_t lms_coeffs[60];  /* Inicializados a 0 */
+				\end{lstlisting}
+
+			\subsubsection{Generación de Ruido: LCG}
+
+				\begin{lstlisting}[style=mystyle]
+					void generar_ruido(float32_t *x, uint32_t N, 
+									float32_t amplitud)
+					{
+						for (uint32_t i = 0; i < N; i++) {
+							/* Generador congruencial lineal */
+							rng_state = 1664525u * rng_state + 1013904223u;
+							uint32_t rnd = rng_state & 0x00FFFFFFu;
+							
+							/* Normalizar a [-1, +1] */
+							float32_t u = (float32_t)rnd / 16777216.0f;
+							x[i] = amplitud * (2.0f * u - 1.0f);
+						}
+					}
+				\end{lstlisting}
+
+			\subsubsection{Procesamiento Principal: Buffer Half}
+
+				\begin{lstlisting}[style=mystyle]
+					void process_buffer_half(uint16_t *adc_in, 
+											uint16_t *dac_out,
+											uint16_t offset, 
+											volatile uint32_t *cycles)
+					{
+						/* Paso 1: Normalizar entrada ADC a [-1, +1] */
+						for (uint16_t i = 0; i < 256; i++) {
+							float32_t val = ((float32_t)adc_in[i + offset] 
+											- 2048.0f) / 2047.5f;
+							s_buffer[i] = (val > 1.0f) ? 1.0f : 
+										(val < -1.0f) ? -1.0f : val;
+						}
 						
-						/* Normalizar a [-1, +1] */
-						float32_t u = (float32_t)rnd / 16777216.0f;
-						x[i] = amplitud * (2.0f * u - 1.0f);
+						/* Paso 2: Generar referencia de ruido */
+						generar_ruido(x_ref_buffer, 256, 0.3f);
+						
+						/* Paso 3: Colorear ruido con FIR */
+						arm_fir_f32(&fir_contam, x_ref_buffer, 
+									x_contam_buffer, 256);
+						
+						/* Paso 4: Contaminar señal limpia */
+						for (uint16_t i = 0; i < 256; i++) {
+							d_buffer[i] = s_buffer[i] + x_contam_buffer[i];
+						}
+						
+						/* Paso 5: Salida DAC2 - señal ruidosa */
+						convert_float_to_dac_buffer(d_buffer, 
+													&dac_buffer2[offset], 256);
+						
+						/* Paso 6: Aplicar LMS adaptativo */
+						arm_lms_f32(&lms, x_ref_buffer, d_buffer, 
+									y_buffer, e_buffer, 256);
+						
+						/* Paso 7: Salida DAC1 - señal limpia */
+						convert_float_to_dac_buffer(e_buffer, 
+													&dac_out[offset], 256);
 					}
-				}
-			\end{lstlisting}
+				\end{lstlisting}
 
-		\subsection{Procesamiento Principal: Buffer Half}
+			\subsubsection{Callbacks de Interrupción}
 
-			\begin{lstlisting}[style=mystyle]
-				void process_buffer_half(uint16_t *adc_in, 
-										uint16_t *dac_out,
-										uint16_t offset, 
-										volatile uint32_t *cycles)
-				{
-					/* Paso 1: Normalizar entrada ADC a [-1, +1] */
-					for (uint16_t i = 0; i < 256; i++) {
-						float32_t val = ((float32_t)adc_in[i + offset] 
-										- 2048.0f) / 2047.5f;
-						s_buffer[i] = (val > 1.0f) ? 1.0f : 
-									(val < -1.0f) ? -1.0f : val;
+				\begin{lstlisting}[style=mystyle]
+					/* DMA Half Transfer (primer semibuffer) */
+					void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
+					{
+						if (hadc->Instance != ADC1) return;
+						if (processing_busy) return;
+						processing_busy = 1;
+						process_buffer_half(adc_buffer, dac_buffer, 0, 
+											&proc_cycles_half);
+						processing_busy = 0;
 					}
-					
-					/* Paso 2: Generar referencia de ruido */
-					generar_ruido(x_ref_buffer, 256, 0.3f);
-					
-					/* Paso 3: Colorear ruido con FIR */
-					arm_fir_f32(&fir_contam, x_ref_buffer, 
-								x_contam_buffer, 256);
-					
-					/* Paso 4: Contaminar señal limpia */
-					for (uint16_t i = 0; i < 256; i++) {
-						d_buffer[i] = s_buffer[i] + x_contam_buffer[i];
+
+					/* DMA Transfer Complete (segundo semibuffer) */
+					void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
+					{
+						if (hadc->Instance != ADC1) return;
+						if (processing_busy) return;
+						processing_busy = 1;
+						process_buffer_half(adc_buffer, dac_buffer, 256, 
+											&proc_cycles_full);
+						processing_busy = 0;
 					}
+				\end{lstlisting}
+	
+		\subsection{Resultados Experimentales}
+
+			\subsubsection{Convergencia del Algoritmo LMS}
+
+				El algoritmo LMS converge asintóticamente hacia los coeficientes óptimos del FIR de contaminación. Con $\mu = 0.005$ y 60 coeficientes:
+
+				\begin{itemize}
+					\item \textbf{Fase inicial (0-2 s)}: El error e(n) es aproximadamente igual a d(n). Los coeficientes del LMS parten de cero.
 					
-					/* Paso 5: Salida DAC2 - señal ruidosa */
-					convert_float_to_dac_buffer(d_buffer, 
-												&dac_buffer2[offset], 256);
+					\item \textbf{Fase intermedia (2-5 s)}: Se observa reducción progresiva del error a medida que el LMS aprende la respuesta del FIR de contaminación.
 					
-					/* Paso 6: Aplicar LMS adaptativo */
-					arm_lms_f32(&lms, x_ref_buffer, d_buffer, 
-								y_buffer, e_buffer, 256);
+					\item \textbf{Fase de convergencia (5-9 s)}: La energía de e(n) se reduce significativamente, acercándose a la energía de la señal limpia s(n).
 					
-					/* Paso 7: Salida DAC1 - señal limpia */
-					convert_float_to_dac_buffer(e_buffer, 
-												&dac_out[offset], 256);
-				}
-			\end{lstlisting}
+					\item \textbf{Convergencia completa (> 9 s)}: El sistema alcanza un estado estable donde $y(n) \approx x_c(n)$.
+				\end{itemize}
 
-		\subsection{Callbacks de Interrupción}
+			\subsubsection{Análisis de Rendimiento}
 
-			\begin{lstlisting}[style=mystyle]
-				/* DMA Half Transfer (primer semibuffer) */
-				void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
-				{
-					if (hadc->Instance != ADC1) return;
-					if (processing_busy) return;
-					processing_busy = 1;
-					process_buffer_half(adc_buffer, dac_buffer, 0, 
-										&proc_cycles_half);
-					processing_busy = 0;
-				}
+				El tiempo de procesamiento por semibuffer se mide utilizando el contador de ciclos DWT:
 
-				/* DMA Transfer Complete (segundo semibuffer) */
-				void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
-				{
-					if (hadc->Instance != ADC1) return;
-					if (processing_busy) return;
-					processing_busy = 1;
-					process_buffer_half(adc_buffer, dac_buffer, 256, 
-										&proc_cycles_full);
-					processing_busy = 0;
-				}
-			\end{lstlisting}
+				\begin{itemize}
+					\item \textbf{Tiempo de procesamiento}: Aproximadamente 80,000-100,000 ciclos de reloj por semibuffer.
+					
+					\item \textbf{Tiempo máximo permitido}: $(256 / 16000) \times 90 \times 10^6 = 1,440,000$ ciclos.
+					
+					\item \textbf{Utilización de CPU}: $ < 10\%$, dejando margen para futuras extensiones.
+				\end{itemize}
 
-	\section{Resultados Experimentales}
+			\subsubsection{Verificación de Cancelación}
 
-		\subsection{Convergencia del Algoritmo LMS}
+				Para verificar el funcionamiento del sistema sin osciloscopio:
 
-			El algoritmo LMS converge asintóticamente hacia los coeficientes óptimos del FIR de contaminación. Con $\mu = 0.005$ y 60 coeficientes:
+				\begin{enumerate}
+					\item Comparar energía de buffers mediante debugger: $E_e << E_d$ indica convergencia.
+					
+					\item Inspeccionar coeficientes del LMS en tiempo de ejecución: Deben alejarse de cero durante convergencia.
+					
+					\item Monitorear mediante UART comparando energía de e(n) vs d(n).
+				\end{enumerate}
 
-			\begin{itemize}
-				\item \textbf{Fase inicial (0-2 s)}: El error e(n) es aproximadamente igual a d(n). Los coeficientes del LMS parten de cero.
-				
-				\item \textbf{Fase intermedia (2-5 s)}: Se observa reducción progresiva del error a medida que el LMS aprende la respuesta del FIR de contaminación.
-				
-				\item \textbf{Fase de convergencia (5-9 s)}: La energía de e(n) se reduce significativamente, acercándose a la energía de la señal limpia s(n).
-				
-				\item \textbf{Convergencia completa (> 9 s)}: El sistema alcanza un estado estable donde $y(n) \approx x_c(n)$.
-			\end{itemize}
+			\subsubsection{Observaciones}
 
-		\subsection{Análisis de Rendimiento}
-
-			El tiempo de procesamiento por semibuffer se mide utilizando el contador de ciclos DWT:
-
-			\begin{itemize}
-				\item \textbf{Tiempo de procesamiento}: Aproximadamente 80,000-100,000 ciclos de reloj por semibuffer.
-				
-				\item \textbf{Tiempo máximo permitido}: $(256 / 16000) \times 90 \times 10^6 = 1,440,000$ ciclos.
-				
-				\item \textbf{Utilización de CPU}: $ < 10\%$, dejando margen para futuras extensiones.
-			\end{itemize}
-
-		\subsection{Verificación de Cancelación}
-
-			Para verificar el funcionamiento del sistema sin osciloscopio:
-
-			\begin{enumerate}
-				\item Comparar energía de buffers mediante debugger: $E_e << E_d$ indica convergencia.
-				
-				\item Inspeccionar coeficientes del LMS en tiempo de ejecución: Deben alejarse de cero durante convergencia.
-				
-				\item Monitorear mediante UART comparando energía de e(n) vs d(n).
-			\end{enumerate}
-
-		\subsection{Observaciones}
-
-			\begin{itemize}
-				\item La estabilidad del LMS es crítica: verificar que $\mu$ no exceda el límite teórico.
-				
-				\item El FIR de contaminación debe ser correlado con la referencia de ruido para que el LMS tenga información útil.
-				
-				\item El mantenimiento del estado continuo del LCG entre bloques es esencial para una secuencia estacionaria.
-			\end{itemize}
+				\begin{itemize}
+					\item La estabilidad del LMS es crítica: verificar que $\mu$ no exceda el límite teórico.
+					
+					\item El FIR de contaminación debe ser correlado con la referencia de ruido para que el LMS tenga información útil.
+					
+					\item El mantenimiento del estado continuo del LCG entre bloques es esencial para una secuencia estacionaria.
+				\end{itemize}
 
 	\section{Conclusiones}
 
-		Se ha implementado exitosamente un sistema de cancelación adaptiva de ruido sobre el microcontrolador STM32F446RE utilizando un filtro LMS. El sistema:
+		En una primera etapa se analizó el comportamiento del algoritmo LMS bajo un esquema de identificación de planta, permitiendo verificar experimentalmente los principales conceptos desarrollados durante el estudio teórico. Los resultados obtenidos mostraron que el parámetro de adaptación $\mu$ determina el compromiso entre velocidad de convergencia y estabilidad: valores mayores permiten una identificación más rápida de la planta, mientras que valores menores producen un proceso de adaptación más lento, aunque igualmente estable.
+
+		Asimismo, se comprobó la importancia de la señal de excitación en el proceso adaptativo. Cuando se empleó una señal pseudoaleatoria, el filtro logró identificar correctamente la respuesta al impulso de la planta, alcanzando errores de identificación próximos al límite de precisión numérica de la implementación. En contraste, al utilizar una señal constante el algoritmo no logró converger hacia la solución correcta, verificando experimentalmente que una señal persistentemente excitante constituye una condición necesaria para la correcta identificación de sistemas mediante el algoritmo LMS.
+
+		A partir de estos resultados se validó la implementación desarrollada y se corroboró el comportamiento esperado del algoritmo LMS, en concordancia con los fundamentos teóricos estudiados durante el curso.
+
+		Como segunda etapa del trabajo, se implementó exitosamente un sistema de cancelación adaptiva de ruido sobre el microcontrolador STM32F446RE utilizando un filtro LMS. El sistema:
 
 		\begin{itemize}
-			\item Genera ruido blanco pseudo-aleatorio de forma determinística mediante LCG.
-			
+			\item Genera ruido blanco pseudoaleatorio de forma determinística mediante LCG.
 			\item Modela la contaminación del ruido mediante un FIR parametrizable.
-			
 			\item Implementa el algoritmo LMS con convergencia predecible y estable.
-			
-			\item Procesa señales en tiempo real sin sobrecargar el procesador (< 10\% CPU).
-			
-			\item Proporciona dos canales de salida para monitoreo simultáneo de señal limpia y ruidosa.
+			\item Procesa señales en tiempo real sin sobrecargar el procesador (<10 \% CPU).
+			\item Proporciona dos canales de salida para monitoreo simultáneo de la señal limpia y la señal ruidosa.
 		\end{itemize}
 
-		La arquitectura basada en DMA y doble buffering permite mantener operación continua con latencia mínima. El algoritmo LMS demuestra convergencia dentro de los tiempos esperados (~9 segundos), confirmando la viabilidad del enfoque para cancelación de ruido adaptativa en sistemas embebidos.
+		La arquitectura basada en DMA y doble buffering permite mantener una operación continua con baja latencia. El algoritmo LMS demostró convergencia dentro de los tiempos esperados (aproximadamente 9 segundos), confirmando la viabilidad del enfoque para implementar sistemas de cancelación adaptativa de ruido sobre plataformas embebidas.
 
-		Futuras mejoras podrían incluir: ajuste automático de $\mu$ en función de la convergencia, implementación de variantes LMS (NLMS, RLS), y utilización del periférico RNG hardware para mejorar la calidad estadística del ruido pseudo-aleatorio.
+		Como trabajo futuro, podrían incorporarse técnicas de ajuste automático del parámetro de adaptación $\mu$, la implementación de variantes del algoritmo LMS, como NLMS o RLS, y la utilización del periférico RNG por hardware del microcontrolador para mejorar la calidad estadística de la señal pseudoaleatoria generada.
 
 \end{document}
