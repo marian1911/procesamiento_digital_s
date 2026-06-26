@@ -62,8 +62,8 @@
 	belowskip=1em,                             % Espacio después del bloque de código
 }
 
-\lstdefinestyle{pythonstyle}{
-	language=Python,
+\lstdefinestyle{matlabstyle}{
+	language=Matlab,
 	backgroundcolor=\color{white},
 	basicstyle=\scriptsize\ttfamily,
 	keywordstyle=\color[HTML]{0000FF}\bfseries,
@@ -152,7 +152,7 @@
 		
 		\item Se debe contemplar que el sistema debe operar a distintas frecuencias de muestreo (8 kHz, 16 kHz, 24 kHz, 40 kHz y 48 kHz), lo cual exige una correcta reconfiguración del temporizador de disparo y la selección de coeficientes adecuados para cada filtro y frecuencia (el cambio de frecuencia de muestreo cambia los coeficientes, por mas que el filtro sea el mismo tipo). El sistema cuenta también con retroalimentación visual mediante LED RGB para indicar el estado actual del muestreo, y contempla un modo de parada segura (modo 5) para evitar errores o conflictos cuando se reconfigura dinámicamente el sistema.
 		
-		\item Por ultimo el calculo y diseño de los filtros debe apegarse a los requerimientos mencionados en el cuadro anterior. Como se explica posteriormente en la sección 4, no es posible su implementación con los filtros de tipo FIR, por lo que se opto por implementarlos con filtros IIR, estos tipos de filtros son capaces de cumplir con las especificaciones de frecuencia de corte y atenuación en las bandas, a expensas de perder linealidad en la fase y poder tener problemas de estabilidad.
+		\item Por ultimo el calculo y diseño de los filtros debe apegarse a los requerimientos mencionados en el cuadro anterior.
 	\end{itemize}
 	
 	\section{Marco teórico}
@@ -256,13 +256,15 @@
 	
 	\subsection{Implementación con la biblioteca CMSIS-DSP}
 	
-	La biblioteca \texttt{CMSIS-DSP}, desarrollada por ARM, proporciona un conjunto de funciones optimizadas para realizar procesamiento digital de señales en microcontroladores con núcleo Cortex-M. Su diseño está pensado para maximizar el rendimiento utilizando instrucciones SIMD cuando están disponibles, y ofrece soporte tanto para punto fijo (\texttt{Q15}) como para punto flotante (\texttt{float32}). Entre sus herramientas más destacadas se encuentran funciones específicas para el diseño y ejecución de filtros FIR e IIR.
+	La biblioteca \texttt{CMSIS-DSP}, desarrollada por ARM, proporciona funciones optimizadas para realizar procesamiento digital de señales en microcontroladores con núcleo Cortex-M. En este trabajo se utilizó su soporte para aritmética de punto fijo en formato \texttt{Q15}, adecuado para implementar filtros FIR de manera eficiente sobre la plataforma STM32F446RE. Este formato representa las muestras y los coeficientes como enteros de 16 bits con signo, permitiendo reducir el costo computacional respecto de una implementación en punto flotante.
 	
-	Para implementar un filtro IIR en cascada de secciones biquad utilizando CMSIS-DSP en formato \texttt{Q15}, es fundamental seguir una secuencia precisa de pasos. En primer lugar, se deben calcular los coeficientes del filtro, los cuales deben estar organizados en bloques de cinco valores por sección biquad: tres coeficientes para la parte directa (\texttt{b0}, \texttt{b1}, \texttt{b2}) y dos para la parte recursiva (\texttt{a1}, \texttt{a2}). Estos coeficientes deben ser previamente escalados y convertidos al formato \texttt{Q15}, lo cual puede hacerse con herramientas como MATLAB, Python (SciPy) o incluso manualmente si el diseño es simple. El siguiente paso consiste en preparar la estructura de datos \texttt{arm\_biquad\_casd\_df1\_inst\_q15}, la cual describe el filtro. Esta estructura debe contener el número de etapas, un puntero al arreglo de coeficientes, un puntero al buffer de estado (de longitud \texttt{4 × numStages}) y el parámetro \texttt{postShift}, que ajusta el escalado de salida para prevenir saturación en aritmética de punto fijo.Con estos datos definidos, se debe llamar a la función \texttt{arm\_biquad\_cascade\_df1\_init\_q15}, que inicializa la estructura asociando los arreglos y parámetros con los campos internos del filtro. Este paso es obligatorio antes de aplicar el procesamiento.
+	La implementación de un filtro FIR con CMSIS-DSP parte del diseño previo de los coeficientes del filtro. Una vez calculados, los coeficientes se escalan y cuantizan al formato \texttt{Q15}, cuidando que sus valores permanezcan dentro del rango representable. Para cada tipo de filtro utilizado en el programa, se definió un arreglo de coeficientes y un buffer de estado asociado. El filtro queda descripto mediante una estructura del tipo \texttt{arm\_fir\_instance\_q15}, que almacena la cantidad de coeficientes, el puntero al arreglo de coeficientes y el puntero al buffer de estado.
 	
-	Una vez inicializado, el filtro puede aplicarse sobre un bloque de muestras utilizando la función \texttt{arm\_biquad\_cascade\_df1\_q15}, la cual toma como argumentos la estructura, un puntero al arreglo de entrada, otro al de salida, y la cantidad de muestras. Esta función recorre cada muestra, aplicando todas las etapas en cascada y actualizando automáticamente el estado interno.
+	La inicialización se realiza mediante la función \texttt{arm\_fir\_init\_q15}. Esta función recibe la estructura del filtro, el número de coeficientes, el arreglo de coeficientes, el buffer de estado y la cantidad de muestras que se procesarán por bloque. El buffer de estado debe tener una longitud suficiente para conservar las muestras anteriores necesarias para la convolución, típicamente \texttt{numTaps + blockSize - 1}. A diferencia de una implementación IIR, no se utilizan etapas biquad ni términos de realimentación; la salida depende únicamente de la muestra actual y de muestras pasadas de la entrada.
 	
-	Respetar esta secuencia —definición de coeficientes, asignación del buffer de estado, configuración de parámetros, inicialización y luego procesamiento— es fundamental para que el filtro funcione correctamente y se eviten errores comunes como desbordamientos o accesos inválidos a memoria.
+	Una vez inicializado, el filtrado se aplica con la función \texttt{arm\_fir\_q15}. Esta función toma como argumentos la instancia del filtro, el bloque de muestras de entrada en formato \texttt{Q15}, el bloque de salida y la cantidad de muestras a procesar. Internamente realiza la convolución FIR y actualiza el estado del filtro, permitiendo procesar sucesivos bloques provenientes del ADC sin perder continuidad temporal entre ellos.
+	
+	En el programa desarrollado, las muestras adquiridas por el ADC se convierten primero desde el rango de 12 bits al formato \texttt{Q15}. Luego, según el filtro seleccionado, se ejecuta la instancia FIR correspondiente mediante \texttt{arm\_fir\_q15}. Finalmente, las muestras filtradas se reconvierten al rango del DAC para su visualización en el osciloscopio. Respetar esta secuencia de conversión, inicialización y procesamiento es fundamental para evitar saturaciones, errores de escala o discontinuidades entre bloques.
 	
 	Toda la documentación oficial puede consultarse en el sitio web de ARM:\newline \href{https://www.keil.com/pack/doc/CMSIS/DSP/html/index.html}{https://www.keil.com/pack/doc/CMSIS/DSP/html/index.html}.
 	
@@ -389,125 +391,138 @@
 	\end{figure}
 	
 	\section{Calculo y diseño de filtros}
-	El siguiente script en Python permite diseñar, visualizar y exportar filtros digitales IIR en formato compatible con la biblioteca CMSIS-DSP, especialmente para su uso en microcontroladores que trabajan con aritmética en punto fijo (Q15). Se definen varios tipos de filtros (pasa bajos, pasa altos, pasa banda y notch) y se evalúan sus respuestas en frecuencia para distintas frecuencias de muestreo. Cada filtro se diseña utilizando funciones de la biblioteca SciPy (\texttt{butter} para filtros clásicos y \texttt{iirnotch} para el notch), y luego se convierte a la forma de secciones en cascada (\texttt{tf2sos}) para garantizar estabilidad numérica. A partir de las secciones obtenidas, se calcula un valor de \texttt{postShift} sugerido que permite escalar correctamente los coeficientes al formato Q15 sin riesgo de saturación. Los coeficientes se imprimen en formato C, listos para ser copiados directamente en un proyecto basado en CMSIS-DSP, junto con los buffers de estado necesarios para cada configuración. Además, el script genera diagramas de Bode que permiten visualizar y comparar gráficamente el comportamiento en frecuencia de los filtros para distintas frecuencias de muestreo.
 	
-	\begin{lstlisting}[style=pythonstyle]
-		import numpy as np
-		import matplotlib.pyplot as plt
-		from scipy.signal import butter, iirnotch, tf2sos, sosfreqz
-		# === Parametros generales ===
-		fs_list = [8000, 16000, 24000, 40000, 48000]
-		orden = 2
-		# === Especificaciones por tipo ===
-		filtros = {
-			"low":  {"type": "lowpass",  "params": {"fc": 3600}},
-			"high": {"type": "highpass", "params": {"fc": 35}},
-			"band": {"type": "bandpass", "params": {"fc1": 35, "fc2": 3500}},
-			"band_stop": {"type": "band_stop",   "params": {"f0": 50, "bw": 30}},  # Q = f0 / bw
-		}
-		# === Conversion a Q15 ===
-		def to_q15(x):
-		return max(min(int(round(x * 32767)), 32767), -32768)
-		# === Loop por tipo de filtro y frecuencia de muestreo ===
-		for filt_name, spec in filtros.items():
-		plt.figure(figsize=(8, 5))
-		for fs in fs_list:
-		nyq = fs / 2
-		tipo = spec["type"]
-		params = spec["params"]
-		# ==== Diseno del filtro ====
-		if tipo == "lowpass":
-		Wn = params["fc"] / nyq
-		b, a = butter(orden, Wn, btype='low')
-		elif tipo == "highpass":
-		Wn = params["fc"] / nyq
-		b, a = butter(orden, Wn, btype='high')
-		elif tipo == "bandpass":
-		fc1 = params["fc1"] / nyq
-		fc2 = params["fc2"] / nyq
-		b, a = butter(orden, [fc1, fc2], btype='band')
-		elif tipo == "band_stop":
-		f0 = params["f0"]
-		Q = f0 / params["bw"]
-		w0 = f0 / nyq
-		b, a = iirnotch(w0=w0, Q=Q)
-		else:
-		continue
-		sos = tf2sos(b, a)
-		var_name = f"{filt_name}_{fs // 1000}k"
-		# ==== Calcular postShift sugerido ====
-		# Maximo coeficiente absoluto en punto flotante (solo numerador y denominador de cada seccion)
-		max_coef = 0.0
-		for sec in sos:
-		b0, b1, b2, a0, a1, a2 = sec
-		max_sec = max(abs(b0), abs(b1), abs(b2), abs(a1), abs(a2))
-		if max_sec > max_coef:
-		max_coef = max_sec
-		# Escalado para evitar overflow en Q15 (coef entre -1 y 1 * 32767)
-		post_shift = max(0, int(np.floor(np.log2(32767 / max_coef))))
-		# ==== Generacion de coeficientes Q15 ====
-		print(f"\n// ===== {tipo.upper()} Filter =====")
-		print(f"// fs = {fs} Hz")
-		print(f"// CMSIS-DSP format: {{b0, b1, b2, -a1, -a2}} in Q15")
-		print(f"// Suggested postShift: {post_shift}")
-		print(f"#define stage_{var_name} {len(sos)}")
-		print(f"q15_t {var_name}[5 * stage_{var_name}] = {{")
-				for sec in sos:
-				b0, b1, b2, a0, a1, a2 = sec
-				assert np.isclose(a0, 1.0, atol=1e-4), "a0 must be 1.0 for CMSIS-DSP"
-				b_q15 = [to_q15(c) for c in [b0, b1, b2]]
-				a_q15 = [to_q15(-a1), to_q15(-a2)]
-				line = "    " + ", ".join(f"{v:6d}" for v in (b_q15 + a_q15)) + ","
-				print(line)
-				print("};")
-			print(f"q15_t {var_name}_status[4 * stage_{var_name}] = {{ 0 }};\n")
-			# ==== Diagrama de Bode ====
-			w, h = sosfreqz(sos, worN=1024, fs=fs)
-			plt.semilogx(w, 20 * np.log10(np.maximum(np.abs(h), 1e-5)), label=f"{fs//1000}kHz")
-			
-			# === Grafico por tipo de filtro ===
-			plt.title(f"Bode Plot - {tipo.title()} Filter")
-			plt.xlabel("Frequency [Hz]")
-			plt.ylabel("Magnitude [dB]")
-			plt.grid(which='both', linestyle='--', linewidth=0.5)
-			plt.axvline(params.get("fc", params.get("f0", params.get("fc1"))), color='red', linestyle=':', label="Reference Frequency")
-			if tipo == "bandpass":
-			plt.axvline(params["fc2"], color='red', linestyle=':')
-			elif tipo == "band_stop":
-			plt.axvline(params["f0"], color='red', linestyle=':')
-			plt.legend()
-			plt.tight_layout()
-			plt.show()
+	\subsection{Criterio de diseño FIR en MATLAB}
+	
+	El diseño final de los filtros se realizó con MATLAB. Para ello se utilizó el script
+	\path{DesingFiltroFIR_v2.m}, ubicado en la carpeta \path{PDS_Lab_2}.
+	La implementación definitiva utiliza filtros FIR, por lo que el cálculo se centra
+	en obtener los coeficientes de la respuesta al impulso que luego serán usados
+	por la función \texttt{arm\_fir\_q15} de la biblioteca CMSIS-DSP.
+	
+	El script define las frecuencias de muestreo utilizadas por el sistema y diseña una familia de filtros para cada una de ellas. Se contemplan filtros pasa bajo, pasa alto, pasa banda y rechaza banda. Para el pasa bajo se emplea un diseño FIR equiripple, mientras que para los restantes filtros se utiliza un diseño FIR por mínimos cuadrados restringidos mediante \texttt{fircls}. En todos los casos se parte de las especificaciones de frecuencia y atenuación requeridas, se fija la cantidad de coeficientes y se obtiene el vector \texttt{Numerator}, que corresponde directamente a los coeficientes del filtro FIR.
+	
+	En los filtros pasa bajo y pasa alto se incorpora además una corrección de la frecuencia de corte. Para ello, el script calcula la respuesta en frecuencia del filtro diseñado, localiza el punto de \(-3\,\mathrm{dB}\) y rediseña el filtro con una frecuencia corregida. De esta forma se busca que la frecuencia efectiva medida sobre la respuesta del filtro coincida mejor con la especificación deseada.
+	
+	\subsection{Cuantización de coeficientes en Q15}
+	
+	Una vez obtenidos los coeficientes en punto flotante, se analiza su comportamiento en formato \texttt{Q15}. Este paso es importante porque la implementación en el microcontrolador no utiliza directamente los coeficientes en doble precisión de MATLAB, sino una representación entera de 16 bits compatible con CMSIS-DSP. La cuantización se realiza escalando por \(2^{15}\), limitando los valores al rango de \texttt{int16} y reconstruyendo la respuesta en frecuencia a partir de esos coeficientes cuantizados.
+	
+	El script utiliza \texttt{freqz} para comparar la magnitud y la fase de los filtros ya cuantizados. Esta verificación permite observar el efecto real de la cuantización sobre cada filtro antes de exportar los coeficientes al proyecto en C.
+	
+	\subsection{Exportación de coeficientes para CMSIS-DSP}
+	
+	El mismo archivo de MATLAB incluye una rutina de exportación a un archivo de cabecera. Para cada filtro se obtiene el vector de coeficientes, se convierte a \texttt{Q15} mediante \texttt{fi}, \texttt{numerictype} y \texttt{fimath}, y se escriben definiciones en C con el número de taps y el arreglo \texttt{const q15\_t} correspondiente. Este formato es el que luego se utiliza en el firmware para inicializar las estructuras \texttt{arm\_fir\_instance\_q15} mediante \texttt{arm\_fir\_init\_q15}.
+	
+	A continuación se muestra un extracto representativo del script utilizado. El archivo completo contiene el mismo procedimiento aplicado a todos los tipos de filtro y a todas las frecuencias de muestreo consideradas.
+	
+	\begin{lstlisting}[style=matlabstyle]
+% Frecuencias de muestreo utilizadas
+Fs = [8000, 16000, 22000, 44000, 48000];
+
+%% Diseno FIR pasa bajo
+FPB_Fc  = 3600;
+FPB_Ast = 30;
+FPB_Ap  = 0.5;
+N_FPB_8K = 79;
+
+FPB_8K_Specs = fdesign.lowpass('N,Fc,Ap,Ast', ...
+    N_FPB_8K, FPB_Fc, FPB_Ap, FPB_Ast, Fs(1));
+FPB_8K = design(FPB_8K_Specs, 'equiripple');
+
+Fc_corr = fcParaQueF3dBSea(FPB_8K.Numerator, Fs(1), FPB_Fc);
+FPB_8K_spec_corr = fdesign.lowpass('N,Fc,Ap,Ast', ...
+    N_FPB_8K, Fc_corr, FPB_Ap, FPB_Ast, Fs(1));
+FPB_8K = design(FPB_8K_spec_corr, 'equiripple');
+
+%% Diseno FIR pasa alto, pasa banda y rechaza banda
+FPA_Fc = 400;
+FPA_Ast = 30;
+FPA_Ap = 1.5;
+N_FPA_8K = 79;
+FPA_8K_Specs = fdesign.highpass('N,Fc,Ast,Ap', ...
+    N_FPA_8K, FPA_Fc, FPA_Ast, FPA_Ap, Fs(1));
+FPA_8K = design(FPA_8K_Specs, 'fircls');
+
+FPBD_Fc1 = 400;
+FPBD_Fc2 = 3600;
+FPBD_Ast1 = 30;
+FPBD_Ap = 1;
+FPBD_Ast2 = 30;
+N_FPBD_8K = 79;
+FPBD_8K_Specs = fdesign.bandpass('N,Fc1,Fc2,Ast1,Ap,Ast2', ...
+    N_FPBD_8K, FPBD_Fc1, FPBD_Fc2, FPBD_Ast1, FPBD_Ap, FPBD_Ast2, Fs(1));
+FPBD_8K = design(FPBD_8K_Specs, 'fircls');
+
+FRBD_Fc1 = 400;
+FRBD_Fc2 = 700;
+FRBD_Ap1 = 2;
+FRBD_Ast = 30;
+FRBD_Ap2 = 2;
+N_FRBD_8K = 79;
+FRBD_8K_Specs = fdesign.bandstop('N,Fc1,Fc2,Ap1,Ast,Ap2', ...
+    N_FRBD_8K, FRBD_Fc1, FRBD_Fc2, FRBD_Ap1, FRBD_Ast, FRBD_Ap2, Fs(1));
+FRBD_8K = design(FRBD_8K_Specs, 'fircls');
+
+%% Verificacion de respuesta con coeficientes cuantizados a Q15
+Q = 15;
+S = 2^Q;
+INT16_MIN = -32768;
+INT16_MAX =  32767;
+NFFT = 4096;
+
+q15 = @(b) (double(int16(min(max(round(b*S), INT16_MIN), INT16_MAX))) / S);
+
+filtersPB = {FPB_8K, FPB_16K, FPB_22K, FPB_44K, FPB_48K};
+for i = 1:5
+    bq = q15(filtersPB{i}.Numerator(:).');
+    [H, w] = freqz(bq, 1, NFFT, Fs(i));
+    plot(w, 20*log10(abs(H) + 1e-12));
+end
+
+%% Exportacion de coeficientes para CMSIS-DSP
+T_q15 = numerictype(1, 16, 15);
+F_math = fimath('OverflowMode', 'saturate', 'RoundMode', 'floor');
+
+h_float = filter_obj.Numerator;
+h_q15_fi = fi(h_float, T_q15, F_math);
+h_int16_values = int16(storedInteger(h_q15_fi));
+
+fprintf(fid, '#define %-30s %d\n', tap_define, N_taps);
+fprintf(fid, 'const q15_t %s[%s] = {\n', coeffs_name, tap_define);
 	\end{lstlisting}
 	
-	\begin{figure}
+	\subsection{Respuestas en frecuencia obtenidas}
+	
+	Las siguientes figuras muestran las respuestas en frecuencia obtenidas para las distintas familias de filtros FIR. Estas curvas permiten verificar el comportamiento de los coeficientes antes de incorporarlos al firmware y comprobar que la cuantización a \texttt{Q15} conserva la respuesta esperada para cada caso.
+	
+	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1\linewidth]{pasa_bajo}
-		\caption[Diagrama de bode: Filtros pasa bajo]{Diagrama de bode: Filtros pasa bajo}
+		\caption[Respuesta FIR pasa bajo en Q15]{Respuesta en frecuencia de los filtros FIR pasa bajo cuantizados en Q15}
 		\label{fig:pasabajo}
 	\end{figure}
 	
-	\begin{figure}
+	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1\linewidth]{pasa_alto}
-		\caption[Diagrama de bode: Filtros pasa alto]{Diagrama de bode: Filtros pasa alto}
+		\caption[Respuesta FIR pasa alto en Q15]{Respuesta en frecuencia de los filtros FIR pasa alto cuantizados en Q15}
 		\label{fig:pasaalto}
 	\end{figure}\newpage
 	
-	\begin{figure}
+	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1\linewidth]{pasa_banda}
-		\caption[Diagrama de bode: Filtros pasa banda]{Diagrama de bode: Filtro pasa banda}
+		\caption[Respuesta FIR pasa banda en Q15]{Respuesta en frecuencia de los filtros FIR pasa banda cuantizados en Q15}
 		\label{fig:pasabanda}
 	\end{figure}
 	
-	\begin{figure}[h!]
+	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1\linewidth]{rechaza_banda}
-		\caption[Diagrama de bode: Filtros rechaza banda]{Diagrama de bode: Filtros rechaza banda}
+		\caption[Respuesta FIR rechaza banda en Q15]{Respuesta en frecuencia de los filtros FIR rechaza banda cuantizados en Q15}
 		\label{fig:rechazabanda}
 	\end{figure}
-
 	
 	\section{Diseño del programa}
 
