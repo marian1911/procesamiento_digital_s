@@ -583,53 +583,32 @@
 	
 		\subsection{Resultados Experimentales}
 
-			\subsubsection{Convergencia del Algoritmo LMS}
+			Para evaluar el firmware implementado en la placa STM32, se inyectó una señal senoidal de
+			3,3 Vpp con una tensión de offset de 1,65 V. El ensayo se realizó para dos frecuencias de
+			entrada, 100 Hz y 1 kHz, con el objetivo de comparar la respuesta del sistema ante distintas
+			condiciones de operación.
 
-				El algoritmo LMS converge asintóticamente hacia los coeficientes óptimos del FIR de contaminación. Con $\mu = 0.005$ y 60 coeficientes:
+			En la Figura~\ref{fig:Sal_100Hz} se muestra la comparación para una señal de entrada de
+			100 Hz. La señal contaminada se observa en amarillo, mientras que la señal de salida limpia
+			se representa en celeste.
 
-				\begin{itemize}
-					\item \textbf{Fase inicial (0-2 s)}: El error e(n) es aproximadamente igual a d(n). Los coeficientes del LMS parten de cero.
-					
-					\item \textbf{Fase intermedia (2-5 s)}: Se observa reducción progresiva del error a medida que el LMS aprende la respuesta del FIR de contaminación.
-					
-					\item \textbf{Fase de convergencia (5-9 s)}: La energía de e(n) se reduce significativamente, acercándose a la energía de la señal limpia s(n).
-					
-					\item \textbf{Convergencia completa (> 9 s)}: El sistema alcanza un estado estable donde $y(n) \approx x_c(n)$.
-				\end{itemize}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\textwidth]{imagenes/Sal_in100hz_3Vpp_offset1_5V.jpeg}
+				\caption{Salida limpia para señal de entrada de 100 Hz.}
+				\label{fig:Sal_100Hz}
+			\end{figure}
 
-			\subsubsection{Análisis de Rendimiento}
+			En la Figura~\ref{fig:Sal_1000Hz} se presenta el mismo ensayo para una frecuencia de entrada
+			de 1 kHz. Nuevamente, la señal contaminada corresponde al trazo amarillo, mientras que
+			la salida limpia corresponde al trazo celeste.
 
-				El tiempo de procesamiento por semibuffer se mide utilizando el contador de ciclos DWT:
-
-				\begin{itemize}
-					\item \textbf{Tiempo de procesamiento}: Aproximadamente 80,000-100,000 ciclos de reloj por semibuffer.
-					
-					\item \textbf{Tiempo máximo permitido}: $(256 / 16000) \times 90 \times 10^6 = 1,440,000$ ciclos.
-					
-					\item \textbf{Utilización de CPU}: $ < 10\%$, dejando margen para futuras extensiones.
-				\end{itemize}
-
-			\subsubsection{Verificación de Cancelación}
-
-				Para verificar el funcionamiento del sistema sin osciloscopio:
-
-				\begin{enumerate}
-					\item Comparar energía de buffers mediante debugger: $E_e << E_d$ indica convergencia.
-					
-					\item Inspeccionar coeficientes del LMS en tiempo de ejecución: Deben alejarse de cero durante convergencia.
-					
-					\item Monitorear mediante UART comparando energía de e(n) vs d(n).
-				\end{enumerate}
-
-			\subsubsection{Observaciones}
-
-				\begin{itemize}
-					\item La estabilidad del LMS es crítica: verificar que $\mu$ no exceda el límite teórico.
-					
-					\item El FIR de contaminación debe ser correlado con la referencia de ruido para que el LMS tenga información útil.
-					
-					\item El mantenimiento del estado continuo del LCG entre bloques es esencial para una secuencia estacionaria.
-				\end{itemize}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.7\textwidth]{imagenes/Sal_in1000hz_3Vpp_offset1_5V.jpeg}
+				\caption{Salida limpia para señal de entrada de 1 kHz.}
+				\label{fig:Sal_1000Hz}
+			\end{figure}
 
 	\section{Conclusiones}
 
