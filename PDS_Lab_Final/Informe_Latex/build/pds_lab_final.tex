@@ -27,7 +27,7 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{TP Final - Cancelación Adaptiva de Ruido}
+\lhead{TP Final - Detección QRS en ECG}
 \rhead{UNC-Procesamiento digital de señales}
 \cfoot{\thepage}
 \setlength{\headheight}{15pt}
@@ -91,7 +91,7 @@
 % Título y autores
 \title{
 	\includegraphics[width=0.45\textwidth]{unc.png} \\[2cm] % Logo
-	\textbf{Trabajo Práctico Final: Acondicionamiento de señal SG} 
+	\textbf{Trabajo Práctico Final: Detección de Complejos QRS en Señales ECG mediante Pan--Tompkins en STM32} 
 }
     
 \author{
@@ -327,12 +327,13 @@
 		\end{itemize}
 
 		ADC1 adquiere la señal ECG principal, mientras que ADC2 permite adquirir una segunda señal utilizada como referencia durante la etapa de cancelación adaptativa implementada previamente mediante el filtro LMS. La salida del filtro LMS constituye la entrada del algoritmo de Pan--Tompkins, permitiendo realizar la detección sobre una señal previamente filtrada. El procesamiento por bloques se realiza utilizando un esquema de doble buffer, donde mientras una mitad del buffer continúa siendo llenada por el DMA, la otra mitad es procesada por el microcontrolador.
-
-		Las muestras adquiridas se normalizan al rango $[-1,1]$ mediante
+		Las muestras adquiridas se convierten a valores de tensión en punto flotante utilizando la tensión de referencia del conversor. En la implementación actual se trabaja con una escala unipolar, por lo que no se realiza una normalización al rango $[-1,1]$.
 
 		\[
-		x(n)=\frac{\mathrm{ADC}(n)-2048}{2047.5}.
+		x(n)=\frac{\mathrm{ADC}(n)}{4095}\,V_{DDA}
 		\]
+
+		con $V_{DDA}=3{,}3\,\mathrm{V}$.
 
 		\subsection{Convertidor Digital-Analógico (DAC)}
 
@@ -346,11 +347,10 @@
 		\end{itemize}
 
 		El canal DAC1 reproduce continuamente la salida de la etapa de integración por ventana móvil, correspondiente a la señal utilizada posteriormente para la detección de los complejos QRS. El canal DAC2 permite visualizar distintas señales internas del algoritmo, tales como la salida del filtro LMS, la señal adquirida por los ADC, la salida del filtro pasa banda, la señal derivada o la salida del integrador de ventana móvil, seleccionables mediante un pulsador.
-
-		La conversión desde punto flotante al formato de 12 bits del DAC se realiza mediante
+		La conversión desde punto flotante al formato de 12 bits del DAC se realiza aplicando la operación inversa sobre la escala de tensión utilizada internamente:
 
 		\[
-		DAC(n)=\left\lfloor\left(f(n)+1\right)\frac{4095}{2}+0.5\right\rfloor
+		DAC(n)=\left\lfloor \frac{f(n)}{V_{DDA}}\,4095+0.5\right\rfloor
 		\]
 
 		limitando posteriormente el resultado al rango comprendido entre 0 y 4095.
@@ -380,12 +380,368 @@
 		\end{itemize}
 
 		El empleo del DMA permite que la adquisición y reproducción de señales se realicen sin intervención directa del procesador, reduciendo significativamente la carga computacional y permitiendo que el núcleo Cortex-M4 dedique la mayor parte del tiempo a la ejecución del algoritmo de procesamiento digital. Además, el esquema de doble buffer implementado posibilita procesar un bloque de muestras mientras el siguiente continúa siendo adquirido, garantizando un flujo continuo de datos sin pérdidas de información.
+	
 	\section{Arquitectura y Diseño del Sistema}
+
+		El sistema desarrollado se organiza como una cadena de adquisición, procesamiento y visualización en tiempo real. La señal principal de ECG ingresa al microcontrolador mediante el ADC1, mientras que el ADC2 se utiliza para adquirir una señal de referencia asociada al ruido o interferencia que se desea atenuar. Ambas señales son procesadas por un filtro adaptativo LMS, cuya salida de error constituye la señal acondicionada que alimenta posteriormente al algoritmo de Pan--Tompkins. Finalmente, las señales internas del procesamiento se envían a los canales del DAC para permitir su observación durante los ensayos experimentales.
+
+		Desde el punto de vista funcional, el flujo general del sistema puede representarse como:
+
+		\[
+		\mathrm{ADC1},\mathrm{ADC2}
+		\rightarrow
+		\mathrm{LMS}
+		\rightarrow
+		\text{Pan--Tompkins}
+		\rightarrow
+		\text{Detección QRS}
+		\rightarrow
+		\mathrm{DAC}
+		\]
+
+		Esta arquitectura permite separar claramente las distintas responsabilidades del sistema: adquisición sincronizada, cancelación adaptativa, realce de los complejos QRS, detección de eventos cardíacos y visualización de resultados.
+
+		\subsection{Arquitectura de adquisición y temporización}
+
+		La base temporal del sistema está determinada por el temporizador TIM2, configurado para generar eventos de actualización a una frecuencia de 200 Hz. Esta señal de disparo se utiliza como referencia común para los ADC y los DAC, de modo que las conversiones de entrada y las actualizaciones de salida ocurren de manera sincronizada.
+
+		Los ADC trabajan en modo de conversión disparada externamente por TIM2, con transferencia de datos mediante DMA circular. De esta forma, las muestras adquiridas se almacenan en memoria sin intervención directa del procesador. El mismo criterio se aplica a los canales del DAC, que reciben sus muestras desde memoria mediante DMA y se actualizan con la misma base temporal. Esta decisión evita depender de retardos por software y permite mantener una frecuencia de muestreo estable durante todo el procesamiento.
+
+		\subsection{Procesamiento por bloques}
+
+		El procesamiento digital se realiza por bloques de 32 muestras. Para cada canal de entrada se utiliza un buffer circular de 64 muestras, dividido en dos mitades. Cuando el DMA completa la primera mitad del buffer, se procesa el primer bloque; cuando completa la segunda mitad, se procesa el bloque restante. Mientras una mitad del buffer está siendo procesada por el microcontrolador, la otra continúa siendo utilizada por el DMA para la adquisición de nuevas muestras.
+
+		Este esquema de doble buffer permite implementar un flujo continuo de datos. La latencia queda determinada principalmente por el tamaño de bloque y la frecuencia de muestreo. Con bloques de 32 muestras y una frecuencia de 200 Hz, cada bloque representa un intervalo de 160 ms. Por lo tanto, todo el procesamiento asociado a un bloque debe completarse antes de que el DMA vuelva a sobrescribir esa misma región de memoria.
+
+		\subsection{Etapa de cancelación adaptativa LMS}
+
+		La primera etapa de procesamiento corresponde al filtro adaptativo LMS. En esta etapa, la señal adquirida por ADC1 se considera la entrada principal $d(n)$, compuesta por la señal ECG de interés junto con posibles componentes de ruido. La señal adquirida por ADC2 se utiliza como referencia $x(n)$ para estimar la componente no deseada presente en la entrada principal.
+
+		El filtro LMS genera una salida $y(n)$, que representa la estimación de la interferencia, y una señal de error $e(n)$ definida como:
+
+		\[
+		e(n)=d(n)-y(n)
+		\]
+
+		Esta señal de error se interpreta como la señal ECG luego de la cancelación adaptativa, por lo que se utiliza como entrada de la cadena Pan--Tompkins. En la implementación se emplea la función \texttt{arm\_lms\_f32} de CMSIS-DSP, con un orden de filtro de 32 coeficientes y un paso de adaptación $\mu = 0{,}005$.
+
+		\subsection{Cadena de procesamiento Pan--Tompkins}
+
+		Luego de la etapa LMS, la señal $e(n)$ atraviesa las etapas de preprocesamiento del algoritmo de Pan--Tompkins. En primer lugar se aplica una etapa pasa-bajos seguida de una etapa pasa-altos, obteniendo una respuesta equivalente a un filtrado pasa banda orientado a conservar las componentes más relevantes del complejo QRS. Posteriormente se aplica una etapa derivativa, que resalta las pendientes pronunciadas de la señal. La salida derivada se eleva al cuadrado para obtener una señal positiva y enfatizar los valores de mayor amplitud.
+
+		Finalmente, se aplica una integración por ventana móvil de 30 muestras. Dado que la frecuencia de muestreo es de 200 Hz, esta ventana equivale aproximadamente a 150 ms, valor compatible con la duración típica del complejo QRS. La salida de esta etapa representa una envolvente de energía sobre la cual resulta más simple aplicar el criterio de detección.
+
+		\subsection{Detección de complejos QRS}
+
+		La detección se realiza sobre la salida de la integración por ventana móvil. El criterio implementado busca máximos locales que superen un umbral adaptativo. Durante una etapa inicial, el sistema estima una escala de amplitud a partir de la señal integrada; luego actualiza en forma dinámica los niveles estimados de señal y de ruido.
+
+		Para evitar múltiples detecciones asociadas a un mismo complejo QRS, se incorpora un período refractario de 200 ms. Cuando se detecta un nuevo pico válido, se incrementa el contador de pulsos y, a partir de la distancia temporal entre detecciones consecutivas, se calcula una estimación de la frecuencia cardíaca en latidos por minuto.
+
+		\subsection{Visualización y validación mediante DAC}
+
+		Los dos canales del DAC se utilizan como herramientas de observación del procesamiento en tiempo real. El canal DAC1 entrega de manera continua la salida de la integración por ventana móvil, que es la señal empleada para la detección de los complejos QRS. Esta salida permite verificar visualmente si los complejos se transforman en pulsos definidos y separados del resto de la señal.
+
+		El canal DAC2 permite seleccionar distintas señales internas del sistema mediante el pulsador B1 de la placa. Cada pulsación avanza al siguiente modo de visualización, lo que facilita comparar la señal original, la referencia de ruido, la salida del LMS y las distintas etapas del algoritmo de Pan--Tompkins durante los ensayos.
+
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|c|l|}
+				\hline
+				Modo DAC2 & Señal observada \\
+				\hline
+				0 & Error del LMS $e(n)$, utilizado como ECG filtrado \\
+				1 & Salida del LMS $y(n)$, estimación de ruido \\
+				2 & Entrada principal ADC1 $d(n)$ \\
+				3 & Entrada de referencia ADC2 $x(n)$ \\
+				4 & Salida del filtrado pasa banda de Pan--Tompkins \\
+				5 & Salida de la etapa derivativa \\
+				6 & Salida de la integración por ventana móvil \\
+				\hline
+			\end{tabular}
+			\caption{Señales internas disponibles para observación mediante el canal DAC2.}
+			\label{tab:dac2_modos}
+		\end{table}
 
 	\section{Implementación}
 
+		La implementación se desarrolló en lenguaje C dentro del proyecto STM32CubeIDE, utilizando la biblioteca HAL para la configuración de periféricos y CMSIS-DSP para la etapa adaptativa LMS. El programa sigue una estructura de inicialización única y un bucle principal encargado de procesar los bloques de muestras indicados por las interrupciones del DMA.
+
+		\subsection{Parámetros principales del procesamiento}
+
+		Las constantes principales del sistema definen el tamaño de bloque, la longitud de los buffers circulares, los parámetros del filtro LMS y la frecuencia de muestreo empleada por el detector QRS.
+
+		\begin{lstlisting}[style=mystyle, caption={Constantes principales del procesamiento.}]
+#define BLOCK_SIZE      32U
+#define BUFFER_SIZE     (2U * BLOCK_SIZE)
+#define LMS_ORDER       32U
+#define LMS_MU          0.005f
+#define MWI_SIZE        30U
+#define ECG_FS_HZ       200U
+		\end{lstlisting}
+
+		El tamaño de bloque de 32 muestras permite trabajar con una carga computacional acotada en cada interrupción de DMA. El buffer de 64 muestras se divide en dos mitades, lo que permite procesar una mitad mientras la otra continúa siendo actualizada por el periférico. La ventana móvil de 30 muestras corresponde a 150 ms para una frecuencia de muestreo de 200 Hz.
+
+		\subsection{Inicialización del sistema}
+
+		Al iniciar el programa se configuran el reloj del microcontrolador y los periféricos utilizados: GPIO, DMA, USART2, ADC1, ADC2, DAC y TIM2. Luego se inicializa la instancia del filtro LMS, se cargan los buffers de salida del DAC con un valor inicial y se habilitan las transferencias DMA. El temporizador TIM2 se inicia al final, ya que a partir de ese momento comienzan los disparos periódicos de adquisición y salida.
+
+		\begin{lstlisting}[style=mystyle, caption={Secuencia general de arranque del sistema.}]
+arm_lms_init_f32(&lms_instance,
+                 LMS_ORDER,
+                 lms_coeffs,
+                 lms_state,
+                 LMS_MU,
+                 BLOCK_SIZE);
+
+HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1,
+                  (uint32_t *)dac_buffer_ch1,
+                  BUFFER_SIZE, DAC_ALIGN_12B_R);
+HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_2,
+                  (uint32_t *)dac_buffer_ch2,
+                  BUFFER_SIZE, DAC_ALIGN_12B_R);
+
+HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_buffer_ch1, BUFFER_SIZE);
+HAL_ADC_Start_DMA(&hadc2, (uint32_t *)adc_buffer_ch2, BUFFER_SIZE);
+HAL_TIM_Base_Start(&htim2);
+		\end{lstlisting}
+
+		Este orden evita que los periféricos comiencen a generar eventos antes de que los buffers y las instancias de procesamiento estén preparados.
+
+		\subsection{Conversión de muestras}
+
+		Las muestras adquiridas por los ADC son códigos de 12 bits. Antes de ingresar a las etapas de procesamiento se convierten a valores en punto flotante, utilizando la tensión de referencia analógica como escala. En la versión implementada, el parámetro \texttt{SIGNAL\_BIAS} se encuentra en cero, por lo que la conversión trabaja directamente sobre el rango unipolar de entrada.
+
+		\begin{lstlisting}[style=mystyle, caption={Conversión de código ADC a punto flotante.}]
+static float32_t adc_to_float(uint16_t adc_value)
+{
+    float32_t voltage;
+
+    voltage = ((float32_t)adc_value * ANALOG_VDDA) / ADC_DAC_MAX_CODE;
+
+    return voltage - SIGNAL_BIAS;
+}
+		\end{lstlisting}
+
+		De forma inversa, las señales internas calculadas en punto flotante se transforman nuevamente a códigos de 12 bits para ser enviadas al DAC. La conversión incluye saturación para evitar valores fuera del rango permitido por el periférico.
+
+		\begin{lstlisting}[style=mystyle, caption={Conversión de punto flotante a código DAC.}]
+static uint16_t float_to_dac(float32_t value)
+{
+    float32_t dac_code;
+
+    dac_code = ((value + SIGNAL_BIAS) * ADC_DAC_MAX_CODE) / ANALOG_VDDA;
+
+    if (dac_code <= 0.0f) return 0U;
+    if (dac_code >= ADC_DAC_MAX_CODE) return 4095U;
+
+    return (uint16_t)(dac_code + 0.5f);
+}
+		\end{lstlisting}
+
+		\subsection{Procesamiento de cada bloque}
+
+		La función central de la aplicación es \texttt{process\_block()}. En primer lugar copia las muestras de ADC1 y ADC2 a buffers de punto flotante. Luego ejecuta el filtro LMS, procesa la señal de error con Pan--Tompkins, actualiza el detector QRS y finalmente escribe las muestras de salida en los buffers asociados a los DAC.
+
+		\begin{lstlisting}[style=mystyle, caption={Núcleo del procesamiento por bloque.}]
+for (uint32_t i = 0U; i < BLOCK_SIZE; i++)
+{
+    d_block[i] = adc_to_float(adc1_ptr[i]);
+    x_block[i] = adc_to_float(adc2_ptr[i]);
+}
+
+arm_lms_f32(&lms_instance,
+            x_block, d_block,
+            y_block, e_block,
+            BLOCK_SIZE);
+
+pan_tompkins_process_block(e_block, BLOCK_SIZE);
+
+for (uint32_t i = 0U; i < BLOCK_SIZE; i++)
+{
+    qrs_process_sample(mwi_block[i]);
+}
+		\end{lstlisting}
+
+		La señal \texttt{d\_block} corresponde a la entrada principal, mientras que \texttt{x\_block} corresponde a la referencia de ruido. La función \texttt{arm\_lms\_f32()} genera la salida estimada del filtro en \texttt{y\_block} y la señal de error en \texttt{e\_block}. Esta última se utiliza como entrada del algoritmo de Pan--Tompkins.
+
+		\subsection{Implementación de Pan--Tompkins}
+
+		El preprocesamiento de Pan--Tompkins se implementa muestra a muestra dentro de cada bloque. La función \texttt{pan\_tompkins\_process\_block()} aplica en cascada el filtro pasa-bajos, el filtro pasa-altos, la derivada, la elevación al cuadrado y la integración por ventana móvil.
+
+		\begin{lstlisting}[style=mystyle, caption={Cadena de procesamiento Pan--Tompkins.}]
+for (uint32_t i = 0U; i < block_size; i++)
+{
+    lpf_block[i] = lpf_process_sample(input[i]);
+    hpf_block[i] = hpf_process_sample(lpf_block[i]);
+    der_block[i] = derivative_process_sample(hpf_block[i]);
+    sq_block[i] = der_block[i] * der_block[i];
+    mwi_block[i] = moving_window_process_sample(sq_block[i]);
+}
+		\end{lstlisting}
+
+		Las etapas de filtrado y derivación conservan sus variables de estado entre bloques. Esto es fundamental para que el procesamiento sea continuo en el tiempo y no se reinicie artificialmente cada 32 muestras.
+
+		\subsection{Detector de complejos QRS}
+
+		La detección se realiza sobre la salida del integrador de ventana móvil. Durante los primeros dos segundos se estima una escala inicial para el umbral. Luego, el algoritmo busca máximos locales y los compara contra un umbral adaptativo calculado a partir de los niveles estimados de señal y ruido.
+
+		\begin{lstlisting}[style=mystyle, caption={Criterio básico de detección de máximo local.}]
+if ((qrs_prev1 > qrs_prev2) && (qrs_prev1 >= mwi_sample))
+{
+    peak = qrs_prev1;
+    peak_sample_index = qrs_sample_index - 1U;
+
+    if (peak > qrs_threshold)
+    {
+        /* Pico candidato a complejo QRS. */
+    }
+}
+		\end{lstlisting}
+
+		Para evitar dobles conteos, el detector incorpora un período refractario de 200 ms. Cuando un pico supera el umbral y se encuentra fuera de ese intervalo, se incrementa \texttt{pulse\_count}. Si ya existe una detección previa, se calcula además la frecuencia cardíaca a partir de la distancia temporal entre picos consecutivos.
+
+		\begin{lstlisting}[style=mystyle, caption={Actualización del conteo y frecuencia cardíaca.}]
+if ((peak_sample_index - qrs_last_sample) >= QRS_REFRACTORY_SAMPLES)
+{
+    pulse_count++;
+    qrs_detected_flag = 1U;
+
+    if (qrs_last_sample != 0U)
+    {
+        rr_samples = peak_sample_index - qrs_last_sample;
+        heart_rate_bpm = (60.0f * (float32_t)ECG_FS_HZ)
+                         / (float32_t)rr_samples;
+    }
+
+    qrs_last_sample = peak_sample_index;
+}
+		\end{lstlisting}
+
+		Las variables \texttt{pulse\_count}, \texttt{qrs\_detected\_flag} y \texttt{heart\_rate\_bpm} se declaran como \texttt{volatile} para facilitar su observación desde el depurador durante los ensayos.
+
+		\subsection{Selección de señales internas por DAC2}
+
+		La función \texttt{dac2\_select\_sample()} concentra la selección de la señal enviada al segundo canal del DAC. El modo de salida se modifica mediante el pulsador B1, atendido por una interrupción externa. Para evitar cambios espurios se implementa un antirrebote temporal de 200 ms.
+
+		\begin{lstlisting}[style=mystyle, caption={Cambio de modo de visualización mediante B1.}]
+if ((now_ms - button_last_tick_ms) >= BUTTON_DEBOUNCE_MS)
+{
+    button_last_tick_ms = now_ms;
+
+    next_mode = (uint32_t)dac2_output_mode + 1U;
+
+    if (next_mode >= (uint32_t)DAC2_OUT_COUNT)
+    {
+        next_mode = 0U;
+    }
+
+    dac2_output_mode = (dac2_output_mode_t)next_mode;
+    dac2_output_switch_count++;
+}
+		\end{lstlisting}
+
+		Esta lógica permite recorrer las señales internas del sistema sin detener la ejecución, facilitando la verificación experimental de cada etapa del procesamiento.
 	\section{Resultados Experimentales}
 
+		Para validar el funcionamiento del sistema se realizaron ensayos experimentales observando las señales de entrada, las salidas intermedias y la salida procesada mediante los canales del DAC. La medición se efectuó utilizando un generador de funciones con dos canales: el canal 1 entregó una señal ECG contaminada con ruido, de aproximadamente 1 Vpp y 0,5 V de offset, mientras que el canal 2 entregó una señal de ruido de referencia, también de 1 Vpp y 0,5 V de offset.
+
+		Las señales fueron visualizadas con el osciloscopio, utilizando el canal amarillo para la señal de comparación seleccionada y el canal celeste para la salida observada del procesamiento. De esta manera fue posible verificar el comportamiento de la etapa adaptativa LMS y de las distintas etapas del algoritmo de Pan--Tompkins.
+
+		\subsection{Comparación entre señal de entrada y salida procesada}
+
+		La Figura \ref{fig:Salida_Entrada} muestra la comparación entre la señal ECG de entrada y la salida procesada por el sistema. Se observa que la señal de salida presenta una morfología más adecuada para la detección de los complejos QRS, ya que el procesamiento atenúa componentes no deseadas y resalta los eventos de mayor pendiente asociados a los latidos.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=1\textwidth]{imagenes/Salida_Entrada.jpeg}
+			\caption{Comparación entre la señal de entrada y la salida procesada.}
+			\label{fig:Salida_Entrada}
+		\end{figure}
+
+		\subsection{Comparación de la salida con y sin acción del LMS}
+
+		Para evaluar el efecto del filtro adaptativo, se comparó la salida del sistema en dos condiciones: una con la referencia de ruido anulada, equivalente a observar el comportamiento sin acción efectiva del LMS, y otra con la referencia de ruido conectada. En ambos casos se mantiene la entrada al algoritmo de Pan--Tompkins como señal de comparación.
+
+		En la Figura \ref{fig:Salida_SinLMS} se observa la respuesta sin cancelación adaptativa efectiva. En esta condición, la señal que ingresa a Pan--Tompkins conserva una mayor influencia del ruido presente en la entrada principal.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=1\textwidth]{imagenes/Salida_SinLMS.jpeg}
+			\caption{Salida del sistema con referencia de ruido anulada.}
+			\label{fig:Salida_SinLMS}
+		\end{figure}
+
+		En la Figura \ref{fig:Salida_ConLMS} se muestra la salida con el filtro LMS activo. La comparación permite verificar que la etapa adaptativa modifica la señal entregada al detector, reduciendo la componente correlacionada con la referencia de ruido.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=1\textwidth]{imagenes/Salida_ConLMS.jpeg}
+			\caption{Salida del sistema con el filtro LMS activo.}
+			\label{fig:Salida_ConLMS}
+		\end{figure}
+
+		\subsection{Comparación entre ruido de referencia y ruido estimado}
+
+		La Figura \ref{fig:Salida_RuidoDeEntrada} muestra la salida del sistema junto con la señal de ruido utilizada como referencia de entrada para el filtro adaptativo. Esta medición permite comprobar que el canal ADC2 recibe una señal correlacionada con la interferencia que se busca cancelar.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=1\textwidth]{imagenes/Salida_RuidoDeEntrada.jpeg}
+			\caption{Salida del sistema y ruido de referencia aplicado al LMS.}
+			\label{fig:Salida_RuidoDeEntrada}
+		\end{figure}
+
+		La Figura \ref{fig:Salida_RuidoEstimado} muestra la salida del sistema junto con la señal estimada por el filtro LMS. Esta señal corresponde a la salida $y(n)$ del filtro adaptativo, es decir, a la estimación de la componente de ruido presente en la entrada principal.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=1\textwidth]{imagenes/Salida_RuidoEstimado.jpeg}
+			\caption{Salida del sistema y ruido estimado por el filtro LMS.}
+			\label{fig:Salida_RuidoEstimado}
+		\end{figure}
+
+		\subsection{Visualización de etapas intermedias de Pan--Tompkins}
+
+		Además de la salida principal, se visualizaron etapas intermedias del algoritmo de Pan--Tompkins mediante el canal DAC2. Esto permitió verificar que cada bloque de procesamiento modifica la señal de acuerdo con la función esperada dentro de la cadena de detección.
+		
+		La Figura \ref{fig:Salida_SalidaPasaBanda} muestra la salida del sistema junto con la señal obtenida luego del filtrado pasa banda. Esta etapa reduce componentes de baja y alta frecuencia que no aportan información relevante para la detección del complejo QRS.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=1\textwidth]{imagenes/Salida_SalidaPasaBanda.jpeg}
+			\caption{Salida del sistema y salida del filtrado pasa banda.}
+			\label{fig:Salida_SalidaPasaBanda}
+		\end{figure}
+
+		La Figura \ref{fig:Salida_SalidaDerivador} muestra la salida del sistema junto con la salida de la etapa derivativa. Esta etapa resalta las variaciones rápidas de la señal, asociadas principalmente a las pendientes del complejo QRS.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=1\textwidth]{imagenes/Salida_SalidaDerivador.jpeg}
+			\caption{Salida del sistema y salida de la etapa derivativa.}
+			\label{fig:Salida_SalidaDerivador}
+		\end{figure}
+
+		\subsection{Cálculo de frecuencia cardíaca}
+
+		Finalmente, se verificó el funcionamiento del detector de complejos QRS observando las variables internas desde el entorno de depuración. La Figura \ref{fig:ContadorPulsos} muestra el valor calculado para la frecuencia cardíaca en latidos por minuto, obtenido a partir del intervalo temporal entre detecciones consecutivas.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=1\textwidth]{imagenes/BPM.jpeg}
+			\caption{Visualización de la frecuencia cardíaca calculada por el detector.}
+			\label{fig:ContadorPulsos}
+		\end{figure}
 	\section{Conclusiones}
+
+		En este trabajo se implementó un sistema de procesamiento digital en tiempo real para señales ECG sobre la plataforma STM32F446RE. La arquitectura desarrollada permitió adquirir dos señales analógicas sincronizadas, procesarlas por bloques mediante DMA y visualizar tanto la salida principal como distintas señales internas utilizando los canales del DAC.
+
+		La incorporación del filtro adaptativo LMS permitió utilizar una señal de referencia para estimar la componente de ruido presente en la entrada principal. A partir de la señal de error del LMS se alimentó la cadena de procesamiento de Pan--Tompkins, compuesta por filtrado pasa banda, derivación, elevación al cuadrado e integración por ventana móvil. Esta estructura permitió resaltar las componentes asociadas al complejo QRS y obtener una señal más adecuada para la detección de latidos.
+
+		Los ensayos experimentales permitieron verificar el funcionamiento de las distintas etapas del sistema. La visualización de la entrada, la salida procesada, la referencia de ruido, la estimación del LMS y las etapas intermedias de Pan--Tompkins mostró que el sistema responde de acuerdo con la arquitectura propuesta. Además, la implementación del detector basado en máximos locales, umbral adaptativo y período refractario permitió realizar el conteo de pulsos y obtener una estimación de la frecuencia cardíaca.
+
+		Como resultado general, se logró integrar adquisición, procesamiento adaptativo, detección de complejos QRS y visualización experimental en una única aplicación embebida. El desarrollo confirma la viabilidad de implementar algoritmos clásicos de procesamiento biomédico en microcontroladores con recursos limitados, siempre que se utilice una arquitectura de procesamiento por bloques y periféricos sincronizados por hardware.
+
+		Como posible mejora futura, podría incorporarse una etapa de calibración automática de amplitud y offset, junto con una validación cuantitativa utilizando señales ECG de referencia. Esto permitiría evaluar con mayor precisión la sensibilidad del detector, la tasa de falsas detecciones y el desempeño del sistema frente a distintos niveles de ruido.
 
 \end{document}

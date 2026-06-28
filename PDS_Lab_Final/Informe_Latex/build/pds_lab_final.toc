@@ -1,14 +1,43 @@
 \babel@toc {spanish}{}\relax 
 \contentsline {section}{\numberline {1}Introducción}{3}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Objetivos del proyecto}{3}{subsection.1.1}%
-\contentsline {section}{\numberline {2}Marco teórico}{3}{section.2}%
-\contentsline {section}{\numberline {3}Placa de Desarrollo}{3}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Microcontrolador STM32F446RE}{3}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Convertidor Analógico-Digital (ADC1)}{3}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Convertidor Digital-Analógico (DAC)}{3}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Timer 2 (TIM2)}{4}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Acceso Directo a Memoria (DMA2)}{4}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Arquitectura y Diseño del Sistema}{4}{section.4}%
-\contentsline {section}{\numberline {5}Implementación}{4}{section.5}%
-\contentsline {section}{\numberline {6}Resultados Experimentales}{4}{section.6}%
-\contentsline {section}{\numberline {7}Conclusiones}{4}{section.7}%
+\contentsline {section}{\numberline {2}Marco teórico}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Electrocardiograma (ECG)}{4}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Actividad eléctrica del corazón}{5}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Ondas características del ECG}{5}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Complejo QRS y frecuencia cardíaca}{5}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.4}Contenido frecuencial de la señal ECG}{6}{subsubsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.2}Algoritmo de Pan--Tompkins}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Etapas de procesamiento de la señal}{7}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Filtro pasa banda}{8}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Etapa derivativa}{8}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Elevación al cuadrado}{8}{subsubsection.2.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.4}Integración por ventana móvil}{9}{subsubsection.2.3.4}%
+\contentsline {section}{\numberline {3}Placa de Desarrollo}{9}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Microcontrolador STM32F446RE}{9}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Convertidores Analógico-Digitales (ADC1 y ADC2)}{10}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Convertidor Digital-Analógico (DAC)}{10}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Temporizador TIM2}{11}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Acceso Directo a Memoria (DMA)}{11}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Arquitectura y Diseño del Sistema}{11}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Arquitectura de adquisición y temporización}{12}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Procesamiento por bloques}{12}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Etapa de cancelación adaptativa LMS}{12}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Cadena de procesamiento Pan--Tompkins}{13}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Detección de complejos QRS}{13}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Visualización y validación mediante DAC}{13}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Implementación}{14}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Parámetros principales del procesamiento}{14}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Inicialización del sistema}{14}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Conversión de muestras}{15}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Procesamiento de cada bloque}{15}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}Implementación de Pan--Tompkins}{16}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}Detector de complejos QRS}{16}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Selección de señales internas por DAC2}{17}{subsection.5.7}%
+\contentsline {section}{\numberline {6}Resultados Experimentales}{17}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Comparación entre señal de entrada y salida procesada}{18}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Comparación de la salida con y sin acción del LMS}{18}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Comparación entre ruido de referencia y ruido estimado}{20}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Visualización de etapas intermedias de Pan--Tompkins}{21}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Cálculo de frecuencia cardíaca}{23}{subsection.6.5}%
+\contentsline {section}{\numberline {7}Conclusiones}{23}{section.7}%
